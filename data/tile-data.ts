@@ -1,4 +1,4 @@
-import type { TileDefinition, TileType, Direction } from './types';
+import type { TileDefinition, TileType, Direction } from '@/types/builder';
 
 export const TILE_DEFINITIONS: Record<TileType, TileDefinition> = {
   'straight': {

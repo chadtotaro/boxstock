@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 
-const BuilderApp = dynamic(() => import('@/components/builder/app/App'), { ssr: false })
+const BuilderApp = dynamic(() => import('@/components/builder/core/App'), { ssr: false })
 
 export default function BuilderPage() {
   return <BuilderApp />
