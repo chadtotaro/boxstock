@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Undo2, Redo2, Check, Loader2, Moon, Sun, CircleCheck, CircleAlert, AlertTriangle, Trash2, Ruler, X, Share2, Download, Copy, Sparkles } from 'lucide-react';
+import { Undo2, Redo2, Check, Loader2, Moon, Sun, CircleCheck, CircleAlert, AlertTriangle, Trash2, Ruler, X, Share2, Download, Copy, Sparkles, Pencil } from 'lucide-react';
 import { useTheme } from '../hooks/useThemeContext';
 import type { SaveStatus } from '@/types/builder';
 import type { TrackValidation } from '../lib/edge-validator';
@@ -341,21 +341,26 @@ export function TopBar({
             }}
           />
         ) : (
-          <h1
-            className="cursor-pointer truncate transition-opacity hover:opacity-70"
-            style={{
-              color: 'var(--c-text)',
-              fontSize: '15px',
-              fontWeight: 600,
-              borderBottom: '1.5px solid var(--c-text)',
-              paddingBottom: '1px',
-              maxWidth: '100%',
-            }}
+          <div
+            className="group flex items-center gap-1.5 cursor-pointer"
             onClick={() => setEditing(true)}
             title="Click to rename"
           >
-            {layoutName}
-          </h1>
+            <h1
+              className="truncate transition-opacity group-hover:opacity-70"
+              style={{
+                color: 'var(--c-text)',
+                fontSize: '15px',
+                fontWeight: 600,
+                borderBottom: '1.5px solid var(--c-text)',
+                paddingBottom: '1px',
+                maxWidth: '100%',
+              }}
+            >
+              {layoutName}
+            </h1>
+            <Pencil size={12} className="opacity-0 group-hover:opacity-40 transition-opacity shrink-0" style={{ color: 'var(--c-text)' }} />
+          </div>
         )}
       </div>
 
