@@ -617,35 +617,34 @@ useEffect(() => {
           }
         `}</style>
 
-        <TopBar
-          layoutName={currentLayout?.name || 'Untitled'}
-          onLayoutNameChange={handleLayoutNameChange}
-          saveStatus={derivedSaveStatus}
-          
-          onOpenGenerate={() => setShowGenerate(true)}
-          onShare={handleShare}
-          onSignOut={signOut}
-          userEmail={user?.email ?? ''}
-          onUndo={undo}
-          onRedo={redo}
-          canUndo={canUndo}
-          canRedo={canRedo}
-          tileCount={Object.keys(tiles).length}
-          trackValidation={trackValidation}
-          onClearAll={handleClearAll}
-          roomConstraint={roomConstraint}
-          onOpenRoomSize={() => setShowRoomModal(true)}
-          onDisableRoomConstraint={handleDisableRoomConstraint}
-        />
-
-        <div className="flex flex-1 overflow-hidden" style={{
-          opacity: generatedResults ? 0.4 : 1,
-          transition: 'opacity 320ms ease',
-          pointerEvents: generatedResults ? 'none' : 'auto',
-        }}>
-          <Sidebar tiles={tiles} tags={currentLayout?.tags || []} onTagsChange={handleTagsChange} onRemoveDumpedTiles={handleRemoveDumpedTiles} hasDumpedTiles={hasDumpedTiles} onOpenLayouts={() => setShowLayouts(true)}
-           />
-          <Canvas
+        <div className="flex flex-1 overflow-hidden">
+          <Sidebar tiles={tiles} tags={currentLayout?.tags || []} onTagsChange={handleTagsChange} onRemoveDumpedTiles={handleRemoveDumpedTiles} hasDumpedTiles={hasDumpedTiles} onOpenLayouts={() => setShowLayouts(true)} />
+          <div className="flex flex-col flex-1 overflow-hidden" style={{
+            opacity: generatedResults ? 0.4 : 1,
+            transition: "opacity 320ms ease",
+            pointerEvents: generatedResults ? "none" : "auto",
+          }}>
+            <TopBar
+              layoutName={currentLayout?.name || "Untitled"}
+              onLayoutNameChange={handleLayoutNameChange}
+              saveStatus={derivedSaveStatus}
+              onOpenGenerate={() => setShowGenerate(true)}
+              onShare={handleShare}
+              onSignOut={signOut}
+              userEmail={user?.email ?? ""}
+              onUndo={undo}
+              onRedo={redo}
+              canUndo={canUndo}
+              canRedo={canRedo}
+              tileCount={Object.keys(tiles).length}
+              trackValidation={trackValidation}
+              onClearAll={handleClearAll}
+              roomConstraint={roomConstraint}
+              onOpenRoomSize={() => setShowRoomModal(true)}
+              onDisableRoomConstraint={handleDisableRoomConstraint}
+            />
+          </div>
+            <Canvas
             tiles={tiles}
             selectedTiles={selectedTiles}
             onPlaceTile={handlePlaceTile}
