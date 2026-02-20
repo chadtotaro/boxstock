@@ -621,7 +621,7 @@ useEffect(() => {
           layoutName={currentLayout?.name || 'Untitled'}
           onLayoutNameChange={handleLayoutNameChange}
           saveStatus={derivedSaveStatus}
-          onOpenLayouts={() => setShowLayouts(true)}
+          
           onOpenGenerate={() => setShowGenerate(true)}
           onShare={handleShare}
           onSignOut={signOut}
@@ -644,7 +644,7 @@ useEffect(() => {
           pointerEvents: generatedResults ? 'none' : 'auto',
         }}>
           <Sidebar tiles={tiles} tags={currentLayout?.tags || []} onTagsChange={handleTagsChange} onRemoveDumpedTiles={handleRemoveDumpedTiles} hasDumpedTiles={hasDumpedTiles}
-          onOpenLayouts={() => setShowLayouts(true)} />
+           />
           <Canvas
             tiles={tiles}
             selectedTiles={selectedTiles}
@@ -683,7 +683,7 @@ useEffect(() => {
           onPlaceInventory={handlePlaceInventory}
           onRemoveDumpedTiles={handleRemoveDumpedTiles}
           hasDumpedTiles={hasDumpedTiles}
-          onOpenLayouts={() => setShowLayouts(true)}
+          
         />
 
         {generatedResults && (
