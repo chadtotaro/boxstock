@@ -66,7 +66,7 @@ export default function LoginPage() {
         {error && <div className="mb-4 px-3 py-2 rounded-lg" style={{ backgroundColor: 'rgba(220,38,38,0.08)', color: '#DC2626', fontSize: '13px' }}>{error}</div>}
         {message && <div className="mb-4 px-3 py-2 rounded-lg" style={{ backgroundColor: 'rgba(21,128,61,0.08)', color: '#15803D', fontSize: '13px' }}>{message}</div>}
         <button onClick={handleSubmit} disabled={loading} className="w-full py-2.5 rounded-lg font-medium transition-all cursor-pointer"
- { backgroundColor: '#FE5757', color: '#fff', fontSize: '14px', border: 'none', opacity: loading ? 0.7 : 1 }}>
+          style={{ backgroundColor: '#FE5757', color: '#fff', fontSize: '14px', border: 'none', opacity: loading ? 0.7 : 1 }}>
           {loading ? 'Loading...' : isSignUp ? 'Create Account' : 'Sign In'}
         </button>
         <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '13px', color: '#6B7280' }}>
