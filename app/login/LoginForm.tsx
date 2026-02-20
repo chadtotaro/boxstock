@@ -71,7 +71,7 @@ export default function LoginForm() {
               onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
               style={{ width: '100%', boxSizing: 'border-box', padding: '10px 12px', borderRadius: '8px', border: '1px solid #D4D7DD', fontSize: '14px', color: '#1A1D23', backgroundColor: '#F2F3F5', outline: 'none' }} />
           </div>
-          {error && <div style={{ marginBottom: '16px', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(220olor: '#DC2626', fontSize: '13px' }}>{error}</div>}
+          {error && <div style={{ marginBottom: "16px", padding: "10px 12px", borderRadius: "8px", backgroundColor: "rgba(220,38,38,0.08)", color: "#DC2626", fontSize: "13px" }}>{error}</div>}
           {message && <div style={{ marginBottom: '16px', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(21,128,61,0.08)', color: '#15803D', fontSize: '13px' }}>{message}</div>}
           <button onClick={handleSubmit} disabled={loading}
             style={{ width: '100%', padding: '12px', borderRadius: '8px', border: 'none', backgroundColor: '#0A0C10', color: '#FFFFFF', fontSize: '15px', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
