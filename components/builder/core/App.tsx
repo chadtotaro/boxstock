@@ -643,7 +643,6 @@ useEffect(() => {
               onOpenRoomSize={() => setShowRoomModal(true)}
               onDisableRoomConstraint={handleDisableRoomConstraint}
             />
-          </div>
             <Canvas
             tiles={tiles}
             selectedTiles={selectedTiles}
@@ -656,6 +655,7 @@ useEffect(() => {
             centerRequest={centerRequest}
             roomConstraint={roomConstraint}
           />
+          </div>
         </div>
 
         {showLayouts && (
