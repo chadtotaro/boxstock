@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import type { User } from '@supabase/supabase-js'
 
@@ -45,6 +46,9 @@ export default function GlobalHeader() {
     await supabase.auth.signOut()
     window.location.href = '/login'
   }
+
+  const pathname = usePathname()
+  if (pathname === "/login") return null
 
   const initial = user?.email?.[0]?.toUpperCase() ?? '?'
 
