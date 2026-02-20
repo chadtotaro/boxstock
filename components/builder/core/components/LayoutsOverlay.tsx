@@ -34,7 +34,7 @@ function LayoutThumbnail({ tiles, width, height }: { tiles: Record<string, Place
 
   if (tileArr.length === 0) {
     return (
-      <div className="flex items-center justify-center rounded" style={{ width, height, backgroundColor: '#f8f8f8' }}>
+      <div className="flex items-center justify-center rounded" style={{ width, height, backgroundColor: 'var(--c-bg-input)' }}>
         
       </div>
     );
@@ -58,7 +58,7 @@ function LayoutThumbnail({ tiles, width, height }: { tiles: Record<string, Place
   const offsetY = (height - totalY * cellSize) / 2;
 
   return (
-    <svg width={width} height={height} className="block rounded" style={{ backgroundColor: '#f8f8f8' }}>
+    <svg width={width} height={height} className="block rounded" style={{ backgroundColor: 'var(--c-bg-input)' }}>
       {Array.from({ length: totalX + 1 }).map((_, i) => (
         <line key={`gv-${i}`} x1={offsetX + i * cellSize} y1={offsetY} x2={offsetX + i * cellSize} y2={offsetY + totalY * cellSize} stroke="var(--c-minimap-grid)" strokeWidth={0.5} />
       ))}

@@ -191,7 +191,7 @@ function DraggableGridTile({
 /* ── Canvas ──────────────────────────────────────────────────────── */
 
 export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMoveTiles, externalPlacedKey, onExternalPlacedKeyClear, trackValidation, centerRequest, roomConstraint }: CanvasProps) {
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(0.2);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
