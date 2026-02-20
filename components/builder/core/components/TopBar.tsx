@@ -22,6 +22,8 @@ interface TopBarProps {
   onOpenRoomSize?: () => void;
   onDisableRoomConstraint?: () => void;
   onShare: (action: 'download' | 'copy') => void | Promise<void>;
+  onSignOut: () => void;
+  userEmail?: string;
 }
 
 function IconButton({
@@ -551,6 +553,15 @@ export function TopBar({
 
         {/* Share / Export */}
         <SharePopover onShare={onShare} />
+        {/* User avatar / sign out */}
+        <button
+          onClick={onSignOut}
+          title={userEmail ?? 'Sign out'}
+          className="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer transition-all hover:opacity-80"
+          style={{ backgroundColor: 'var(--c-accent-bg)', border: '1px solid var(--c-accent-border)', color: 'var(--c-accent)', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}
+        >
+          {userEmail ? userEmail[0].toUpperCase() : '?'}
+        </button>
 
         <button
           onClick={onOpenGenerate}

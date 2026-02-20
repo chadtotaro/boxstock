@@ -616,6 +616,8 @@ useEffect(() => {
           onOpenLayouts={() => setShowLayouts(true)}
           onOpenGenerate={() => setShowGenerate(true)}
           onShare={handleShare}
+          onSignOut={signOut}
+          userEmail={user?.email ?? ''}
           onUndo={undo}
           onRedo={redo}
           canUndo={canUndo}
