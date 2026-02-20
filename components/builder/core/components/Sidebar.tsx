@@ -4,7 +4,7 @@ import { TileRenderer } from './TileRenderer';
 import { TagInput } from './TagInput';
 import { TILE_ORDER, TILE_DEFINITIONS } from '@/data/tile-data';
 import type { TileType, DragItem, PlacedTile } from '@/types/builder';
-import { RotateCw, MousePointer, Redo2, Move, Tag, Trash2, LayoutGrid, Keyboard } from 'lucide-react';
+import { RotateCw, MousePointer, Redo2, Move, Tag, Trash2, LayoutGrid, Keyboard, X } from 'lucide-react';
 
 interface DraggableTileProps {
   tileType: TileType;
@@ -116,17 +116,21 @@ export function FloatingShortcutsPanel() {
   const modKey = isMac ? '⌘' : 'Ctrl';
   return (
     <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 50 }}>
-      {open && (
+      {open ? (
         <div style={{
           backgroundColor: 'var(--c-bg)',
           border: '1px solid var(--c-border)',
           borderRadius: '10px',
           padding: '12px',
-          marginBottom: '8px',
           boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
           minWidth: '220px',
         }}>
-          <p style={{ color: 'var(--c-text-muted)', fontSize: '11px', marginBottom: '10px', letterSpacing: '0.05em', marginTop: 0 }}>SHORTCUTS</p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <p style={{ color: 'var(--c-text-muted)', fontSize: '11px', letterSpacing: '0.05em', margin: 0 }}>SHORTCUTS</p>
+            <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, display: 'flex', alignItems: 'center', color: 'var(--c-text-muted)' }}>
+              <X size={14} />
+            </button>
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
             <ShortcutRow label="Click tile to select"><div style={{ width: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><MousePointer size={12} style={{ color: 'var(--c-text-muted)' }} /></div></ShortcutRow>
             <ShortcutRow label="Multi-select"><div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}><Kbd wide>Shift</Kbd><span style={{ color: 'var(--c-text-muted)', fontSize: '9px' }}>+</span><div style={{ width: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><MousePointer size={10} style={{ color: 'var(--c-text-muted)' }} /></div></div></ShortcutRow>
@@ -139,26 +143,27 @@ export function FloatingShortcutsPanel() {
             <ShortcutRow label="Redo"><div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}><Kbd wide>{modKey}</Kbd><Kbd wide>⇧Z</Kbd></div></ShortcutRow>
           </div>
         </div>
+      ) : (
+        <button
+          onClick={() => setOpen(true)}
+          title="Keyboard shortcuts"
+          style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '8px',
+            border: '1px solid var(--c-border)',
+            backgroundColor: 'var(--c-bg)',
+            color: 'var(--c-text-muted)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          }}
+        >
+          <Keyboard size={15} />
+        </button>
       )}
-      <button
-        onClick={() => setOpen(!open)}
-        title="Keyboard shortcuts"
-        style={{
-          width: '32px',
-          height: '32px',
-          borderRadius: '8px',
-          border: '1px solid var(--c-border)',
-          backgroundColor: open ? 'var(--c-accent-bg)' : 'var(--c-bg)',
-          color: open ? 'var-c-accent)' : 'var(--c-text-muted)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-        }}
-      >
-        <Keyboard size={15} />
-      </button>
     </div>
   );
 }
