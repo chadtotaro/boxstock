@@ -346,6 +346,7 @@ export function TopBar({
             onClick={() => setEditing(true)}
             title="Click to rename"
           >
+            <Pencil size={12} className="opacity-0 group-hover:opacity-40 transition-opacity shrink-0" style={{ color: 'var(--c-text)' }} />
             <h1
               className="truncate transition-opacity group-hover:opacity-70"
               style={{
@@ -359,7 +360,6 @@ export function TopBar({
             >
               {layoutName}
             </h1>
-            <Pencil size={12} className="opacity-0 group-hover:opacity-40 transition-opacity shrink-0" style={{ color: 'var(--c-text)' }} />
           </div>
         )}
       </div>
