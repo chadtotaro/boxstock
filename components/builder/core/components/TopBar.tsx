@@ -9,7 +9,6 @@ interface TopBarProps {
   layoutName: string;
   onLayoutNameChange: (name: string) => void;
   saveStatus: SaveStatus;
-  onOpenLayouts: () => void;
   onOpenGenerate: () => void;
   onUndo: () => void;
   onRedo: () => void;
@@ -198,7 +197,6 @@ export function TopBar({
   layoutName,
   onLayoutNameChange,
   saveStatus,
-  onOpenLayouts,
   onOpenGenerate,
   onUndo,
   onRedo,
