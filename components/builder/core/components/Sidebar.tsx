@@ -111,7 +111,7 @@ interface SidebarProps {
 
 /* ── Floating Shortcuts Panel ── */
 export function FloatingShortcutsPanel() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const isMac = typeof navigator !== 'undefined' && /Mac/.test(navigator.userAgent);
   const modKey = isMac ? '⌘' : 'Ctrl';
   return (
