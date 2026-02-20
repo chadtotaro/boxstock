@@ -643,7 +643,8 @@ useEffect(() => {
           transition: 'opacity 320ms ease',
           pointerEvents: generatedResults ? 'none' : 'auto',
         }}>
-          <Sidebar tiles={tiles} tags={currentLayout?.tags || []} onTagsChange={handleTagsChange} onRemoveDumpedTiles={handleRemoveDumpedTiles} hasDumpedTiles={hasDumpedTiles} />
+          <Sidebar tiles={tiles} tags={currentLayout?.tags || []} onTagsChange={handleTagsChange} onRemoveDumpedTiles={handleRemoveDumpedTiles} hasDumpedTiles={hasDumpedTiles}
+          onOpenLayouts={() => setShowLayouts(true)} />
           <Canvas
             tiles={tiles}
             selectedTiles={selectedTiles}
@@ -682,6 +683,7 @@ useEffect(() => {
           onPlaceInventory={handlePlaceInventory}
           onRemoveDumpedTiles={handleRemoveDumpedTiles}
           hasDumpedTiles={hasDumpedTiles}
+          onOpenLayouts={() => setShowLayouts(true)}
         />
 
         {generatedResults && (

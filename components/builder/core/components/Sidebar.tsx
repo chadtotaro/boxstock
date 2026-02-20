@@ -4,7 +4,7 @@ import { TileRenderer } from './TileRenderer';
 import { TagInput } from './TagInput';
 import { TILE_ORDER, TILE_DEFINITIONS } from '@/data/tile-data';
 import type { TileType, DragItem, PlacedTile } from '@/types/builder';
-import { RotateCw, MousePointer, Redo2, Move, Tag, Trash2 } from 'lucide-react';
+import { RotateCw, MousePointer, Redo2, Move, Tag, Trash2, LayoutGrid } from 'lucide-react';
 
 interface DraggableTileProps {
   tileType: TileType;
@@ -105,9 +105,10 @@ interface SidebarProps {
   onTagsChange?: (tags: string[]) => void;
   onRemoveDumpedTiles?: () => void;
   hasDumpedTiles?: boolean;
+  onOpenLayouts?: () => void;
 }
 
-export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTiles, hasDumpedTiles }: SidebarProps) {
+export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTiles, hasDumpedTiles, onOpenLayouts }: SidebarProps) {
   const tileCounts = useMemo(() => {
     const counts: Record<TileType, number> = {
       'straight': 0, 'corner': 0, 'inside-corner': 0, 'inside-corner-45': 0, 'bump': 0, 'diagonal': 0, 'blank': 0,
@@ -124,17 +125,35 @@ export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTil
       className="flex flex-col h-full shrink-0 border-r overflow-y-auto"
       style={{ width: '280px', backgroundColor: 'var(--c-bg)', borderColor: 'var(--c-border)' }}
     >
-      {/* Header */}
-      <div className="px-4 py-3 border-b" style={{ borderColor: 'var(--c-border)' }}>
-        <h2 style={{ color: 'var(--c-text)', fontSize: '13px', letterSpacing: '0.05em' }}>
-          TILE PALETTE
-        </h2>
-        <p style={{ color: 'var(--c-text-muted)', fontSize: '11px', marginTop: '2px' }}>
-          Drag tiles onto the grid
-        </p>
+      {/* ── Your Tracks button ── */}
+      <div className="p-3 border-b" style={{ borderColor: 'var(--c-border)' }}>
+        <button
+          onClick={onOpenLayouts}
+          className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg transition-all cursor-pointer"
+          style={{
+            backgroundColor: 'var(--c-bg-hover)',
+            border: '1px solid var(--c-border)',
+            color: 'var(--c-text)',
+            fontSize: '13px',
+            fontWeight: 500,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)';
+            e.currentTarget.style.borderColor = 'var(--c-accent-border)';
+            e.currentTarget.style.color = 'var(--c-accent)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'var(--c-bg-hover)';
+            e.currentTarget.style.borderColor = 'var(--c-border)';
+            e.currentTarget.style.color = 'var(--c-text)';
+          }}
+        >
+          <LayoutGrid size={16} style={{ flexShrink: 0 }} />
+          Your Tracks
+        </button>
       </div>
 
-      {/* Tags */}
+      {/* ── Tags ── */}
       {onTagsChange && (
         <div className="px-4 py-3 border-b" style={{ borderColor: 'var(--c-border)' }}>
           <div className="flex items-center gap-1.5 mb-2">
@@ -145,14 +164,14 @@ export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTil
         </div>
       )}
 
-      {/* Tiles */}
+      {/* ── Tile palette ── */}
       <div className="flex flex-col gap-1.5 p-3">
         {TILE_ORDER.map((tileType) => (
           <DraggableTile key={tileType} tileType={tileType} count={tileCounts[tileType]} />
         ))}
       </div>
 
-      {/* Remove dumped tiles */}
+      {/* ── Remove dumped tiles ── */}
       {hasDumpedTiles && onRemoveDumpedTiles && (
         <div className="px-3 pb-3">
           <button
@@ -164,12 +183,8 @@ export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTil
               color: 'var(--c-error)',
               fontSize: '12px',
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--c-error)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--c-error-border)';
-            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--c-error)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--c-error-border)'; }}
           >
             <Trash2 size={13} />
             Remove dumped tiles
@@ -177,7 +192,7 @@ export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTil
         </div>
       )}
 
-      {/* Keyboard shortcuts */}
+      {/* ── Keyboard shortcuts ── */}
       <div className="mt-auto px-4 py-3 border-t" style={{ borderColor: 'var(--c-border)' }}>
         <p style={{ color: 'var(--c-text-muted)', fontSize: '11px', marginBottom: '8px', letterSpacing: '0.03em' }}>
           SHORTCUTS
