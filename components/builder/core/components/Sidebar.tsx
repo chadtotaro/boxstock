@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useDrag } from 'react-dnd';
 import { TileRenderer } from './TileRenderer';
 import { TagInput } from './TagInput';
@@ -106,6 +106,59 @@ interface SidebarProps {
   onRemoveDumpedTiles?: () => void;
   hasDumpedTiles?: boolean;
   onOpenLayouts?: () => void;
+}
+
+
+/* ── Floating Shortcuts Panel ── */
+export function FloatingShortcutsPanel() {
+  const [open, setOpen] = useState(false);
+  const isMac = typeof navigator !== 'undefined' && /Mac/.test(navigator.userAgent);
+  const modKey = isMac ? '⌘' : 'Ctrl';
+
+  return (
+    <div style={{ position: 'absolute', bottom: '48px', left: '12px', zIndex: 50 }}>
+      {open && (
+        <div style={{
+          backgroundColor: 'var(--c-bg)',
+          border: '1px solid var(--c-border)',
+          borderRadius: '10px',
+          padding: '12px',
+          marginBottom: '8px',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+          minWidth: '220px',
+        }}>
+          <p style={{ color: 'var(--c-text-muted)', fontSize: '11px', marginBottom: '10px', letterSpacing: '0.05em', marginTop: 0 }}>SHORTCUTS</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
+            <ShortcutRow label="Click tile to select"><div style={{ width: 20 'flex', alignItems: 'center', justifyContent: 'center' }}><MousePointer size={12} style={{ color: 'var(--c-text-muted)' }} /></div></ShortcutRow>
+            <ShortcutRow label="Multi-select"><div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}><Kbd wide>Shift</Kbd><span style={{ color: 'var(--c-text-muted)', fontSize: '9px' }}>+</span><div style={{ width: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><MousePointer size={10} style={{ color: 'var(--c-text-muted)' }} /></div></div></ShortcutRow>
+            <ShortcutRow label="Drag to move tile(s)"><div style={{ width: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Move size={12} style={{ color: 'var(--c-text-muted)' }} /></div></ShortcutRow>
+            <ShortcutRow label="Rotate selected"><Kbd>R</Kbd></ShortcutRow>
+            <ShortcutRow label="Duplicate selected"><Kbd>D</Kbd></ShortcutRow>
+            <ShortcutRow label="Scroll to rotate (drag)"><div style={{ width: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><RotateCw size={11} style={{ color: 'var(--c-text-muted)' }} /></div></ShortcutRow>
+            <ShortcutRow label="Remove selected"><Kbd wide>Del</Kbd></ShortcutRow>
+            <ShortcutRow label="Undo"><div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}><Kbd wide>{modKey}</Kbd><Kbd>Z</Kbd></div></ShortcutRow>
+            <ShortcutRow label="Redo"><div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}><Kbd wide>{modKey}</Kbd><Kbd wide>⇧Z</Kbd></div></ShortcutRow>
+          </div>
+        </div>
+      )}
+      <button
+        onClick={() => setOpen(!open)}
+        title="Keyboard shortcuts"
+        style={{
+          width: '32px', height: '32px',
+          borderRadius: '8px',
+          border: '1px solid var(--c-border)',
+          backgroundColor: open ? 'var(--c-accent-bg)' : 'var(--c-bg)',
+          color: open ? 'var(--c-accent)' : 'var(--c-text-muted)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center
+          cursor: 'pointer',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+        }}
+      >
+        <Keyboard size={15} />
+      </button>
+    </div>
+  );
 }
 
 export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTiles, hasDumpedTiles, onOpenLayouts }: SidebarProps) {

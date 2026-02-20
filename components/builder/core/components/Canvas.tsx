@@ -664,6 +664,7 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
 
       {/* Empty state */}
       {tileCount === 0 && ghostCells.length === 0 && (
+        <FloatingShortcutsPanel />
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 5 }}>
           <div className="flex flex-col items-center gap-3">
             <div
