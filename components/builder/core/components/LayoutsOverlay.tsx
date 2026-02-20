@@ -34,8 +34,8 @@ function LayoutThumbnail({ tiles, width, height }: { tiles: Record<string, Place
 
   if (tileArr.length === 0) {
     return (
-      <div className="flex items-center justify-center rounded" style={{ width, height, backgroundColor: 'var(--c-minimap-inner)' }}>
-        <span style={{ color: 'var(--c-text-dim)', fontSize: '11px' }}>Empty</span>
+      <div className="flex items-center justify-center rounded" style={{ width, height, backgroundColor: '#f8f8f8' }}>
+        
       </div>
     );
   }
@@ -58,7 +58,7 @@ function LayoutThumbnail({ tiles, width, height }: { tiles: Record<string, Place
   const offsetY = (height - totalY * cellSize) / 2;
 
   return (
-    <svg width={width} height={height} className="block rounded" style={{ backgroundColor: 'var(--c-minimap-inner)' }}>
+    <svg width={width} height={height} className="block rounded" style={{ backgroundColor: '#f8f8f8' }}>
       {Array.from({ length: totalX + 1 }).map((_, i) => (
         <line key={`gv-${i}`} x1={offsetX + i * cellSize} y1={offsetY} x2={offsetX + i * cellSize} y2={offsetY + totalY * cellSize} stroke="var(--c-minimap-grid)" strokeWidth={0.5} />
       ))}
@@ -121,7 +121,7 @@ function CardMenu({
       <button
         onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
         className="flex items-center justify-center w-7 h-7 rounded transition-colors cursor-pointer"
-        style={{ color: 'var(--c-text-muted)' }}
+        style={{ color: '#FFFFFF' }}
         onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-bg-input)'; e.currentTarget.style.color = 'var(--c-text)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--c-text-muted)'; }}
       >
@@ -175,11 +175,14 @@ function LayoutCard({
   const { isDark } = useTheme();
   const [hovered, setHovered] = useState(false);
   const tileCount = Object.keys(layout.tiles).length;
-  const dateStr = new Date(layout.lastModified).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const dateStr = new Date(layout.lastModified).toLocaleDateString(undefined, {
+    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+  });
 
+  const thumb = layout.thumbnailDataUrl;
   return (
     <div
-      className="rounded-lg transition-all"
+      className="rounded-lg transition-all overflow-hidden"
       style={{
         backgroundColor: 'var(--c-bg-panel)',
         border: `1px solid ${isCurrent ? 'var(--c-accent-border-strong)' : hovered ? 'var(--c-card-hover-border)' : 'var(--c-border)'}`,
@@ -191,26 +194,52 @@ function LayoutCard({
       onMouseLeave={() => setHovered(false)}
       onClick={onOpen}
     >
-      <div className="relative p-3 pb-0">
-        <LayoutThumbnail tiles={layout.tiles} width={220} height={140} />
+      <div className="relative">
+        {thumb ? (
+          <img
+            src={thumb}
+            alt={`${layout.name} thumbnail`}
+            className="block w-full"
+            style={{ height: 140, objectFit: 'contain', backgroundColor: '#0b0f14' }}
+          />
+        ) : (
+          <LayoutThumbnail tiles={layout.tiles} width={220} height={140} />
+        )}
+
         {isCurrent && (
-          <div className="absolute top-5 left-5 px-2 py-0.5 rounded-full" style={{ backgroundColor: 'var(--c-accent-bg)', border: '1px solid var(--c-accent-border-strong)', color: 'var(--c-accent)', fontSize: '9px', letterSpacing: '0.04em' }}>
+          <div
+            className="absolute top-2 left-2 px-2 py-0.5 rounded-full"
+            style={{
+              backgroundColor: 'var(--c-accent-bg)',
+              border: '1px solid var(--c-accent-border-strong)',
+              color: 'var(--c-accent)',
+              fontSize: '9px',
+              letterSpacing: '0.04em',
+            }}
+          >
             CURRENT
           </div>
         )}
+
+        <div
+          className="absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-full"
+          style={{ backgroundColor: 'rgba(0,0,0,0.45)' }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <CardMenu layoutId={layout.id} layoutName={layout.name} isCurrent={isCurrent} onRename={onRename} onDuplicate={onDuplicate} onDelete={onDelete} />
+        </div>
+
         {hovered && !isCurrent && (
-          <div className="absolute inset-3 bottom-0 flex items-center justify-center rounded" style={{ backgroundColor: 'var(--c-overlay)', backdropFilter: 'blur(2px)' }}>
-            <span className="px-4 py-1.5 rounded-full" style={{ backgroundColor: 'var(--c-accent)', color: isDark ? '#0F1115' : '#FFFFFF', fontSize: '12px' }}>Open</span>
+          <div className="absolute inset-0 flex items-center justify-center" style={{ backgroundColor: 'var(--c-overlay)', backdropFilter: 'blur(2px)' }}>
+            <span className="px-4 py-1.5 rounded-full" style={{ backgroundColor: 'var(--c-accent)', color: isDark ? '#0F1115' : '#FFFFFF', fontSize: '12px' }}>
+              Open
+            </span>
           </div>
         )}
       </div>
 
       <div className="p-3 pt-2.5">
-        <div className="flex items-start justify-between gap-2">
-          <p className="truncate flex-1 min-w-0" style={{ color: 'var(--c-text)', fontSize: '13px' }}>{layout.name}</p>
-          <CardMenu layoutId={layout.id} layoutName={layout.name} isCurrent={isCurrent} onRename={onRename} onDuplicate={onDuplicate} onDelete={onDelete} />
-        </div>
-
+        <p className="truncate" style={{ color: 'var(--c-text)', fontSize: '13px' }}>{layout.name}</p>
         {layout.tags.length > 0 && (
           <div className="flex items-center gap-1 mt-1.5 flex-wrap">
             {layout.tags.slice(0, 3).map((tag) => (
@@ -219,7 +248,6 @@ function LayoutCard({
             {layout.tags.length > 3 && <span style={{ color: 'var(--c-text-muted)', fontSize: '10px' }}>+{layout.tags.length - 3}</span>}
           </div>
         )}
-
         <div className="flex items-center gap-3 mt-2" style={{ color: 'var(--c-text-muted)', fontSize: '11px' }}>
           <span className="flex items-center gap-1"><Layers size={10} />{tileCount}</span>
           <span className="flex items-center gap-1"><Clock size={10} />{dateStr}</span>
@@ -255,7 +283,6 @@ function LayoutRow({
       onClick={onOpen}
     >
       <div className="shrink-0"><LayoutThumbnail tiles={layout.tiles} width={64} height={44} /></div>
-
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p className="truncate" style={{ color: 'var(--c-text)', fontSize: '13px' }}>{layout.name}</p>
@@ -269,7 +296,6 @@ function LayoutRow({
           </div>
         )}
       </div>
-
       <div className="shrink-0 text-right" style={{ width: 60, color: 'var(--c-text-muted)', fontSize: '12px' }}>
         <span className="flex items-center gap-1 justify-end"><Layers size={11} />{tileCount}</span>
       </div>
@@ -286,7 +312,7 @@ function LayoutRow({
   );
 }
 
-/* ── Main Overlay ────────────────────────────────────────────────── */
+/* ── Main Overlay (Modal) ────────────────────────────────────────── */
 
 export function LayoutsOverlay({
   layouts, currentLayoutId, onOpen, onCreateNew, onDuplicate, onRename, onDelete, onClose,
@@ -299,7 +325,14 @@ export function LayoutsOverlay({
 
   useEffect(() => { requestAnimationFrame(() => setVisible(true)); }, []);
 
-  const handleClose = () => { setVisible(false); setTimeout(onClose, 250); };
+  // Close on Escape key
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, []);
+
+  const handleClose = () => { setVisible(false); setTimeout(onClose, 200); };
 
   const filtered = useMemo(() => {
     let list = [...layouts];
@@ -307,35 +340,40 @@ export function LayoutsOverlay({
       const q = search.toLowerCase();
       list = list.filter((l) => l.name.toLowerCase().includes(q) || l.tags.some((t) => t.includes(q)));
     }
+    // Sort without ever pinning current to front — stable ordering
     if (sort === 'recent') list.sort((a, b) => b.lastModified - a.lastModified);
     else list.sort((a, b) => a.name.localeCompare(b.name));
     return list;
   }, [layouts, search, sort]);
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+      {/* Backdrop */}
       <div
         className="absolute inset-0 transition-opacity"
-        style={{ backgroundColor: 'var(--c-overlay)', opacity: visible ? 1 : 0, transitionDuration: '250ms' }}
+        style={{ backgroundColor: 'rgba(0,0,0,0.6)', opacity: visible ? 1 : 0, transitionDuration: '200ms' }}
         onClick={handleClose}
       />
 
+      {/* Modal */}
       <div
-        className="relative mt-auto flex flex-col overflow-hidden transition-transform"
+        className="relative flex flex-col w-full transition-all"
         style={{
-          maxHeight: '85vh',
+          maxWidth: 960,
+          maxWidth: 960, maxHeight: '85vh',
           backgroundColor: 'var(--c-bg)',
-          borderTop: '1px solid var(--c-border)',
-          borderRadius: '16px 16px 0 0',
-          boxShadow: '0 -8px 40px var(--c-shadow-strong)',
-          transform: visible ? 'translateY(0)' : 'translateY(100%)',
-          transitionDuration: '300ms',
+          border: '1px solid var(--c-border)',
+          borderRadius: '16px',
+          boxShadow: '0 24px 80px var(--c-shadow-strong)',
+          opacity: visible ? 1 : 0,
+          transform: visible ? 'scale(1) translateY(0)' : 'scale(0.97) translateY(8px)',
+          transitionDuration: '200ms',
           transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b shrink-0" style={{ borderColor: 'var(--c-border)' }}>
-          <h2 style={{ color: 'var(--c-text)', fontSize: '18px' }}>My Layouts</h2>
+          <h2 style={{ color: 'var(--c-text)', fontSize: '18px', fontWeight: 600 }}>My Layouts</h2>
           <button
             onClick={handleClose}
             className="flex items-center justify-center w-8 h-8 rounded transition-colors cursor-pointer"
@@ -396,7 +434,7 @@ export function LayoutsOverlay({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto px-6 py-4" style={{ minHeight: 200 }}>
+        <div className="flex-1 overflow-y-auto px-6 py-4">
           {filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16">
               <div className="flex items-center justify-center w-14 h-14 rounded-xl mb-4" style={{ backgroundColor: 'var(--c-bg-hover)', border: '1px solid var(--c-border)' }}>
@@ -410,7 +448,7 @@ export function LayoutsOverlay({
               )}
             </div>
           ) : view === 'grid' ? (
-            <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(244px, 1fr))' }}>
+            <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
               {filtered.map((layout) => (
                 <LayoutCard key={layout.id} layout={layout} isCurrent={layout.id === currentLayoutId} onOpen={() => { onOpen(layout.id); handleClose(); }} onRename={onRename} onDuplicate={onDuplicate} onDelete={onDelete} />
               ))}

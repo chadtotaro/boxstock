@@ -120,7 +120,7 @@ const lightTokens: Record<string, string> = {
   '--c-grid-dash': 'rgba(0,0,0,0.06)',
   '--c-grid-dot': 'rgba(0,0,0,0.08)',
   '--c-grid-crosshair': '#C0C4CC',
-  '--c-canvas-bg': '#E8EAED',
+  '--c-canvas-bg': '#FFFFFF',
 
   '--c-minimap-bg': 'rgba(255,255,255,0.95)',
   '--c-minimap-inner': '#F0F1F3',
@@ -130,7 +130,7 @@ const lightTokens: Record<string, string> = {
   '--c-shadow': 'rgba(0,0,0,0.1)',
   '--c-shadow-strong': 'rgba(0,0,0,0.15)',
 
-  '--c-tile-dark': '#C8CCD6',
+  '--c-tile-dark': '#161920',
   '--c-tag-color': '#0077AA',
   '--c-tag-bg': 'rgba(0,119,170,0.08)',
   '--c-tag-border': 'rgba(0,119,170,0.2)',

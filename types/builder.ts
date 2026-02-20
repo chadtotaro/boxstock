@@ -38,6 +38,8 @@ export interface Layout {
   tiles: Record<string, PlacedTile>;
   lastModified: number;
   createdAt: number;
+  /** Cached PNG thumbnail for gallery cards */
+  thumbnailDataUrl?: string;
 }
 
 export type SaveStatus = 'saved' | 'saving' | 'unsaved';

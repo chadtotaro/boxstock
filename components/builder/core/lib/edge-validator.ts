@@ -437,7 +437,7 @@ function traceLaneContinuity(
         let current = startEp;
         let loopLength = 0;
 
-        // eslint-disable-next-line no-constant-condition
+         
         while (true) {
           const curKey = epKey(current);
           if (visitedEndpoints.has(curKey)) {
@@ -498,9 +498,9 @@ function traceLaneContinuity(
   // ── Determine validity ─────────────────────────────────────────────
   //
   // Primary check: the tracer found actual closed loops.
-  let hasClosedLoop = loops.length >= 1;
+  const hasClosedLoop = loops.length >= 1;
   const allSegmentsVisited = breaks.length === 0;
-  let lanesAreContinuous = allSegmentsVisited && loops.length >= 2;
+  const lanesAreContinuous = allSegmentsVisited && loops.length >= 2;
 
   return {
     hasClosedLoop,

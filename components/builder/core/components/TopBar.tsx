@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Zap, Undo2, Redo2, Layers, Check, Loader2, Moon, Sun, CircleCheck, CircleAlert, AlertTriangle, Trash2, Ruler, X } from 'lucide-react';
+import { Zap, Undo2, Redo2, Layers, Check, Loader2, Moon, Sun, CircleCheck, CircleAlert, AlertTriangle, Trash2, Ruler, X, Share2, Download, Copy } from 'lucide-react';
 import { useTheme } from '../hooks/useThemeContext';
 import type { SaveStatus } from '@/types/builder';
 import type { TrackValidation } from '../lib/edge-validator';
@@ -21,6 +21,7 @@ interface TopBarProps {
   roomConstraint?: RoomConstraint | null;
   onOpenRoomSize?: () => void;
   onDisableRoomConstraint?: () => void;
+  onShare: (action: 'download' | 'copy') => void | Promise<void>;
 }
 
 function IconButton({
@@ -116,7 +117,6 @@ function TrackStatusBadge({ validation }: { validation: TrackValidation }) {
     const tooltipLines: string[] = [];
     if (hasEdge) {
       tooltipLines.push(`${validation.edgeErrors.length} incompatible edge${validation.edgeErrors.length > 1 ? 's' : ''}:`);
-      // Group edge errors by tile
       const byTile: Record<string, string[]> = {};
       for (const err of validation.edgeErrors) {
         (byTile[err.tileKey] ??= []).push(dirLabel[err.direction]);
@@ -152,7 +152,6 @@ function TrackStatusBadge({ validation }: { validation: TrackValidation }) {
     );
   }
 
-  // No edge errors or lane breaks, but not a valid closed loop
   const reason = !validation.hasClosedLoop
     ? 'No closed loop'
     : !validation.lanesAreContinuous
@@ -204,6 +203,111 @@ function TrackStatusBadge({ validation }: { validation: TrackValidation }) {
   );
 }
 
+/* ── Share Popover ───────────────────────────────────────────────── */
+
+function SharePopover({ onShare }: { onShare: (action: 'download' | 'copy') => void }) {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  const handleCopy = () => {
+    onShare('copy');
+    setCopied(true);
+    setTimeout(() => { setCopied(false); setOpen(false); }, 1500);
+  };
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        title="Share or download track"
+        className="flex items-center justify-center w-9 h-9 rounded-lg transition-all cursor-pointer"
+        style={{
+          backgroundColor: open ? 'var(--c-accent-bg-hover)' : 'var(--c-bg-input)',
+          border: `1px solid ${open ? 'var(--c-accent-border)' : 'var(--c-border)'}`,
+          color: open ? 'var(--c-accent)' : 'var(--c-text-icon)',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)';
+          e.currentTarget.style.borderColor = 'var(--c-accent-border)';
+          e.currentTarget.style.color = 'var(--c-accent)';
+        }}
+        onMouseLeave={(e) => {
+          if (!open) {
+            e.currentTarget.style.backgroundColor = 'var(--c-bg-input)';
+            e.currentTarget.style.borderColor = 'var(--c-border)';
+            e.currentTarget.style.color = 'var(--c-text-icon)';
+          }
+        }}
+      >
+        <Share2 size={15} />
+      </button>
+
+      {open && (
+        <div
+          className="absolute right-0 top-11 rounded-xl overflow-hidden z-50"
+          style={{
+            backgroundColor: 'var(--c-menu-bg)',
+            border: '1px solid var(--c-menu-border)',
+            boxShadow: '0 8px 32px var(--c-shadow-strong)',
+            minWidth: 200,
+          }}
+        >
+          <div className="px-4 py-2.5 border-b" style={{ borderColor: 'var(--c-menu-border)' }}>
+            <span style={{ color: 'var(--c-text-muted)', fontSize: '10px', letterSpacing: '0.08em', fontWeight: 600 }}>SHARE & EXPORT</span>
+          </div>
+
+          <button
+            onClick={() => { onShare('download'); setOpen(false); }}
+            className="flex items-center gap-3 w-full px-4 py-3 transition-colors cursor-pointer"
+            style={{ color: 'var(--c-text)', fontSize: '13px' }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-bg-hover)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+          >
+            <div className="flex items-center justify-center w-7 h-7 rounded-lg" style={{ backgroundColor: 'rgba(254,87,87,0.12)' }}>
+              <Download size={13} style={{ color: '#FE5757' }} />
+            </div>
+            <div className="text-left">
+              <div style={{ fontSize: '13px', color: 'var(--c-text)' }}>Download PNG</div>
+              <div style={{ fontSize: '11px', color: 'var(--c-text-muted)' }}>High-res, print ready</div>
+            </div>
+          </button>
+
+          <button
+            onClick={handleCopy}
+            className="flex items-center gap-3 w-full px-4 py-3 transition-colors cursor-pointer"
+            style={{ color: 'var(--c-text)', fontSize: '13px' }}
+            onMouseEnter={(e) => { if (!copied) e.currentTarget.style.backgroundColor = 'var(--c-bg-hover)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+          >
+            <div className="flex items-center justify-center w-7 h-7 rounded-lg" style={{ backgroundColor: copied ? 'rgba(34,197,94,0.12)' : 'rgba(99,102,241,0.12)' }}>
+              {copied
+                ? <Check size={13} style={{ color: '#22C55E' }} />
+                : <Copy size={13} style={{ color: '#818CF8' }} />
+              }
+            </div>
+            <div className="text-left">
+              <div style={{ fontSize: '13px', color: copied ? '#22C55E' : 'var(--c-text)' }}>
+                {copied ? 'Copied!' : 'Share Track'}
+              </div>
+              <div style={{ fontSize: '11px', color: 'var(--c-text-muted)' }}>Copies a shareable URL</div>
+            </div>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function TopBar({
   layoutName,
   onLayoutNameChange,
@@ -220,6 +324,7 @@ export function TopBar({
   roomConstraint,
   onOpenRoomSize,
   onDisableRoomConstraint,
+  onShare,
 }: TopBarProps) {
   const { isDark, toggle } = useTheme();
   const [editing, setEditing] = useState(false);
@@ -230,7 +335,6 @@ export function TopBar({
   useEffect(() => { setEditValue(layoutName); }, [layoutName]);
   useEffect(() => { if (editing && inputRef.current) inputRef.current.select(); }, [editing]);
 
-  // Auto-dismiss the confirm prompt after 3 seconds
   useEffect(() => {
     if (!confirmClear) return;
     const t = setTimeout(() => setConfirmClear(false), 3000);
@@ -323,36 +427,18 @@ export function TopBar({
                 <button
                   onClick={() => { onClearAll(); setConfirmClear(false); }}
                   className="flex items-center gap-1 px-2 py-0.5 rounded transition-all cursor-pointer"
-                  style={{
-                    backgroundColor: 'rgba(239,68,68,0.1)',
-                    border: '1px solid rgba(239,68,68,0.3)',
-                    color: '#EF4444',
-                    fontSize: '11px',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.1)';
-                  }}
+                  style={{ backgroundColor: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#EF4444', fontSize: '11px' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.2)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.1)'; }}
                 >
                   Yes, clear
                 </button>
                 <button
                   onClick={() => setConfirmClear(false)}
                   className="px-2 py-0.5 rounded transition-all cursor-pointer"
-                  style={{
-                    backgroundColor: 'transparent',
-                    border: '1px solid var(--c-border)',
-                    color: 'var(--c-text-muted)',
-                    fontSize: '11px',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }}
+                  style={{ backgroundColor: 'transparent', border: '1px solid var(--c-border)', color: 'var(--c-text-muted)', fontSize: '11px' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
                   Cancel
                 </button>
@@ -362,12 +448,7 @@ export function TopBar({
                 onClick={() => setConfirmClear(true)}
                 title="Clear all tiles"
                 className="flex items-center gap-1.5 px-2 py-1 rounded transition-all cursor-pointer"
-                style={{
-                  backgroundColor: 'transparent',
-                  border: '1px solid transparent',
-                  color: 'var(--c-text-muted)',
-                  fontSize: '12px',
-                }}
+                style={{ backgroundColor: 'transparent', border: '1px solid transparent', color: 'var(--c-text-muted)', fontSize: '12px' }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.08)';
                   e.currentTarget.style.borderColor = 'rgba(239,68,68,0.2)';
@@ -388,15 +469,11 @@ export function TopBar({
 
         {tileCount > 0 && <TrackStatusBadge validation={trackValidation} />}
 
-        {/* Room constraint pill / invalid tiles warning */}
         {roomConstraint?.enabled && (
           <div className="flex items-center gap-2">
             <div
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
-              style={{
-                backgroundColor: 'rgba(0,212,255,0.1)',
-                border: '1px solid rgba(0,212,255,0.2)',
-              }}
+              style={{ backgroundColor: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.2)' }}
             >
               <Ruler size={12} style={{ color: '#00D4FF' }} />
               <span style={{ color: '#00D4FF', fontSize: '11px', whiteSpace: 'nowrap' }}>
@@ -416,33 +493,24 @@ export function TopBar({
             {roomConstraint.invalidTileKeys.size > 0 && (
               <div
                 className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
-                style={{
-                  backgroundColor: 'rgba(245,158,11,0.1)',
-                  border: '1px solid rgba(245,158,11,0.2)',
-                }}
+                style={{ backgroundColor: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)' }}
                 title={`${roomConstraint.invalidTileKeys.size} tile${roomConstraint.invalidTileKeys.size !== 1 ? 's' : ''} outside room bounds`}
               >
                 <AlertTriangle size={12} style={{ color: '#F59E0B' }} />
-                <span style={{ color: '#F59E0B', fontSize: '11px' }}>
-                  {roomConstraint.invalidTileKeys.size} outside
-                </span>
+                <span style={{ color: '#F59E0B', fontSize: '11px' }}>{roomConstraint.invalidTileKeys.size} outside</span>
               </div>
             )}
           </div>
         )}
       </div>
 
-      {/* Right: Theme toggle + Room Size + Generate + Layouts */}
+      {/* Right: Theme + Room + Share + Generate + Layouts */}
       <div className="flex items-center gap-2">
         <button
           onClick={toggle}
           title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
           className="flex items-center justify-center w-9 h-9 rounded-lg transition-all cursor-pointer"
-          style={{
-            backgroundColor: 'var(--c-bg-input)',
-            border: '1px solid var(--c-border)',
-            color: 'var(--c-text-icon)',
-          }}
+          style={{ backgroundColor: 'var(--c-bg-input)', border: '1px solid var(--c-border)', color: 'var(--c-text-icon)' }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)';
             e.currentTarget.style.borderColor = 'var(--c-accent-border)';
@@ -481,15 +549,13 @@ export function TopBar({
           <Ruler size={14} />
         </button>
 
+        {/* Share / Export */}
+        <SharePopover onShare={onShare} />
+
         <button
           onClick={onOpenGenerate}
           className="flex items-center gap-2 px-4 py-2 rounded transition-all cursor-pointer"
-          style={{
-            backgroundColor: 'var(--c-accent-bg)',
-            border: '1px solid var(--c-accent-border)',
-            color: 'var(--c-accent)',
-            fontSize: '13px',
-          }}
+          style={{ backgroundColor: 'var(--c-accent-bg)', border: '1px solid var(--c-accent-border)', color: 'var(--c-accent)', fontSize: '13px' }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)';
             e.currentTarget.style.borderColor = 'var(--c-accent-border-strong)';
@@ -507,11 +573,7 @@ export function TopBar({
         <button
           onClick={onOpenLayouts}
           className="flex items-center gap-2 px-4 py-2 rounded transition-all cursor-pointer"
-          style={{
-            backgroundColor: 'var(--c-accent)',
-            color: isDark ? '#0F1115' : '#FFFFFF',
-            fontSize: '13px',
-          }}
+          style={{ backgroundColor: 'var(--c-accent)', color: isDark ? '#0F1115' : '#FFFFFF', fontSize: '13px' }}
           onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-accent-hover)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-accent)'; }}
         >

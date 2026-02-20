@@ -3,11 +3,11 @@ import { createPortal } from 'react-dom';
 import { useDrag, useDrop, useDragLayer } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { TileRenderer } from './TileRenderer';
-import { MiniMap } from './MiniMap';
+
 import type { PlacedTile, DragItem, TileType, RoomConstraint } from '@/types/builder';
 import { CELL_SIZE, isInBounds } from '@/types/builder';
 import { Plus, Minus, Maximize2, Grip } from 'lucide-react';
-import { getTileEdgeErrors, type TrackValidation, type TileEdgeError } from '../lib/edge-validator';
+import { getTileEdgeErrors, type TrackValidation } from '../lib/edge-validator';
 import { toast } from 'sonner';
 
 interface CanvasProps {
@@ -297,7 +297,7 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
     [dragRotation]
   );
 
-  const [, dropRef] = useDrop<DragItem, void, {}>(() => ({
+  const [, dropRef] = useDrop<DragItem, void, unknown>(() => ({
     accept: 'TILE',
     hover: (item, monitor) => {
       isDraggingRef.current = true;
@@ -499,24 +499,24 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
           {/* ── Grid layer (NOT inside TrackVisualLayer) ──────────── */}
           <svg
             className="absolute"
-            style={{ left: svgLeft, top: svgTop, width: svgWidth, height: svgHeight, pointerEvents: 'none', overflow: 'visible' }}
+            style={{ left: svgLeft, top: svgTop, width: svgWidth, height: svgHeight, pointerEvents: 'none', overflow: 'visible', zIndex: 18 }}
             viewBox={`${svgLeft} ${svgTop} ${svgWidth} ${svgHeight}`}
           >
             {Array.from({ length: colCount + 1 }).map((_, i) => {
               const x = (startCol + i) * CELL_SIZE;
-              return <line key={`v-${startCol + i}`} x1={x} y1={svgTop} x2={x} y2={svgTop + svgHeight} stroke="var(--c-grid-line)" strokeWidth={1} />;
+              return <line key={`v-${startCol + i}`} x1={x} y1={svgTop} x2={x} y2={svgTop + svgHeight} stroke="var(--c-grid-line)" strokeWidth={1.5} />;
             })}
             {Array.from({ length: rowCount + 1 }).map((_, i) => {
               const y = (startRow + i) * CELL_SIZE;
-              return <line key={`h-${startRow + i}`} x1={svgLeft} y1={y} x2={svgLeft + svgWidth} y2={y} stroke="var(--c-grid-line)" strokeWidth={1} />;
+              return <line key={`h-${startRow + i}`} x1={svgLeft} y1={y} x2={svgLeft + svgWidth} y2={y} stroke="var(--c-grid-line)" strokeWidth={1.5} />;
             })}
             {Array.from({ length: colCount + 1 }).map((_, i) => {
               const x = (startCol + i) * CELL_SIZE;
-              return <line key={`vd-${startCol + i}`} x1={x} y1={svgTop} x2={x} y2={svgTop + svgHeight} stroke="var(--c-grid-dash)" strokeWidth={1} strokeDasharray="2 4" />;
+              return <line key={`vd-${startCol + i}`} x1={x} y1={svgTop} x2={x} y2={svgTop + svgHeight} stroke="var(--c-grid-dash)" strokeWidth={1.5} strokeDasharray="2 4" />;
             })}
             {Array.from({ length: rowCount + 1 }).map((_, i) => {
               const y = (startRow + i) * CELL_SIZE;
-              return <line key={`hd-${startRow + i}`} x1={svgLeft} y1={y} x2={svgLeft + svgWidth} y2={y} stroke="var(--c-grid-dash)" strokeWidth={1} strokeDasharray="2 4" />;
+              return <line key={`hd-${startRow + i}`} x1={svgLeft} y1={y} x2={svgLeft + svgWidth} y2={y} stroke="var(--c-grid-dash)" strokeWidth={1.5} strokeDasharray="2 4" />;
             })}
             <line x1={0} y1={svgTop} x2={0} y2={svgTop + svgHeight} stroke="var(--c-grid-crosshair)" strokeWidth={1} strokeDasharray="4 8" />
             <line x1={svgLeft} y1={0} x2={svgLeft + svgWidth} y2={0} stroke="var(--c-grid-crosshair)" strokeWidth={1} strokeDasharray="4 8" />
@@ -679,8 +679,6 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
           </div>
         </div>
       )}
-
-      <MiniMap tiles={tiles} pan={pan} zoom={zoom} containerWidth={containerSize.width} containerHeight={containerSize.height} />
 
       {/* Zoom controls */}
       <div

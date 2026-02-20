@@ -699,7 +699,7 @@ function buildVariantC(
 
   // Large, balanced — push both dims as high as budget allows
   const jitter = Math.floor(rng() * 2);
-  let target = Math.min(maxSum, maxC * 2); // target cW+cH
+  const target = Math.min(maxSum, maxC * 2); // target cW+cH
   let cW = clamp(Math.floor(target / 2) + jitter, 2, maxC);
   let cH = clamp(target - cW, 2, maxC);
   while (cW + cH > maxSum && (cW > 2 || cH > 2)) {

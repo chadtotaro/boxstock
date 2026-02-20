@@ -60,6 +60,7 @@ export function LayoutResultsOverlay({
 
   // Reset card visibility when layouts change (after regeneration)
   useEffect(() => {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
     setCardsVisible(false);
     const t = setTimeout(() => setCardsVisible(true), 80);
     return () => clearTimeout(t);

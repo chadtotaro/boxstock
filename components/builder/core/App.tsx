@@ -1,3 +1,4 @@
+import { supabase } from "@/lib/supabase";
 import type { TileType, PlacedTile, Layout, SaveStatus, RoomConstraint, RoomUnit } from '@/types/builder';
 import { TILE_DEFINITIONS } from '@/data/tile-data';
 import { isInBounds } from '@/types/builder';
@@ -17,7 +18,7 @@ import { LayoutResultsOverlay, generateThreeLayouts, type GeneratedLayout, type 
 import { useUndoableTiles } from './hooks/useUndoable';
 import { RoomSizeModal } from './components/RoomSizeModal';
 import { OutsideTilesModal } from './components/OutsideTilesModal';
-
+import { renderThumbnail } from './lib/thumbnail-renderer';
 const LAYOUTS_KEY = 'miniz-layouts';
 const CURRENT_ID_KEY = 'miniz-current-layout-id';
 const AUTOSAVE_DELAY = 800;
@@ -131,26 +132,67 @@ function AppInner() {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved');
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSavedRef = useRef<string>(JSON.stringify(currentLayout?.tiles || {}));
-
-  const performSave = useCallback(() => {
-    setSaveStatus('saving');
-    const updated = layouts.map((l) =>
-      l.id === currentLayoutId ? { ...l, tiles, lastModified: Date.now() } : l
-    );
-    setLayouts(updated);
-    saveLayouts(updated);
-    lastSavedRef.current = JSON.stringify(tiles);
-    setTimeout(() => setSaveStatus('saved'), 300);
-  }, [layouts, currentLayoutId, tiles]);
-
-  useEffect(() => {
+  const [lastSavedJson, setLastSavedJson] = useState<string>(
+    JSON.stringify(currentLayout?.tiles || {})
+  );
+  const isDirty = useMemo(() => {
     const current = JSON.stringify(tiles);
-    if (current === lastSavedRef.current) return;
-    setSaveStatus('unsaved');
+    return current !== lastSavedJson;
+  }, [tiles, lastSavedJson]);
+  const derivedSaveStatus: SaveStatus =
+  saveStatus === 'saving'
+    ? 'saving'
+    : isDirty
+      ? 'unsaved'
+      : 'saved';
+      const performSave = useCallback(async () => {
+        setSaveStatus('saving');
+      
+        const thumb =
+        typeof window !== 'undefined'
+        ? renderThumbnail({ tiles, width: 260, height: 180 })          : null;
+          console.log('Generated thumbnail:', thumb);
+        const updated = layouts.map((l) =>
+          l.id === currentLayoutId
+            ? {
+                ...l,
+                tiles,
+                lastModified: Date.now(),
+                thumbnailDataUrl: thumb ?? l.thumbnailDataUrl,
+              }
+            : l
+        );
+      
+        const current = updated.find((l) => l.id === currentLayoutId);
+        const rest = updated.filter((l) => l.id !== currentLayoutId);
+        const reordered = current ? [current, ...rest] : updated;
+      
+        setLayouts(reordered);
+        saveLayouts(reordered);
+      
+        const saved = JSON.stringify(tiles);
+        lastSavedRef.current = saved;
+        setLastSavedJson(saved);
+      
+        setTimeout(() => setSaveStatus('saved'), 300);
+      }, [layouts, currentLayoutId, tiles]);
+
+useEffect(() => {
+  const current = JSON.stringify(tiles);
+  if (current === lastSavedRef.current) return;
+
+ 
+
+  if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+
+  saveTimerRef.current = setTimeout(() => {
+    void performSave();
+  }, AUTOSAVE_DELAY);
+
+  return () => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
-    saveTimerRef.current = setTimeout(() => { performSave(); }, AUTOSAVE_DELAY);
-    return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
-  }, [tiles, performSave]);
+  };
+}, [tiles, performSave]);
 
   const updateCurrentLayout = useCallback(
     (updater: (layout: Layout) => Layout) => {
@@ -165,6 +207,30 @@ function AppInner() {
     [currentLayoutId]
   );
 
+  const handleShare = useCallback(async (action: 'download' | 'copy') => {
+    if (action === 'download') {
+      const dataUrl = renderThumbnail({ tiles, width: 2400, height: 1600 });
+      if (!dataUrl) return;
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      const layout = layouts.find(l => l.id === currentLayoutId);
+      a.download = `${layout?.name ?? 'track'}.png`;
+      a.click();
+    } else {
+      const layout = layouts.find(l => l.id === currentLayoutId);
+      const { data, error } = await supabase
+        .from('shared_tracks')
+        .insert({ layout_name: layout?.name ?? 'Untitled', tiles })
+        .select('id')
+        .single();
+      if (!error && data) {
+        const url = `${window.location.origin}/track/${data.id}`;
+        await navigator.clipboard.writeText(url);
+        toast.success('Link copied!', { description: url });
+      }
+    }
+  }, [tiles, layouts, currentLayoutId]);
+
   const handleLayoutNameChange = useCallback(
     (name: string) => updateCurrentLayout((l) => ({ ...l, name })),
     [updateCurrentLayout]
@@ -175,30 +241,32 @@ function AppInner() {
     [updateCurrentLayout]
   );
 
-  const toastStyle = {
+  const toastStyle = useMemo(() => ({
     backgroundColor: 'var(--c-bg-panel)',
     border: '1px solid var(--c-border)',
     color: 'var(--c-text)',
-  };
+  }), []);
 
   const handleOpenLayout = useCallback(
     (layoutId: string) => {
-      performSave();
+      void performSave();
       const target = layouts.find((l) => l.id === layoutId);
       if (target) {
         setCurrentLayoutId(layoutId);
         saveCurrentId(layoutId);
         resetTo(target.tiles);
-        lastSavedRef.current = JSON.stringify(target.tiles);
-        setSaveStatus('saved');
+        const saved = JSON.stringify(target.tiles);
+        lastSavedRef.current = saved;
+        setLastSavedJson(saved);        setSaveStatus('saved');
         setSelectedTiles(new Set());
+        setCenterRequest(r => r + 1);
       }
     },
     [layouts, performSave, resetTo]
   );
 
-  const handleCreateLayout = useCallback(() => {
-    performSave();
+  const handleCreateLayout = useCallback(async () => {
+    await performSave();
     const newLayout = createEmptyLayout();
     const updated = [newLayout, ...layouts];
     setLayouts(updated);
@@ -207,11 +275,13 @@ function AppInner() {
     saveCurrentId(newLayout.id);
     resetTo({});
     lastSavedRef.current = '{}';
+    setLastSavedJson('{}');
     setSaveStatus('saved');
     setSelectedTiles(new Set());
+    setCenterRequest(r => r + 1);
     setShowLayouts(false);
     toast.success('New layout created', { style: toastStyle, duration: 1500 });
-  }, [layouts, performSave, resetTo]);
+  }, [layouts, performSave, resetTo, toastStyle]);
 
   const handleDuplicateLayout = useCallback(
     (layoutId: string) => {
@@ -227,7 +297,7 @@ function AppInner() {
       saveLayouts(updated);
       toast.success('Layout duplicated', { style: toastStyle, duration: 1500 });
     },
-    [layouts]
+    [layouts, toastStyle]
   );
 
   const handleRenameLayout = useCallback(
@@ -253,7 +323,7 @@ function AppInner() {
       });
       toast.success('Layout deleted', { style: toastStyle, duration: 1500 });
     },
-    [currentLayoutId]
+    [currentLayoutId, toastStyle]
   );
 
   // ── Tile operations ───────────────────────────────────────────
@@ -327,7 +397,7 @@ function AppInner() {
   }, [setTiles]);
 
   const [lastDuplicatedKey, setLastDuplicatedKey] = useState<string | null>(null);
-  const [centerRequest, setCenterRequest] = useState(0);
+  const [centerRequest, setCenterRequest] = useState(1);
 
   // ── Room Constraint ──────────────────────────────────────────
   const [roomConstraint, setRoomConstraint] = useState<RoomConstraint | null>(null);
@@ -380,7 +450,7 @@ function AppInner() {
 
       setShowRoomModal(false);
     },
-    [tiles]
+    [tiles, toastStyle]
   );
 
   const handleOutsideTilesCancel = useCallback(() => {
@@ -401,7 +471,7 @@ function AppInner() {
     setRoomConstraint(outsideTilesInfo.pendingConstraint);
     setOutsideTilesInfo(null);
     toast.success(`Room constraint set, ${keysToRemove.size} tile${keysToRemove.size !== 1 ? 's' : ''} removed`, { style: toastStyle, duration: 2000 });
-  }, [outsideTilesInfo, setTiles]);
+  }, [outsideTilesInfo, setTiles, toastStyle]);
 
   const handleOutsideTilesKeepInvalid = useCallback(() => {
     if (!outsideTilesInfo) return;
@@ -409,12 +479,12 @@ function AppInner() {
     setRoomConstraint(constraint);
     setOutsideTilesInfo(null);
     toast.success('Room constraint set, outside tiles marked invalid', { style: toastStyle, duration: 2000 });
-  }, [outsideTilesInfo]);
+  }, [outsideTilesInfo, toastStyle]);
 
   const handleDisableRoomConstraint = useCallback(() => {
     setRoomConstraint(null);
     toast.success('Room constraint disabled', { style: toastStyle, duration: 1500 });
-  }, []);
+  }, [toastStyle]);
 
   // ── Inventory placement ───────────────────────────────────────
 
@@ -432,7 +502,7 @@ function AppInner() {
       setCenterRequest((c) => c + 1);
       toast.success(`Placed ${result.count} tiles`, { style: toastStyle, duration: 2000 });
     },
-    [tiles, setTiles],
+    [tiles, setTiles, toastStyle],
   );
 
   const handleRemoveDumpedTiles = useCallback(() => {
@@ -445,7 +515,7 @@ function AppInner() {
     });
     setSelectedTiles(new Set());
     toast.success('Removed dumped inventory tiles', { style: toastStyle, duration: 2000 });
-  }, [setTiles]);
+  }, [setTiles, toastStyle]);
 
   const duplicateTile = useCallback(() => {
     if (selectedTiles.size === 0) return;
@@ -493,7 +563,7 @@ function AppInner() {
         duration: 1500,
       });
     }
-  }, [selectedTiles, tiles, setTiles]);
+  }, [selectedTiles, tiles, setTiles, toastStyle]);
 
   // ── Keyboard shortcuts ────────────────────────────────────────
 
@@ -539,9 +609,10 @@ function AppInner() {
         <TopBar
           layoutName={currentLayout?.name || 'Untitled'}
           onLayoutNameChange={handleLayoutNameChange}
-          saveStatus={saveStatus}
+          saveStatus={derivedSaveStatus}
           onOpenLayouts={() => setShowLayouts(true)}
           onOpenGenerate={() => setShowGenerate(true)}
+          onShare={handleShare}
           onUndo={undo}
           onRedo={redo}
           canUndo={canUndo}

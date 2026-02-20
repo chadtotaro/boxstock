@@ -14,6 +14,7 @@ interface TileRendererProps {
   hovered?: boolean;
   edgeErrors?: TileEdgeError[];
   ghost?: boolean;
+  showGrid?: boolean;
 }
 
 /* ── Individual tile SVGs (native 144x144) ───────────────────────── */
@@ -31,7 +32,7 @@ function StraightSVG() {
 
 function CornerDiv() {
   return (
-    <div style={{ width: 144, height: 144, position: 'relative', background: 'var(--c-canvas-bg)' }}>
+    <div style={{ width: 144, height: 144, position: 'relative', background: 'transparent)' }}>
       <div style={{ position: 'absolute', left: 0, top: 0, width: 144, height: 144, backgroundColor: '#fe5757', borderBottomRightRadius: 500 }} />
       <div style={{ position: 'absolute', left: 0, top: 0, width: 116, height: 116, backgroundColor: 'var(--c-tile-dark)', borderBottomRightRadius: 500 }} />
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{ position: 'absolute', left: 10, top: 124 }}><circle cx="5" cy="5" r="5" fill="#D9D9D9" /></svg>
@@ -120,6 +121,7 @@ export function TileRenderer({
   hovered = false,
   edgeErrors = [],
   ghost = false,
+  showGrid = false,
 }: TileRendererProps) {
   const Component = TILE_COMPONENTS[tileType];
   const needsScaling = NEEDS_SCALING[tileType];
@@ -167,10 +169,12 @@ export function TileRenderer({
       </div>
 
       {/* Dashed grid border overlay */}
-      <div
-        className="absolute inset-0 border border-dashed pointer-events-none"
-        style={{ borderColor: 'var(--c-border-dashed)', zIndex: 2 }}
-      />
+      {showGrid && (
+  <div
+    className="absolute inset-0 border border-dashed pointer-events-none"
+    style={{ borderColor: 'var(--c-border-dashed)', zIndex: 2 }}
+  />
+)}
 
       {/* Hover highlight border */}
       {hovered && !selected && (
