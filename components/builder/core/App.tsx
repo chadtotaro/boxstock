@@ -1,3 +1,4 @@
+import { useAuth } from "./hooks/useAuth";
 import { supabase } from "@/lib/supabase";
 import type { TileType, PlacedTile, Layout, SaveStatus, RoomConstraint, RoomUnit } from '@/types/builder';
 import { TILE_DEFINITIONS } from '@/data/tile-data';
@@ -98,6 +99,8 @@ function migrateOldStorage(): Layout | null {
 }
 
 function AppInner() {
+  const { user, loading: authLoading, signOut } = useAuth();
+  if (authLoading) return null;
   const [layouts, setLayouts] = useState<Layout[]>(() => {
     let loaded = loadLayouts();
     const migrated = migrateOldStorage();
