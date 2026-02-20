@@ -101,6 +101,7 @@ function migrateOldStorage(): Layout | null {
 function AppInner() {
   const { user, loading: authLoading, signOut } = useAuth();
   if (authLoading) return null;
+  if (!user && !authLoading) { window.location.href = "/login"; return null; }
   const [layouts, setLayouts] = useState<Layout[]>(() => {
     let loaded = loadLayouts();
     const migrated = migrateOldStorage();
