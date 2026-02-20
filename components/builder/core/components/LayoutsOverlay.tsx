@@ -34,7 +34,7 @@ function LayoutThumbnail({ tiles, width, height }: { tiles: Record<string, Place
 
   if (tileArr.length === 0) {
     return (
-      <div className="flex items-center justify-center rounded" style={{ width, height, backgroundColor: '#0A0C10' }}>
+      <div className="flex items-center justify-center rounded" style={{ width: "100%", height, backgroundColor: "#0A0C10" }}>
         
       </div>
     );
