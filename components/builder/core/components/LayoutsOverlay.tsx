@@ -34,7 +34,7 @@ function LayoutThumbnail({ tiles, width, height }: { tiles: Record<string, Place
 
   if (tileArr.length === 0) {
     return (
-      <div className="flex items-center justify-center rounded" style={{ width, height, backgroundColor: 'var(--c-bg-input)' }}>
+      <div className="flex items-center justify-center rounded" style={{ width, height, backgroundColor: 'var(--c-bg-panel)' }}>
         
       </div>
     );
@@ -58,7 +58,7 @@ function LayoutThumbnail({ tiles, width, height }: { tiles: Record<string, Place
   const offsetY = (height - totalY * cellSize) / 2;
 
   return (
-    <svg width={width} height={height} className="block rounded" style={{ backgroundColor: 'var(--c-bg-input)' }}>
+    <svg width={width} height={height} className="block rounded" style={{ backgroundColor: 'var(--c-bg-panel)' }}>
       {Array.from({ length: totalX + 1 }).map((_, i) => (
         <line key={`gv-${i}`} x1={offsetX + i * cellSize} y1={offsetY} x2={offsetX + i * cellSize} y2={offsetY + totalY * cellSize} stroke="var(--c-minimap-grid)" strokeWidth={0.5} />
       ))}
@@ -111,7 +111,7 @@ function CardMenu({
         onBlur={() => { onRename(layoutId, renameValue.trim() || layoutName); setRenaming(false); }}
         onClick={(e) => e.stopPropagation()}
         className="outline-none rounded px-2 py-0.5 w-full"
-        style={{ backgroundColor: 'var(--c-bg-input)', border: '1px solid var(--c-accent-border-strong)', color: 'var(--c-text)', fontSize: '13px' }}
+        style={{ backgroundColor: 'var(--c-bg-panel)', border: '1px solid var(--c-accent-border-strong)', color: 'var(--c-text)', fontSize: '13px' }}
       />
     );
   }
@@ -387,7 +387,7 @@ export function LayoutsOverlay({
 
         {/* Toolbar */}
         <div className="flex items-center gap-3 px-6 py-3 border-b shrink-0 flex-wrap" style={{ borderColor: 'var(--c-border)' }}>
-          <div className="flex items-center gap-2 rounded-lg px-3 py-2 flex-1" style={{ backgroundColor: 'var(--c-bg-input)', border: '1px solid var(--c-border)', minWidth: 200, maxWidth: 360 }}>
+          <div className="flex items-center gap-2 rounded-lg px-3 py-2 flex-1" style={{ backgroundColor: 'var(--c-bg-panel)', border: '1px solid var(--c-border)', minWidth: 200, maxWidth: 360 }}>
             <Search size={14} style={{ color: 'var(--c-text-muted)' }} />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search layouts..." className="bg-transparent outline-none flex-1" style={{ color: 'var(--c-text)', fontSize: '13px' }} />
           </div>
