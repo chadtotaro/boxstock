@@ -246,5 +246,6 @@ export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTil
           </button>
         </div>
       )}
+    </div>
     );
 }
