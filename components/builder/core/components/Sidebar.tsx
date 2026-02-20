@@ -4,7 +4,7 @@ import { TileRenderer } from './TileRenderer';
 import { TagInput } from './TagInput';
 import { TILE_ORDER, TILE_DEFINITIONS } from '@/data/tile-data';
 import type { TileType, DragItem, PlacedTile } from '@/types/builder';
-import { RotateCw, MousePointer, Redo2, Move, Tag, Trash2, LayoutGrid } from 'lucide-react';
+import { RotateCw, MousePointer, Redo2, Move, Tag, Trash2, LayoutGrid, Keyboard } from 'lucide-react';
 
 interface DraggableTileProps {
   tileType: TileType;
