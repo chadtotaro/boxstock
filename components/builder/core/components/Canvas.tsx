@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useDrag, useDrop, useDragLayer } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { TileRenderer } from './TileRenderer';
+import { FloatingShortcutsPanel } from './Sidebar';
 
 import type { PlacedTile, DragItem, TileType, RoomConstraint } from '@/types/builder';
 import { CELL_SIZE, isInBounds } from '@/types/builder';
