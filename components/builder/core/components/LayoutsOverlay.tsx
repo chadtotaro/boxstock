@@ -34,7 +34,7 @@ function LayoutThumbnail({ tiles, width, height }: { tiles: Record<string, Place
 
   if (tileArr.length === 0) {
     return (
-      <div className="flex items-center justify-center rounded" style={{ width, height, backgroundColor: '#000000' }}>
+      <div className="flex items-center justify-center rounded" style={{ width, height, backgroundColor: '#0A0C10' }}>
         
       </div>
     );
@@ -58,7 +58,7 @@ function LayoutThumbnail({ tiles, width, height }: { tiles: Record<string, Place
   const offsetY = (height - totalY * cellSize) / 2;
 
   return (
-    <svg width={width} height={height} className="block rounded" style={{ backgroundColor: '#000000' }}>
+    <svg width={width} height={height} className="block rounded" style={{ backgroundColor: '#0A0C10' }}>
       {Array.from({ length: totalX + 1 }).map((_, i) => (
         <line key={`gv-${i}`} x1={offsetX + i * cellSize} y1={offsetY} x2={offsetX + i * cellSize} y2={offsetY + totalY * cellSize} stroke="var(--c-minimap-grid)" strokeWidth={0.5} />
       ))}
@@ -111,7 +111,7 @@ function CardMenu({
         onBlur={() => { onRename(layoutId, renameValue.trim() || layoutName); setRenaming(false); }}
         onClick={(e) => e.stopPropagation()}
         className="outline-none rounded px-2 py-0.5 w-full"
-        style={{ backgroundColor: '#000000', border: '1px solid var(--c-accent-border-strong)', color: 'var(--c-text)', fontSize: '13px' }}
+        style={{ backgroundColor: '#0A0C10', border: '1px solid var(--c-accent-border-strong)', color: 'var(--c-text)', fontSize: '13px' }}
       />
     );
   }
@@ -184,7 +184,7 @@ function LayoutCard({
     <div
       className="rounded-lg transition-all overflow-hidden"
       style={{
-        backgroundColor: '#000000',
+        backgroundColor: '#0A0C10',
         border: `1px solid ${isCurrent ? 'var(--c-accent-border-strong)' : hovered ? 'var(--c-card-hover-border)' : 'var(--c-border)'}`,
         boxShadow: hovered ? '0 8px 24px var(--c-shadow)' : '0 2px 8px var(--c-shadow)',
         transform: hovered ? 'translateY(-2px)' : 'none',
@@ -387,7 +387,7 @@ export function LayoutsOverlay({
 
         {/* Toolbar */}
         <div className="flex items-center gap-3 px-6 py-3 border-b shrink-0 flex-wrap" style={{ borderColor: 'var(--c-border)' }}>
-          <div className="flex items-center gap-2 rounded-lg px-3 py-2 flex-1" style={{ backgroundColor: '#000000', border: '1px solid var(--c-border)', minWidth: 200, maxWidth: 360 }}>
+          <div className="flex items-center gap-2 rounded-lg px-3 py-2 flex-1" style={{ backgroundColor: '#0A0C10', border: '1px solid var(--c-border)', minWidth: 200, maxWidth: 360 }}>
             <Search size={14} style={{ color: 'var(--c-text-muted)' }} />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search layouts..." className="bg-transparent outline-none flex-1" style={{ color: 'var(--c-text)', fontSize: '13px' }} />
           </div>
@@ -396,7 +396,7 @@ export function LayoutsOverlay({
             value={sort} onChange={(e) => setSort(e.target.value as SortMode)}
             className="rounded-lg px-3 py-2 outline-none cursor-pointer"
             style={{
-              backgroundColor: '#000000',
+              backgroundColor: '#0A0C10',
               border: '1px solid var(--c-border)',
               color: 'var(--c-text-secondary)',
               fontSize: '12px',
