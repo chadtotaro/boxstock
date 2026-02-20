@@ -327,6 +327,8 @@ export function TopBar({
   onOpenRoomSize,
   onDisableRoomConstraint,
   onShare,
+  onSignOut,
+  userEmail,
 }: TopBarProps) {
   const { isDark, toggle } = useTheme();
   const [editing, setEditing] = useState(false);
