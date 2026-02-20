@@ -100,8 +100,6 @@ function migrateOldStorage(): Layout | null {
 
 function AppInner() {
   const { user, loading: authLoading, signOut } = useAuth();
-  if (authLoading) return null;
-  if (!user && !authLoading) { window.location.href = "/login"; return null; }
   const [layouts, setLayouts] = useState<Layout[]>(() => {
     let loaded = loadLayouts();
     const migrated = migrateOldStorage();
@@ -180,7 +178,16 @@ function AppInner() {
       
         setTimeout(() => setSaveStatus('saved'), 300);
       }, [layouts, currentLayoutId, tiles]);
-
+      useEffect(() => {
+        if (!authLoading && !user) {
+          window.location.href = '/login';
+        }
+      }, [authLoading, user]);
+      useEffect(() => {
+  if (!authLoading && !user) {
+    window.location.href = '/login';
+  }
+}, [authLoading, user]);
 useEffect(() => {
   const current = JSON.stringify(tiles);
   if (current === lastSavedRef.current) return;
