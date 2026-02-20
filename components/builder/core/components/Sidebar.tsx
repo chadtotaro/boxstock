@@ -115,7 +115,7 @@ export function FloatingShortcutsPanel() {
   const isMac = typeof navigator !== 'undefined' && /Mac/.test(navigator.userAgent);
   const modKey = isMac ? '⌘' : 'Ctrl';
   return (
-    <div style={{ position: 'absolute', bottom: '48px', left: '12px', zIndex: 50 }}>
+    <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 50 }}>
       {open && (
         <div style={{
           backgroundColor: 'var(--c-bg)',
@@ -246,51 +246,5 @@ export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTil
           </button>
         </div>
       )}
-
-      {/* ── Keyboard shortcuts ── */}
-      <div className="mt-auto px-4 py-3 border-t" style={{ borderColor: 'var(--c-border)' }}>
-        <p style={{ color: 'var(--c-text-muted)', fontSize: '11px', marginBottom: '8px', letterSpacing: '0.03em' }}>
-          SHORTCUTS
-        </p>
-        <div className="flex flex-col gap-2">
-          <ShortcutRow label="Click tile to select">
-            <div className="flex items-center justify-center shrink-0" style={{ width: 20 }}>
-              <MousePointer size={12} style={{ color: 'var(--c-text-muted)' }} />
-            </div>
-          </ShortcutRow>
-          <ShortcutRow label="Multi-select">
-            <div className="flex items-center gap-0.5">
-              <Kbd wide>Shift</Kbd>
-              <span style={{ color: 'var(--c-text-muted)', fontSize: '9px' }}>+</span>
-              <div className="flex items-center justify-center shrink-0" style={{ width: 16 }}>
-                <MousePointer size={10} style={{ color: 'var(--c-text-muted)' }} />
-              </div>
-            </div>
-          </ShortcutRow>
-          <ShortcutRow label="Drag to move tile(s)">
-            <div className="flex items-center justify-center shrink-0" style={{ width: 20 }}>
-              <Move size={12} style={{ color: 'var(--c-text-muted)' }} />
-            </div>
-          </ShortcutRow>
-          <ShortcutRow label="Rotate selected"><Kbd>R</Kbd></ShortcutRow>
-          <ShortcutRow label="Duplicate selected"><Kbd>D</Kbd></ShortcutRow>
-          <ShortcutRow label="Scroll to rotate (drag)">
-            <div className="flex items-center justify-center shrink-0" style={{ width: 20 }}>
-              <RotateCw size={11} style={{ color: 'var(--c-text-muted)' }} />
-            </div>
-          </ShortcutRow>
-          <ShortcutRow label="Remove selected"><Kbd wide>Del</Kbd></ShortcutRow>
-          <ShortcutRow label="Undo">
-            <div className="flex items-center gap-0.5"><Kbd wide>{modKey}</Kbd><Kbd>Z</Kbd></div>
-          </ShortcutRow>
-          <ShortcutRow label="Redo">
-            <div className="flex items-center gap-0.5">
-              <Kbd wide>{modKey}</Kbd>
-              <Kbd wide><span className="flex items-center gap-0.5"><Redo2 size={8} />Z</span></Kbd>
-            </div>
-          </ShortcutRow>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
