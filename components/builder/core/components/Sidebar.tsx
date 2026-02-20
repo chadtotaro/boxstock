@@ -114,7 +114,6 @@ export function FloatingShortcutsPanel() {
   const [open, setOpen] = useState(false);
   const isMac = typeof navigator !== 'undefined' && /Mac/.test(navigator.userAgent);
   const modKey = isMac ? '⌘' : 'Ctrl';
-
   return (
     <div style={{ position: 'absolute', bottom: '48px', left: '12px', zIndex: 50 }}>
       {open && (
@@ -145,12 +144,15 @@ export function FloatingShortcutsPanel() {
         onClick={() => setOpen(!open)}
         title="Keyboard shortcuts"
         style={{
-          width: '32px', height: '32px',
+          width: '32px',
+          height: '32px',
           borderRadius: '8px',
           border: '1px solid var(--c-border)',
           backgroundColor: open ? 'var(--c-accent-bg)' : 'var(--c-bg)',
-          color: open ? 'var(--c-accent)' : 'var(--c-text-muted)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center
+          color: open ? 'var-c-accent)' : 'var(--c-text-muted)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           cursor: 'pointer',
           boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
         }}
