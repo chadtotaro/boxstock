@@ -129,7 +129,7 @@ export function FloatingShortcutsPanel() {
         }}>
           <p style={{ color: 'var(--c-text-muted)', fontSize: '11px', marginBottom: '10px', letterSpacing: '0.05em', marginTop: 0 }}>SHORTCUTS</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
-            <ShortcutRow label="Click tile to select"><div style={{ width: 20 'flex', alignItems: 'center', justifyContent: 'center' }}><MousePointer size={12} style={{ color: 'var(--c-text-muted)' }} /></div></ShortcutRow>
+            <ShortcutRow label="Click tile to select"><div style={{ width: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><MousePointer size={12} style={{ color: 'var(--c-text-muted)' }} /></div></ShortcutRow>
             <ShortcutRow label="Multi-select"><div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}><Kbd wide>Shift</Kbd><span style={{ color: 'var(--c-text-muted)', fontSize: '9px' }}>+</span><div style={{ width: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><MousePointer size={10} style={{ color: 'var(--c-text-muted)' }} /></div></div></ShortcutRow>
             <ShortcutRow label="Drag to move tile(s)"><div style={{ width: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Move size={12} style={{ color: 'var(--c-text-muted)' }} /></div></ShortcutRow>
             <ShortcutRow label="Rotate selected"><Kbd>R</Kbd></ShortcutRow>
