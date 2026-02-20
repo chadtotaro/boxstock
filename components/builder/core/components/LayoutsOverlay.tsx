@@ -360,7 +360,7 @@ export function LayoutsOverlay({
         className="relative flex flex-col w-full transition-all"
         style={{
           maxWidth: 960,
-          maxWidth: 960, maxHeight: '85vh',
+          maxHeight: '85vh',
           backgroundColor: 'var(--c-bg)',
           border: '1px solid var(--c-border)',
           borderRadius: '16px',
