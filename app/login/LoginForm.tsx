@@ -35,6 +35,8 @@ export default function LoginForm() {
     setLoading(false)
   }
 
+  const toggleLabel = isSignUp ? 'Already have an account?' : 'New here? Sign up'
+
   return (
     <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#F2F3F5' }}>
       <div className="w-full max-w-sm rounded-2xl p-8" style={{ backgroundColor: '#FFFFFF', border: '1px solid #D4D7DD', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
@@ -54,24 +56,49 @@ export default function LoginForm() {
         </p>
         <div className="flex flex-col gap-1 mb-3">
           <label style={{ fontSize: '12px', fontWeight: 500, color: '#3A3F4A' }}>Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com"
-            style={{ padding: '10px 12px', borderRadius: '8px', border: '1px solid #D4D7DD', fontSize: '14px', color: '#1A1D23', backgroundColor: '#F2F3F5', outline: 'none' }} />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            style={{ padding: '10px 12px', borderRadius: '8px', border: '1px solid #D4D7DD', fontSize: '14px', color: '#1A1D23', backgroundColor: '#F2F3F5', outline: 'none' }}
+          />
         </div>
         <div className="flex flex-col gap-1 mb-5">
           <label style={{ fontSize: '12px', fontWeight: 500, color: '#3A3F4A' }}>Password</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••"
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
             onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-            style={{ padding: '10px 12px', borderRadius: '8px', border: '1px solid #D4D7DD', fontSize: '14px', color: '#1A1D23', backgroundColor: '#F2F3F5', outline: 'none' }} />
+            style={{ padding: '10px 12px', borderRadius: '8px', border: '1px solid #D4D7DD', fontSize: '14px', color: '#1A1D23', backgroundColor: '#F2F3F5', outline: 'none' }}
+          />
         </div>
-        {error && <div className="mb-4 px-3 py-2 rounded-lg" style={{ backgroundColor: 'rgba(220,38,38,0.08)', color: '#DC2626', fontSize: '13px' }}>{error}</div>}
-        {message && <div className="mb-4 px-3 py-2 rounded-lg" style={{ backgroundColor: 'rgba(21,128,61,0.08)', color: '#15803D', fontSize: '13px' }}>{message}</div>}
-        <button onClick={handleSubmit} disabled={loading} className="w-full py-2.5 rounded-lg font-medium transition-all curso     style={{ backgroundColor: '#FE5757', color: '#fff', fontSize: '14px', border: 'none', opacity: loading ? 0.7 : 1 }}>
+        {error && (
+          <div className="mb-4 px-3 py-2 rounded-lg" style={{ backgroundColor: 'rgba(220,38,38,0.08)', color: '#DC2626', fontSize: '13px' }}>
+            {error}
+          </div>
+        )}
+        {message && (
+          <div className="mb-4 px-3 py-2 rounded-lg" style={{ backgroundColor: 'rgba(21,128,61,0.08)', color: '#15803D', fontSize: '13px' }}>
+            {message}
+          </div>
+        )}
+        <button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="w-full py-2.5 rounded-lg font-medium transition-all cursor-pointer"
+          style={{ backgroundColor: '#FE5757', color: '#fff', fontSize: '14px', border: 'none', opacity: loading ? 0.7 : 1 }}
+        >
           {loading ? 'Loading...' : isSignUp ? 'Create Account' : 'Sign In'}
         </button>
         <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '13px', color: '#6B7280' }}>
-          {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-          <button onClick={() => { setIsSignUp(!isSignUp); setError(null); setMessage(null) }}
-            style={{ color: '#FE5757', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}>
+          {toggleLabel}{' '}
+          <button
+            onClick={() => { setIsSignUp(!isSignUp); setError(null); setMessage(null) }}
+            style={{ color: '#FE5757', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
+          >
             {isSignUp ? 'Sign In' : 'Sign Up'}
           </button>
         </p>
