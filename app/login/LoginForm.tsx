@@ -69,7 +69,7 @@ export default function LoginForm() {
           {loading ? 'Loading...' : isSignUp ? 'Create Account' : 'Sign In'}
         </button>
         <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '13px', color: '#6B7280' }}>
-          {isSignUp ? 'Already have an account?' : "Don&#39;t have an account?"}{' '}
+          {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
           <button onClick={() => { setIsSignUp(!isSignUp); setError(null); setMessage(null) }}
             style={{ color: '#FE5757', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}>
             {isSignUp ? 'Sign In' : 'Sign Up'}
