@@ -285,8 +285,6 @@ export function TopBar({
         <ActionIconButton onClick={toggle} tooltip={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>{isDark ? <Sun size={15} /> : <Moon size={15} />}</ActionIconButton>
         <SharePopover onShare={onShare} />
       </div>
-        <SharePopover onShare={onShare} />
-      </div>
     </div>
   );
 }
