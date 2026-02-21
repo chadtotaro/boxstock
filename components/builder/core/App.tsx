@@ -149,7 +149,7 @@ function AppInner() {
   const [currentLayoutId, setCurrentLayoutId] = useState<string>('');
 
   const currentLayout = layouts.find((l) => l.id === currentLayoutId) || layouts[0];
-  const { tiles, setTiles, undo, redo, canUndo, canRedo, resetTo } = useUndoableTiles(currentLayout?.tiles || {});
+  const { tiles, setTiles, undo, redo, canUndo, canRedo, resetTo } = useUndoableTiles((currentLayout?.tiles) ?? {});
   const [selectedTiles, setSelectedTiles] = useState<Set<string>>(new Set());
   const [showLayouts, setShowLayouts] = useState(false);
   const [showGenerate, setShowGenerate] = useState(false);
