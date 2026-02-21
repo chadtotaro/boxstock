@@ -240,12 +240,12 @@ function LayoutCard({
 
       <div className="p-3 pt-2.5">
         <p className="truncate" style={{ color: 'var(--c-text)', fontSize: '13px' }}>{layout.name}</p>
-        {layout.tags.length > 0 && (
+        {(layout.tags ?? []).length > 0 && (
           <div className="flex items-center gap-1 mt-1.5 flex-wrap">
             {layout.tags.slice(0, 3).map((tag) => (
               <span key={tag} className="rounded-full px-2 py-0.5" style={{ backgroundColor: 'var(--c-tag-muted-bg)', color: 'var(--c-tag-muted)', fontSize: '10px' }}>{tag}</span>
             ))}
-            {layout.tags.length > 3 && <span style={{ color: 'var(--c-text-muted)', fontSize: '10px' }}>+{layout.tags.length - 3}</span>}
+            {(layout.tags ?? []).length > 3 && <span style={{ color: 'var(--c-text-muted)', fontSize: '10px' }}>+{(layout.tags ?? []).length - 3}</span>}
           </div>
         )}
         <div className="flex items-center gap-3 mt-2" style={{ color: 'var(--c-text-muted)', fontSize: '11px' }}>
@@ -288,7 +288,7 @@ function LayoutRow({
           <p className="truncate" style={{ color: 'var(--c-text)', fontSize: '13px' }}>{layout.name}</p>
           {isCurrent && <span className="shrink-0 px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'var(--c-accent-bg)', color: 'var(--c-accent)', fontSize: '9px' }}>CURRENT</span>}
         </div>
-        {layout.tags.length > 0 && (
+        {(layout.tags ?? []).length > 0 && (
           <div className="flex items-center gap-1 mt-1">
             {layout.tags.slice(0, 4).map((tag) => (
               <span key={tag} className="rounded-full px-2 py-0.5" style={{ backgroundColor: 'var(--c-tag-muted-bg)', color: 'var(--c-tag-muted)', fontSize: '10px' }}>{tag}</span>
