@@ -19,7 +19,7 @@ export default function LoginForm() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) router.replace('/builder')
+      if (data.session) router.replace('/')
     })
   }, [router])
 
@@ -34,7 +34,7 @@ export default function LoginForm() {
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) setError(error.message)
-      else router.replace('/builder')
+      else router.replace('/')
     }
     setLoading(false)
   }
