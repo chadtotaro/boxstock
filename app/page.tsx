@@ -29,11 +29,11 @@ function timeAgo(ts: number) {
   return `${Math.floor(h / 24)}d ago`;
 }
 
-const BOXSTOCK_PICKS = [
-  { id: 'pick-1', name: 'Daytona Oval', tiles: 42, tileSize: 50, emoji: '🏁' },
-  { id: 'pick-2', name: 'Tokyo Drift', tiles: 38,ileSize: 30, emoji: '🌀' },
-  { id: 'pick-3', name: 'Nürburgring Jr.', tiles: 60, tileSize: 50, emoji: '⚡' },
-  { id: 'pick-4', name: 'Mini Hairpin', tiles: 24, tileSize: 30, emoji: '🔄' },
+const PICKS = [
+  { id: 'p1', name: 'Daytona Oval', tiles: 42, tileSize: 50, emoji: '🏁' },
+  { id: 'p2', name: 'Tokyo Drift', tiles: 38, tileSize: 30, emoji: '🌀' },
+  { id: 'p3', name: burgring Jr.', tiles: 60, tileSize: 50, emoji: '⚡' },
+  { id: 'p4', name: 'Mini Hairpin', tiles: 24, tileSize: 30, emoji: '🔄' },
 ];
 
 export default function Dashboard() {
@@ -67,27 +67,22 @@ export default function Dashboard() {
     router.push('/builder');
   };
 
-  const displayed = showAll ? layouts : layouts.slice(0, 5);
+  const displayed = showAll ? layouts : lay.slice(0, 5);
   const tileCount = (l: Layout) => Object.keys(l.tiles || {}).length;
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#0A0C10', color: '#F0F2F5', fontFamily: 'system-ui, sans-serif' }}>
-      {/* Header */}
       <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', padding: '0 32px', height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.5px' }}>
           <span style={{ color: '#00D4FF' }}>BOX</span>STOCK
         </span>
-        <button
-          onClick={handleNew}
-          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 18px', borderRadius: 8, backgroundColor: '#00D4FF', color: '#0A0C10', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer' }}
-        >
+        <button onClick={handleNew} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 18px', borderRadius: 8, backgroundColor: '#00D4FF', color: '#0A0C10', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer' }}>
           <Plus size={15} />
           New Track
         </button>
       </div>
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 32px' }}>
-        {/* Your Tracks */}
         <section style={{ marginBottom: 56 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
             <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Your Tracks</h2>
@@ -97,27 +92,22 @@ export default function Dashboard() {
               </button>
             )}
           </div>
-
           {layouts.length === 0 ? (
-            <div
-              onClick={handleNew}
-              style={{ border: '2px dashed rgba(255,255,255,0.1)', borderRadius: 12, padding: '48px 24px', textAlign: 'center', cursor: 'pointer', color: 'rgba(255,255,255,0.4)' }}
-            >
+            <div onClick={handleNew} style={{ border: '2px dashed rgba(255,255,255,0.1)', borderRadius: 12, padding: '48px 24px', textAlign: 'center', cursor: 'pointer', color: 'rgba(255,255,255,0.4)' }}>
               <Plus size={32} style={{ margin: '0 auto 12px' }} />
               <p style={{ margin: 0, fontSize: 14 }}>No tracks yet — create your first one</p>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(au-fill, minmax(200px, 1fr))', gap: 16 }}>
               {displayed.map(l => (
-                <div
-                  key={l.id}
-                  onClick={() => handleOpen(l.id)}
-                  style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#14171D', cursor: 'pointer', overflow: 'hidden', transition: 'border-color 0.15s' }}
+                <div key={l.id} onClick={() => handleOpen(l.id)}
+                  style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#14171D', cursor: 'pointer', overflow: 'hidden' }}
                   onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(0,212,255,0.4)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
                 >
                   <div style={{ height: 120, backgroundColor: '#0A0C10', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {l.thumbnailDataUrl
+                      ? <img src={l.thumbnailDataUrl} alt={l.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                       : <Layers size={32} style={{ color: 'rgba(255,255,255,0.15)' }} />
                     }
                   </div>
@@ -129,36 +119,30 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-             ))}
+              ))}
             </div>
           )}
         </section>
 
-        {/* Boxstock Picks */}
         <section>
           <div style={{ marginBottom: 20 }}>
             <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>Boxstock Picks</h2>
             <p style={{ margin: 0, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>Curated layouts from the Boxstock team</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
-            {BOXSTOCK_PICKS.map(p => (
-              <div
-                key={p.id}
-                style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#14171D', overflow: 'hidden', cursor: 'not-allowed', opacity: 0.7 }}
-              >
+          <div style={{ display: grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
+            {PICKS.map(p => (
+              <div key={p.id} style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#14171D', overflow: 'hidden', opacity: 0.7 }}>
                 <div style={{ height: 120, backgroundColor: '#0A0C10', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 48 }}>
                   {p.emoji}
                 </div>
                 <div style={{ padding: '12px 14px' }}>
                   <p style={{ margin: '0 0 4px', fontWeight: 600, fontSize: 13 }}>{p.name}</p>
-                  <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11 }}>
-                    <span>{p.tiles} tiles · {p.tileSize}cm</span>
-                  </div>
+                  <p style={{ margin: 0, color: 'rgba(255,255,255,0.4)', fontSize: 11 }}>{p.tiles} tiles · {p.tileSize}cm</p>
                   <span style={{ display: 'inline-block', marginTop: 6, fontSize: 10, backgroundColor: 'rgba(0,212,255,0.1)', color: '#00D4FF', padding: '2px 6px', borderRadius: 4 }}>Coming soon</span>
                 </div>
               </div>
             ))}
-          </div>
+         </div>
         </section>
       </div>
     </div>
