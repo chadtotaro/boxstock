@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Moon, Sun, Check, Loader2, Share2, Download, Copy, Sparkles } from 'lucide-react';
 import Icon from '@mdi/react';
-import { mdiRulerSquare, mdiGrid, mdiClose, mdiUndo, mdiRedo } from '@mdi/js';
+import { mdiGrid, mdiClose, mdiUndo, mdiRedo } from '@mdi/js';
 import { useTheme } from '../hooks/useThemeContext';
 import type { SaveStatus } from '@/types/builder';
 import type { TrackValidation } from '../lib/edge-validator';
@@ -27,7 +27,7 @@ interface TopBarProps {
   userEmail?: string;
 }
 
-const iconBtnBase: React.CSSProperties = {
+const iconBtnFilled: React.CSSProperties = {
   display: 'flex', alignItems: 'center', justifyContent: 'center',
   width: 36, height: 36, borderRadius: 8,
   backgroundColor: '#e9e9eb', border: '1px solid #d5d7de',
@@ -35,7 +35,7 @@ const iconBtnBase: React.CSSProperties = {
 };
 
 const iconBtnDisabled: React.CSSProperties = {
-  ...iconBtnBase, opacity: 0.4, cursor: 'default',
+  ...iconBtnFilled, opacity: 0.4, cursor: 'default',
 };
 
 const chipStyle: React.CSSProperties = {
@@ -45,11 +45,18 @@ const chipStyle: React.CSSProperties = {
   fontSize: 12, color: '#000', whiteSpace: 'nowrap', flexShrink: 0,
 };
 
+function RulerIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill="#4D5358">
+      <path d="M204-120q-35 0-59.5-24.5T120-204v-174l516-516q11-11 25.5-17t30.5-6q16 0 31 6t26 17l143 143q11 11 17 26t6 31q0 16-6 30.5T892-638L376-122l-172 2Zm482-514 56-56-142-142-56 56 142 142Z"/>
+    </svg>
+  );
+}
+
 function SharePopover({ onShare }: { onShare: (action: 'download' | 'copy') => void }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {
@@ -58,22 +65,14 @@ function SharePopover({ onShare }: { onShare: (action: 'download' | 'copy') => v
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, [open]);
-
   const handleCopy = () => {
     onShare('copy');
     setCopied(true);
     setTimeout(() => { setCopied(false); setOpen(false); }, 1500);
   };
-
   return (
     <div ref={ref} style={{ position: 'relative' }}>
-      <button
-        onClick={() => setOpen(!open)}
-        title="Share or download track"
-        style={{ ...iconBtnBase, backgroundColor: open ? '#d5d7de' : '#e9e9eb' }}
-        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d5d7de'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = open ? '#d5d7de' : '#e9e9eb'; }}
-      >
+      <button onClick={() => setOpen(!open)} title="Share or download track" style={{ ...iconBtnFilled, backgroundColor: open ? '#d5d7de' : '#e9e9eb' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d5d7de'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = open ? '#d5d7de' : '#e9e9eb'; }}>
         <Share2 size={16} />
       </button>
       {open && (
@@ -133,45 +132,36 @@ export function TopBar({
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', height: 56, padding: '0 16px', gap: 12, backgroundColor: '#f2f3f5', borderBottom: '1px solid #cbcdd4', flexShrink: 0 }}>
-
-      {/* LEFT: track name */}
-      <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0, minWidth: 0, maxWidth: 280 }}>
+    <div style={{ display: 'flex', alignItems: 'center', height: 56, padding: '0 16px', backgroundColor: '#f2f3f5', borderBottom: '1px solid #cbcdd4', flexShrink: 0 }}>
+      {/* LEFT: track name pushes everything else right */}
+      <div style={{ flexShrink: 0, minWidth: 0, maxWidth: 280, marginRight: 'auto' }}>
         {editing ? (
-          <input
-            ref={inputRef}
-            value={editValue}
-            onChange={(e) => setEditValue(e.target.value)}
-            onBlur={commitName}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') commitName();
-              if (e.key === 'Escape') { setEditValue(layoutName); setEditing(false); }
-            }}
-            style={{ background: 'transparent', border: 'none', borderBottom: '2px solid #0fc4ba', color: '#000', fontSize: 16, fontWeight: 500, fontFamily: 'Inter, sans-serif', outline: 'none', width: Math.max(140, editValue.length * 10 + 24), padding: '0 2px 2px' }}
-          />
+          <input ref={inputRef} value={editValue} onChange={(e) => setEditValue(e.target.value)} onBlur={commitName} onKeyDown={(e) => { if (e.key === 'Enter') commitName(); if (e.key === 'Escape') { setEditValue(layoutName); setEditing(false); } }} style={{ background: 'transparent', border: 'none', borderBottom: '2px solid #0fc4ba', color: '#000', fontSize: 16, fontWeight: 500, fontFamily: 'Inter, sans-serif', outline: 'none', width: Math.max(140, (editValue ?? '').length * 10 + 24), padding: '0 2px 2px' }} />
         ) : (
-          <h1 onClick={() => setEditing(true)} title="Click to rename" style={{ margin: 0, color: '#000', fontSize: 16, fontWeight: 500, fontFamily: 'Inter, sans-serif', textDecoration: 'underline', cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>
+          <h1 onClick={() => setEditing(true)} title="Click to rename" style={{ margin: 0, color: '#000', fontSize: 16, fontWeight: 500, fontFamily: 'Inter, sans-serif', textDecoration: 'underline', cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {layoutName}
           </h1>
         )}
       </div>
 
-      {/* CENTER: saved + tile chip + room chip */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+      {/* RIGHT CLUSTER: all controls */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+        {/* Saved indicator */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginRight: 4 }}>
           {saveStatus === 'saving'
             ? <Loader2 size={11} style={{ color: '#888' }} className="animate-spin" />
-            : <div style={{ width: 8, height: 8, borderRadius: '50%', flexShrink: 0, backgroundColor: saveStatus === 'saved' ? '#4dc16a' : '#f59e0b' }} />
+            : <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: saveStatus === 'saved' ? '#4dc16a' : '#f59e0b' }} />
           }
           <span style={{ fontSize: 12, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: saveStatus === 'saved' ? '#4dc16a' : saveStatus === 'saving' ? '#888' : '#f59e0b' }}>
             {saveStatus === 'saved' ? 'Saved' : saveStatus === 'saving' ? 'Saving...' : 'Unsaved'}
           </span>
         </div>
 
+        {/* Tile chip */}
         {confirmClear ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <span style={{ fontSize: 12, color: '#888', whiteSpace: 'nowrap' }}>Clear {tileCount} tile{tileCount !== 1 ? 's' : ''}?</span>
-            <button onClick={() => { onClearAll(); setConfirmClear(false); }} style={{ padding: '2px 8px', borderRadius: 6, backgroundColor: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#ef4444', fontSize: 11, cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.1)'; }}>Yes, clear</button>
+            <button onClick={() => { onClearAll(); setConfirmClear(false); }} style={{ padding: '2px 8px', borderRadius: 6, backgroundColor: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#ef4444', fontSize: 11, cursor: 'pointer' }}>Yes, clear</button>
             <button onClick={() => setConfirmClear(false)} style={{ padding: '2px 8px', borderRadius: 6, backgroundColor: 'transparent', border: '1px solid #d5d7de', color: '#888', fontSize: 11, cursor: 'pointer' }}>Cancel</button>
           </div>
         ) : (
@@ -184,9 +174,10 @@ export function TopBar({
           </div>
         )}
 
+        {/* Room chip */}
         {roomConstraint && roomConstraint.enabled ? (
           <div style={chipStyle}>
-            <Icon path={mdiRulerSquare} size={0.7} style={{ color: '#4D5358' }} />
+            <RulerIcon size={20} />
             <button onClick={onOpenRoomSize ?? (() => {})} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#000', fontSize: 12, padding: 0, whiteSpace: 'nowrap' }}>
               {roomConstraint.widthValue} x {roomConstraint.heightValue} {roomConstraint.unit}
             </button>
@@ -195,26 +186,34 @@ export function TopBar({
             </button>
           </div>
         ) : (
-          <button onClick={onOpenRoomSize ?? (() => {})} title="Set room size" style={iconBtnBase} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d5d7de'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#e9e9eb'; }}>
-            <Icon path={mdiRulerSquare} size={0.7} />
+          <button onClick={onOpenRoomSize ?? (() => {})} title="Set room size" style={iconBtnFilled} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d5d7de'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#e9e9eb'; }}>
+            <RulerIcon size={20} />
           </button>
         )}
-      </div>
 
-      {/* RIGHT: undo, redo, generate, theme, share */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-        <button onClick={onUndo} disabled={!canUndo} title="Undo (Ctrl+Z)" style={canUndo ? iconBtnBase : iconBtnDisabled} onMouseEnter={(e) => { if (canUndo) e.currentTarget.style.backgroundColor = '#d5d7de'; }} onMouseLeave={(e) => { if (canUndo) e.currentTarget.style.backgroundColor = '#e9e9eb'; }}>
+        <div style={{ width: 1, height: 24, backgroundColor: '#d5d7de', margin: '0 4px' }} />
+
+        {/* Undo */}
+        <button onClick={onUndo} disabled={!canUndo} title="Undo (Ctrl+Z)" style={canUndo ? iconBtnFilled : iconBtnDisabled} onMouseEnter={(e) => { if (canUndo) e.currentTarget.style.backgroundColor = '#d5d7de'; }} onMouseLeave={(e) => { if (canUndo) e.currentTarget.style.backgroundColor = '#e9e9eb'; }}>
           <Icon path={mdiUndo} size={0.7} />
         </button>
-        <button onClick={onRedo} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)" style={canRedo ? iconBtnBase : iconBtnDisabled} onMouseEnter={(e) => { if (canRedo) e.currentTarget.style.backgroundColor = '#d5d7de'; }} onMouseLeave={(e) => { if (canRedo) e.currentTarget.style.backgroundColor = '#e9e9eb'; }}>
+
+        {/* Redo */}
+        <button onClick={onRedo} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)" style={canRedo ? iconBtnFilled : iconBtnDisabled} onMouseEnter={(e) => { if (canRedo) e.currentTarget.style.backgroundColor = '#d5d7de'; }} onMouseLeave={(e) => { if (canRedo) e.currentTarget.style.backgroundColor = '#e9e9eb'; }}>
           <Icon path={mdiRedo} size={0.7} />
         </button>
-        <button onClick={onOpenGenerate} title="AI Generate layout" style={iconBtnBase} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d5d7de'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#e9e9eb'; }}>
+
+        {/* AI Generate */}
+        <button onClick={onOpenGenerate} title="AI Generate layout" style={iconBtnFilled} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d5d7de'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#e9e9eb'; }}>
           <Sparkles size={16} />
         </button>
-        <button onClick={toggle} title={isDark ? 'Switch to light mode' : 'Switch to dark mode'} style={iconBtnBase} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d5d7de'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#e9e9eb'; }}>
+
+        {/* Theme */}
+        <button onClick={toggle} title={isDark ? 'Light mode' : 'Dark mode'} style={iconBtnFilled} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d5d7de'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#e9e9eb'; }}>
           {isDark ? <Sun size={16} /> : <Moon size={16} />}
         </button>
+
+        {/* Share */}
         <SharePopover onShare={onShare} />
       </div>
     </div>
