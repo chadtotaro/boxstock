@@ -116,7 +116,7 @@ export default function Dashboard() {
                   onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(0,212,255,0.4)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
                 >
-                  <div style={{ height: 120, backgroundColor: '#0A0C10', display: 'flex', alignItems: 'center', justifyContent: 'center' }}                    {l.thumbnailDataUrl
+                  <div style={{ height: 120, backgroundColor: '#0A0C10', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       ? <img src={l.thumbnailDataUrl} alt={l.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                       : <Layers size={32} style={{ color: 'rgba(255,255,255,0.15)' }} />
                     }
