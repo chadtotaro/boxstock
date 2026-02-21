@@ -239,38 +239,62 @@ export function TopBar({
       className="flex items-center px-3 h-14 border-b shrink-0 gap-3"
       style={{ backgroundColor: 'var(--c-bg)', borderColor: 'var(--c-border)' }}
     >
-      {/* ── Left: Undo/Redo + Clear + Tile Count ── */}
-      <div className="flex items-center gap-1 shrink-0">
-        {/* Undo */}
-        <button
-          onClick={onUndo}
-          disabled={!canUndo}
-          title="Undo (Ctrl+Z)"
-          className="flex items-center justify-center w-8 h-8 rounded transition-all cursor-pointer disabled:cursor-default"
-          style={{ color: canUndo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)', backgroundColor: 'transparent' }}
-          onMouseEnter={(e) => { if (canUndo) { e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)'; e.currentTarget.style.color = 'var(--c-accent)'; } }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = canUndo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)'; }}
-        >
-          <Undo2 size={16} />
-        </button>
-
-        {/* Redo */}
-        <button
-          onClick={onRedo}
-          disabled={!canRedo}
-          title="Redo (Ctrl+Shift+Z)"
-          className="flex items-center justify-center w-8 h-8 rounded transition-all cursor-pointer disabled:cursor-default"
-          style={{ color: canRedo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)', backgroundColor: 'transparent' }}
-          onMouseEnter={(e) => { if (canRedo) { e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)'; e.currentTarget.style.color = 'var(--c-accent)'; } }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = canRedo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)'; }}
-        >
-          <Redo2 size={16} />
-        </button>
+      {/* Left: Track name */}
+      <div className="flex items-center shrink-0 min-w-0" style={{ maxWidth: "300px" }}>
+      <div className="flex-1 flex items-center justify-center min-w-0 px-4">
+        {editing ? (
+          <input
+            ref={inputRef}
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onBlur={commitName}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') commitName();
+              if (e.key === 'Escape') { setEditValue(layoutName); setEditing(false); }
+            }}
+            className="outline-none text-center"
+            style={{
+              backgroundColor: 'transparent',
+              borderBottom: '2px solid var(--c-accent)',
+              color: 'var(--c-text)',
+              fontSize: '15px',
+              fontWeight: 600,
+              width: Math.max(160, editValue.length * 10 + 24),
+              maxWidth: '100%',
+              padding: '0 4px 2px',
+            }}
+          />
+        ) : (
+          <div
+            className="group flex items-center gap-1.5 cursor-pointer"
+            onClick={() => setEditing(true)}
+            title="Click to rename"
+          >
+            <Pencil size={12} className="opacity-0 group-hover:opacity-40 transition-opacity shrink-0" style={{ color: 'var(--c-text)' }} />
+            <h1
+              className="truncate transition-opacity group-hover:opacity-70"
+              style={{
+                color: 'var(--c-text)',
+                fontSize: '15px',
+                fontWeight: 600,
+                borderBottom: '1.5px solid var(--c-text)',
+                paddingBottom: '1px',
+                maxWidth: '100%',
+              }}
+            >
+              {layoutName}
+            </h1>
+          </div>
+        )}
+      </div>
+      </div>
+      {/* Center: Save status + tile count + room size */}
+      <div className="flex-1 flex items-center justify-center gap-2 min-w-0 px-4">
+      <div className="flex items-center gap-2 shrink-0">
+        {/* Save status */}
+        <SaveStatusIndicator status={saveStatus} />
 
         {/* Divider */}
-        <div style={{ width: 1, height: 18, backgroundColor: 'var(--c-border)', margin: '0 4px' }} />
-
-        {/* Clear all tiles */}
         {confirmClear ? (
           <div className="flex items-center gap-1.5">
             <span style={{ color: 'var(--c-text-muted)', fontSize: '12px', whiteSpace: 'nowrap' }}>
@@ -330,62 +354,37 @@ export function TopBar({
         )}
       </div>
 
-      {/* ── Center: Editable layout name ── */}
-      <div className="flex-1 flex items-center justify-center min-w-0 px-4">
-        {editing ? (
-          <input
-            ref={inputRef}
-            value={editValue}
-            onChange={(e) => setEditValue(e.target.value)}
-            onBlur={commitName}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') commitName();
-              if (e.key === 'Escape') { setEditValue(layoutName); setEditing(false); }
-            }}
-            className="outline-none text-center"
-            style={{
-              backgroundColor: 'transparent',
-              borderBottom: '2px solid var(--c-accent)',
-              color: 'var(--c-text)',
-              fontSize: '15px',
-              fontWeight: 600,
-              width: Math.max(160, editValue.length * 10 + 24),
-              maxWidth: '100%',
-              padding: '0 4px 2px',
-            }}
-          />
-        ) : (
-          <div
-            className="group flex items-center gap-1.5 cursor-pointer"
-            onClick={() => setEditing(true)}
-            title="Click to rename"
-          >
-            <Pencil size={12} className="opacity-0 group-hover:opacity-40 transition-opacity shrink-0" style={{ color: 'var(--c-text)' }} />
-            <h1
-              className="truncate transition-opacity group-hover:opacity-70"
-              style={{
-                color: 'var(--c-text)',
-                fontSize: '15px',
-                fontWeight: 600,
-                borderBottom: '1.5px solid var(--c-text)',
-                paddingBottom: '1px',
-                maxWidth: '100%',
-              }}
-            >
-              {layoutName}
-            </h1>
-          </div>
-        )}
-      </div>
-
-      {/* ── Right: Save status + action icons ── */}
+      {/* Right: Undo/Redo + action icons */}
       <div className="flex items-center gap-2 shrink-0">
-        {/* Save status */}
-        <SaveStatusIndicator status={saveStatus} />
+      <div className="flex items-center gap-1 shrink-0">
+        {/* Undo */}
+        <button
+          onClick={onUndo}
+          disabled={!canUndo}
+          title="Undo (Ctrl+Z)"
+          className="flex items-center justify-center w-8 h-8 rounded transition-all cursor-pointer disabled:cursor-default"
+          style={{ color: canUndo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)', backgroundColor: 'transparent' }}
+          onMouseEnter={(e) => { if (canUndo) { e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)'; e.currentTarget.style.color = 'var(--c-accent)'; } }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = canUndo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)'; }}
+        >
+          <Undo2 size={16} />
+        </button>
+
+        {/* Redo */}
+        <button
+          onClick={onRedo}
+          disabled={!canRedo}
+          title="Redo (Ctrl+Shift+Z)"
+          className="flex items-center justify-center w-8 h-8 rounded transition-all cursor-pointer disabled:cursor-default"
+          style={{ color: canRedo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)', backgroundColor: 'transparent' }}
+          onMouseEnter={(e) => { if (canRedo) { e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)'; e.currentTarget.style.color = 'var(--c-accent)'; } }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = canRedo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)'; }}
+        >
+          <Redo2 size={16} />
+        </button>
 
         {/* Divider */}
-        <div style={{ width: 1, height: 18, backgroundColor: 'var(--c-border)', margin: '0 2px' }} />
-
+        <div style={{ width: 1, height: 18, backgroundColor: 'var(--c-border)', margin: '0 4px' }} />
         {/* AI / Generate */}
         <ActionIconButton onClick={onOpenGenerate} tooltip="AI Generate layout">
           <Sparkles size={15} />
