@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus, Layers } from 'lucide-react';
+import Icon from '@mdi/react';
+import { mdiApps, mdiSquareFoot } from '@mdi/js';
 
 const LAYOUTS_KEY = 'miniz-layouts';
 const CURRENT_ID_KEY = 'miniz-current-layout-id';
@@ -60,12 +62,12 @@ function TrackCard({ name, tiles, room, thumbnail, onClick }: {
         <p style={{ margin: '0 0 10px', fontSize: 11, color: '#555' }}>Created by: radical_mannt</p>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: '#000' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <Icon path={mdiApps} size={0.65} />
             {tiles}
           </span>
           {room && (
             <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#000' }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 21H3V3"/><path d="M21 3L3 21"/></svg>
+              <Icon path={mdiSquareFoot} size={0.65} />
               {room}
             </span>
           )}
