@@ -235,7 +235,8 @@ function AppInner() {
           if (remote.length === 0) {
             const fresh = createEmptyLayout('Untitled Layout');
             finalLayouts = [fresh];
-            saveLayoutToSupabase({ ...fresh }, user.id);
+            console.log('New user, creating fresh layout, user.id:', user.id);
+            saveLayoutToSupabase({ ...fresh }, user.id).then(() => console.log('saved fresh')).catch(e => console.error('save failed', e));
           } else {
             finalLayouts = remote;
           }
