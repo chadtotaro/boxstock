@@ -233,7 +233,16 @@ function AppInner() {
       useEffect(() => {
         if (!user) return;
         loadLayoutsFromSupabase(user.id).then((remote) => {
-          if (remote.length === 0) return;
+          if (remote.length === 0) {
+            // New user - clear any localStorage from another user and start fresh
+            const fresh = createEmptyLayout('Untitled Layout');
+            setLayouts([fresh]);
+            saveLayouts([fresh]);
+            setCurrentLayoutId(fresh.id);
+            saveCurrentId(fresh.id);
+            saveLayoutToSupabase({ ...fresh }, user.id);
+            return;
+          }
           setLayouts(remote);
           saveLayouts(remote);
           const savedId = loadCurrentId();
