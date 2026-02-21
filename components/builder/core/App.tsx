@@ -1,6 +1,7 @@
 import { useAuth } from "./hooks/useAuth";
 import { supabase } from "@/lib/supabase";
 import type { TileType, PlacedTile, Layout, SaveStatus, RoomConstraint, RoomUnit } from '@/types/builder';
+import { convertToCm, computeRoomGrid } from '@/types/builder';
 import { TILE_DEFINITIONS } from '@/data/tile-data';
 import { isInBounds } from '@/types/builder';
 import { toast, Toaster } from 'sonner';
