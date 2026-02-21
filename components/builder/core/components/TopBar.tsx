@@ -48,7 +48,7 @@ const chipStyle: React.CSSProperties = {
 function RulerIcon({ size = 20 }: { size?: number }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill="#4D5358">
-      <path d="M160-160v-640h80v640h-80Zm640 0L480-480l320-320 56 57-264 263 264 263-56 57Z"/>
+      <path d="M120-120v-720h80v280h560v-280h80v720h-80v-360H200v360h-80Zm200-360h240v-80H320v80Zm0 160h160v-80H320v80Zm0 160h240v-80H320v80Z"/>
     </svg>
   );
 }
