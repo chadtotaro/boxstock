@@ -41,6 +41,7 @@ function createEmptyLayout(name?: string): Layout {
     tiles: {},
     lastModified: Date.now(),
     createdAt: Date.now(),
+    tileSize: 50 as const,
   };
 }
 
