@@ -11,12 +11,13 @@ interface RoomSizeModalProps {
   initialWidth?: number;
   initialHeight?: number;
   initialUnit?: RoomUnit;
+  tileSize?: 30 | 50;
 }
 
 const UNIT_LABELS: Record<RoomUnit, string> = { ft: 'Feet', m: 'Meters', cm: 'Centimeters' };
 const UNIT_ABBR: Record<RoomUnit, string> = { ft: 'ft', m: 'm', cm: 'cm' };
 
-export function RoomSizeModal({ open, onClose, onApply, initialWidth, initialHeight, initialUnit }: RoomSizeModalProps) {
+export function RoomSizeModal({ open, onClose, onApply, initialWidth, initialHeight, initialUnit, tileSize = 50 }: RoomSizeModalProps) {
   const [widthStr, setWidthStr] = useState(String(initialWidth ?? 10));
   const [heightStr, setHeightStr] = useState(String(initialHeight ?? 8));
   const [unit, setUnit] = useState<RoomUnit>(initialUnit ?? 'ft');
@@ -28,7 +29,7 @@ export function RoomSizeModal({ open, onClose, onApply, initialWidth, initialHei
     if (width <= 0 || height <= 0) return null;
     const wCm = convertToCm(width, unit);
     const hCm = convertToCm(height, unit);
-    return computeRoomGrid(wCm, hCm);
+    return computeRoomGrid(wCm, hCm, tileSize);
   }, [width, height, unit]);
 
   const isValid = preview !== null && preview.cols >= 1 && preview.rows >= 1;

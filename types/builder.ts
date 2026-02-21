@@ -72,10 +72,10 @@ export function convertToCm(value: number, unit: RoomUnit): number {
   }
 }
 
-export function computeRoomGrid(widthCm: number, heightCm: number): { cols: number; rows: number } {
+export function computeRoomGrid(widthCm: number, heightCm: number, tileSize: 30 | 50 = 50): { cols: number; rows: number } {
   return {
-    cols: Math.floor(widthCm / 50),
-    rows: Math.floor(heightCm / 50),
+    cols: Math.floor(widthCm / tileSize),
+    rows: Math.floor(heightCm / tileSize),
   };
 }
 

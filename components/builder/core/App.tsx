@@ -753,6 +753,7 @@ useEffect(() => {
           initialWidth={roomConstraint?.widthValue}
           initialHeight={roomConstraint?.heightValue}
           initialUnit={roomConstraint?.unit}
+          tileSize={currentLayout?.tileSize ?? 50}
         />
 
         <OutsideTilesModal
