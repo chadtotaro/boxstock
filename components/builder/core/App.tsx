@@ -268,6 +268,7 @@ useEffect(() => {
         setCurrentLayoutId(layoutId);
         saveCurrentId(layoutId);
         resetTo(target.tiles);
+        setRoomConstraint(target.roomConstraint ?? null);
         const saved = JSON.stringify(target.tiles);
         lastSavedRef.current = saved;
         setLastSavedJson(saved);        setSaveStatus('saved');
@@ -479,6 +480,7 @@ useEffect(() => {
         setOutsideTilesInfo({ outsideKeys, pendingConstraint: newConstraint });
       } else {
         setRoomConstraint(newConstraint);
+        setLayouts(prev => prev.map(l => l.id === currentLayoutId ? { ...l, roomConstraint: newConstraint } : l));
         toast.success(`Room constraint set: ${cols} x ${rows} tiles`, { style: toastStyle, duration: 2000 });
       }
 
@@ -517,6 +519,7 @@ useEffect(() => {
 
   const handleDisableRoomConstraint = useCallback(() => {
     setRoomConstraint(null);
+    setLayouts(prev => prev.map(l => l.id === currentLayoutId ? { ...l, roomConstraint: null } : l));
     toast.success('Room constraint disabled', { style: toastStyle, duration: 1500 });
   }, [toastStyle]);
 

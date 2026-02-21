@@ -39,6 +39,7 @@ export interface Layout {
   lastModified: number;
   createdAt: number;
   tileSize: 30 | 50;
+  roomConstraint?: RoomConstraint | null;
   /** Cached PNG thumbnail for gallery cards */
   thumbnailDataUrl?: string;
 }
