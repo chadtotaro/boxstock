@@ -146,11 +146,7 @@ function AppInner() {
   const [layouts, setLayouts] = useState<Layout[]>([]);
   const [layoutsReady, setLayoutsReady] = useState(false);
 
-  const [currentLayoutId, setCurrentLayoutId] = useState<string>(() => {
-    const saved = loadCurrentId();
-    if (saved && layouts.some((l) => l.id === saved)) return saved;
-    return layouts[0]?.id || '';
-  });
+  const [currentLayoutId, setCurrentLayoutId] = useState<string>('');
 
   const currentLayout = layouts.find((l) => l.id === currentLayoutId) || layouts[0];
   const { tiles, setTiles, undo, redo, canUndo, canRedo, resetTo } = useUndoableTiles(currentLayout?.tiles || {});
