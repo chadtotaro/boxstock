@@ -23,6 +23,7 @@ import { OutsideTilesModal } from './components/OutsideTilesModal';
 import { renderThumbnail } from './lib/thumbnail-renderer';
 const LAYOUTS_KEY = 'miniz-layouts';
 const CURRENT_ID_KEY = 'miniz-current-layout-id';
+const USER_KEY = 'miniz-user-id';
 const AUTOSAVE_DELAY = 800;
 
 function generateId() {
@@ -232,6 +233,14 @@ function AppInner() {
 
       useEffect(() => {
         if (!user) return;
+        // Clear localStorage if a different user is logging in
+        const lastUserId = localStorage.getItem(USER_KEY);
+        if (lastUserId && lastUserId !== user.id) {
+          localStorage.removeItem(LAYOUTS_KEY);
+          localStorage.removeItem(CURRENT_ID_KEY);
+        }
+        localStorage.setItem(USER_KEY, user.id);
+
         loadLayoutsFromSupabase(user.id).then((remote) => {
           if (remote.length === 0) {
             // New user - clear any localStorage from another user and start fresh
