@@ -324,7 +324,6 @@ export function TopBar({
             <button onClick={onDisableRoomConstraint ?? (() => {})} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-text-muted)", fontSize: "14px", padding: "0 0 0 2px", lineHeight: 1, display: "flex", alignItems: "center" }} title="Clear room constraint">x</button>
           </div>
         )}
-        )}
       </div>
 
       {/* ── Center: Editable layout name ── */}
