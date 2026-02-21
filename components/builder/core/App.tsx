@@ -143,22 +143,8 @@ async function loadLayoutsFromSupabase(userId: string): Promise<Layout[]> {
 }
 function AppInner() {
   const { user, loading: authLoading, signOut } = useAuth();
-  const [layouts, setLayouts] = useState<Layout[]>(() => {
-    let loaded = loadLayouts();
-    const migrated = migrateOldStorage();
-    if (migrated) {
-      loaded = [migrated, ...loaded];
-      saveLayouts(loaded);
-      saveCurrentId(migrated.id);
-    }
-    if (loaded.length === 0) {
-      const first = createEmptyLayout('Untitled Layout');
-      loaded = [first];
-      saveLayouts(loaded);
-      saveCurrentId(first.id);
-    }
-    return loaded;
-  });
+  const [layouts, setLayouts] = useState<Layout[]>([]);
+  const [layoutsReady, setLayoutsReady] = useState(false);
 
   const [currentLayoutId, setCurrentLayoutId] = useState<string>(() => {
     const saved = loadCurrentId();
@@ -233,33 +219,20 @@ function AppInner() {
 
       useEffect(() => {
         if (!user) return;
-        // Clear localStorage if a different user is logging in
-        const lastUserId = localStorage.getItem(USER_KEY);
-        if (lastUserId && lastUserId !== user.id) {
-          localStorage.removeItem(LAYOUTS_KEY);
-          localStorage.removeItem(CURRENT_ID_KEY);
-        }
-        localStorage.setItem(USER_KEY, user.id);
-
         loadLayoutsFromSupabase(user.id).then((remote) => {
+          let finalLayouts: Layout[];
           if (remote.length === 0) {
-            // New user - clear any localStorage from another user and start fresh
             const fresh = createEmptyLayout('Untitled Layout');
-            setLayouts([fresh]);
-            saveLayouts([fresh]);
-            setCurrentLayoutId(fresh.id);
-            saveCurrentId(fresh.id);
+            finalLayouts = [fresh];
             saveLayoutToSupabase({ ...fresh }, user.id);
-            return;
-          }
-          setLayouts(remote);
-          saveLayouts(remote);
-          const savedId = loadCurrentId();
-          if (savedId && remote.some((l) => l.id === savedId)) {
-            setCurrentLayoutId(savedId);
           } else {
-            setCurrentLayoutId(remote[0].id);
+            finalLayouts = remote;
           }
+          setLayouts(finalLayouts);
+          saveLayouts(finalLayouts);
+          setCurrentLayoutId(finalLayouts[0].id);
+          saveCurrentId(finalLayouts[0].id);
+          setLayoutsReady(true);
         });
       }, [user]);
 useEffect(() => {
