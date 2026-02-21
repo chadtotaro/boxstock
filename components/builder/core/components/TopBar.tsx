@@ -326,6 +326,7 @@ export function TopBar({
         ) : (
           <ActionIconButton onClick={onOpenRoomSize ?? (() => {})} tooltip="Set room size constraint"><Ruler size={15} /></ActionIconButton>
         )}
+      </div>
 
       {/* ── Center: Editable layout name ── */}
       <div className="flex-1 flex items-center justify-center min-w-0 px-4">
