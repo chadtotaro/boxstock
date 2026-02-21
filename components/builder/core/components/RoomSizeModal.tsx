@@ -12,12 +12,14 @@ interface RoomSizeModalProps {
   initialHeight?: number;
   initialUnit?: RoomUnit;
   tileSize?: 30 | 50;
+  onClear?: () => void;
+  hasConstraint?: boolean;
 }
 
 const UNIT_LABELS: Record<RoomUnit, string> = { ft: 'Feet', m: 'Meters', cm: 'Centimeters' };
 const UNIT_ABBR: Record<RoomUnit, string> = { ft: 'ft', m: 'm', cm: 'cm' };
 
-export function RoomSizeModal({ open, onClose, onApply, initialWidth, initialHeight, initialUnit, tileSize = 50 }: RoomSizeModalProps) {
+export function RoomSizeModal({ open, onClose, onApply, initialWidth, initialHeight, initialUnit, tileSize = 50, onClear, hasConstraint }: RoomSizeModalProps) {
   const [widthStr, setWidthStr] = useState(String(initialWidth ?? 10));
   const [heightStr, setHeightStr] = useState(String(initialHeight ?? 8));
   const [unit, setUnit] = useState<RoomUnit>(initialUnit ?? 'ft');
@@ -77,6 +79,15 @@ export function RoomSizeModal({ open, onClose, onApply, initialWidth, initialHei
               <p style={{ color: 'var(--c-text-muted)', fontSize: '11px' }}>Define physical room dimensions</p>
             </div>
           </div>
+          {hasConstraint && onClear && (
+            <button
+              onClick={() => { onClear(); onClose(); }}
+              className="px-4 py-2 rounded-md transition-all cursor-pointer"
+              style={{ backgroundColor: 'transparent', border: '1px solid var(--c-error-border)', color: 'var(--c-error)', fontSize: '13px', marginRight: 'auto' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-error-bg)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+            >Clear constraint</button>
+          )}
           <button
             onClick={onClose}
             className="flex items-center justify-center w-7 h-7 rounded-md transition-colors cursor-pointer"

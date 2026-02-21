@@ -644,7 +644,9 @@ useEffect(() => {
         `}</style>
 
         <div className="flex flex-1 overflow-hidden">
-          <Sidebar tiles={tiles} tags={currentLayout?.tags || []} onTagsChange={handleTagsChange} onRemoveDumpedTiles={handleRemoveDumpedTiles} hasDumpedTiles={hasDumpedTiles} onOpenLayouts={() => setShowLayouts(true)} tileSize={currentLayout?.tileSize ?? 50} onTileSizeChange={handleTileSizeChange} />
+          <Sidebar tiles={tiles} tags={currentLayout?.tags || []} onTagsChange={handleTagsChange} onRemoveDumpedTiles={handleRemoveDumpedTiles} hasDumpedTiles={hasDumpedTiles} onOpenLayouts={() => setShowLayouts(true)} tileSize={currentLayout?.tileSize ?? 50}
+          onClear={handleDisableRoomConstraint}
+          hasConstraint={!!roomConstraint?.enabled} onTileSizeChange={handleTileSizeChange} />
           <div className="flex flex-col flex-1 overflow-hidden" style={{
             opacity: generatedResults ? 0.4 : 1,
             transition: "opacity 320ms ease",
@@ -780,6 +782,8 @@ useEffect(() => {
           initialHeight={roomConstraint?.heightValue}
           initialUnit={roomConstraint?.unit}
           tileSize={currentLayout?.tileSize ?? 50}
+          onClear={handleDisableRoomConstraint}
+          hasConstraint={!!roomConstraint?.enabled}
         />
 
         <OutsideTilesModal
