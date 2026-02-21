@@ -241,7 +241,6 @@ export function TopBar({
     >
       {/* Left: Track name */}
       <div className="flex items-center shrink-0 min-w-0" style={{ maxWidth: "300px" }}>
-      <div className="flex-1 flex items-center justify-center min-w-0 px-4">
         {editing ? (
           <input
             ref={inputRef}
@@ -290,7 +289,6 @@ export function TopBar({
       </div>
       {/* Center: Save status + tile count + room size */}
       <div className="flex-1 flex items-center justify-center gap-2 min-w-0 px-4">
-      <div className="flex items-center gap-2 shrink-0">
         {/* Save status */}
         <SaveStatusIndicator status={saveStatus} />
 
