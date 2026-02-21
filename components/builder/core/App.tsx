@@ -185,11 +185,21 @@ function AppInner() {
           window.location.href = '/login';
         }
       }, [authLoading, user]);
+
       useEffect(() => {
-  if (!authLoading && !user) {
-    window.location.href = '/login';
-  }
-}, [authLoading, user]);
+        if (!user) return;
+        loadLayoutsFromSupabase(user.id).then((remote) => {
+          if (remote.length === 0) return;
+          setLayouts(remote);
+          saveLayouts(remote);
+          const savedId = loadCurrentId();
+          if (savedId && remote.some((l) => l.id === savedId)) {
+            setCurrentLayoutId(savedId);
+          } else {
+            setCurrentLayoutId(remote[0].id);
+          }
+        });
+      }, [user]);
 useEffect(() => {
   const current = JSON.stringify(tiles);
   if (current === lastSavedRef.current) return;
