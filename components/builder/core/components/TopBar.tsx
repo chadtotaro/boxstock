@@ -391,13 +391,6 @@ export function TopBar({
         <ActionIconButton onClick={toggle} tooltip={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
           {isDark ? <Sun size={15} /> : <Moon size={15} />}
         </ActionIconButton>
-        {/* Room size */}
-        <ActionIconButton
-          onClick={onOpenRoomSize ?? (() => {})}
-          tooltip="Set room size constraint"
-        >
-          <Ruler size={15} />
-        </ActionIconButton>
 
         {/* Share */}
         <SharePopover onShare={onShare} />
