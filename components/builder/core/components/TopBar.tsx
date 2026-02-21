@@ -113,7 +113,7 @@ export function TopBar({
 }: TopBarProps) {
   const { isDark, toggle } = useTheme();
   const [editing, setEditing] = useState(false);
-  const [editValue, setEditValue] = useState(layoutName);
+  const [editValue, setEditValue] = useState(layoutName ?? '');
   const inputRef = useRef<HTMLInputElement>(null);
   const [confirmClear, setConfirmClear] = useState(false);
 
