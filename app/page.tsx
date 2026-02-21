@@ -67,7 +67,7 @@ export default function Dashboard() {
     router.push('/builder');
   };
 
-  const displayed = showAll ? layouts : lay.slice(0, 5);
+  const displayed = showAll ? layouts : layouts.slice(0, 5);
   const tileCount = (l: Layout) => Object.keys(l.tiles || {}).length;
 
   return (
