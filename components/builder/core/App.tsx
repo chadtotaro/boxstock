@@ -288,6 +288,7 @@ useEffect(() => {
     setCurrentLayoutId(newLayout.id);
     saveCurrentId(newLayout.id);
     resetTo({});
+    setRoomConstraint(null);
     lastSavedRef.current = '{}';
     setLastSavedJson('{}');
     setSaveStatus('saved');
