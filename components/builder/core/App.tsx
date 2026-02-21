@@ -213,6 +213,10 @@ function AppInner() {
       
         setLayouts(reordered);
         saveLayouts(reordered);
+
+        if (user && current) {
+          await saveLayoutToSupabase({ ...current, tiles, lastModified: Date.now() }, user.id);
+        }
       
         const saved = JSON.stringify(tiles);
         lastSavedRef.current = saved;
