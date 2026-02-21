@@ -215,7 +215,9 @@ function AppInner() {
 
       useEffect(() => {
         if (!user) return;
+        console.log('Loading layouts for user:', user.id);
         loadLayoutsFromSupabase(user.id).then((remote) => {
+          console.log('Got remote layouts:', remote.length, remote.map(l => l.name));
           let finalLayouts: Layout[];
           if (remote.length === 0) {
             const fresh = createEmptyLayout('Untitled Layout');
