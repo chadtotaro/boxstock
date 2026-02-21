@@ -28,38 +28,21 @@ interface TopBarProps {
 }
 
 const iconBtnBase: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 36,
-  height: 36,
-  borderRadius: 8,
-  backgroundColor: '#e9e9eb',
-  border: '1px solid #d5d7de',
-  cursor: 'pointer',
-  color: '#4D5358',
-  flexShrink: 0,
+  display: 'flex', alignItems: 'center', justifyContent: 'center',
+  width: 36, height: 36, borderRadius: 8,
+  backgroundColor: '#e9e9eb', border: '1px solid #d5d7de',
+  cursor: 'pointer', color: '#4D5358', flexShrink: 0,
 };
 
 const iconBtnDisabled: React.CSSProperties = {
-  ...iconBtnBase,
-  opacity: 0.4,
-  cursor: 'default',
+  ...iconBtnBase, opacity: 0.4, cursor: 'default',
 };
 
 const chipStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 4,
-  height: 36,
-  padding: '0 8px',
-  borderRadius: 8,
-  backgroundColor: '#e9e9eb',
-  border: '1px solid #d5d7de',
-  fontSize: 12,
-  color: '#000',
-  whiteSpace: 'nowrap',
-  flexShrink: 0,
+  display: 'flex', alignItems: 'center', gap: 4,
+  height: 36, padding: '0 8px', borderRadius: 8,
+  backgroundColor: '#e9e9eb', border: '1px solid #d5d7de',
+  fontSize: 12, color: '#000', whiteSpace: 'nowrap', flexShrink: 0,
 };
 
 function SharePopover({ onShare }: { onShare: (action: 'download' | 'copy') => void }) {
@@ -98,12 +81,7 @@ function SharePopover({ onShare }: { onShare: (action: 'download' | 'copy') => v
           <div style={{ padding: '10px 16px 8px', borderBottom: '1px solid #e2e2e2' }}>
             <span style={{ color: '#888', fontSize: 10, letterSpacing: '0.08em', fontWeight: 600 }}>SHARE & EXPORT</span>
           </div>
-          <button
-            onClick={() => { onShare('download'); setOpen(false); }}
-            style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', padding: '10px 16px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 13 }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f5f5f5'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-          >
+          <button onClick={() => { onShare('download'); setOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', padding: '10px 16px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 13 }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f5f5f5'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, backgroundColor: 'rgba(254,87,87,0.12)' }}>
               <Download size={13} style={{ color: '#FE5757' }} />
             </div>
@@ -112,12 +90,7 @@ function SharePopover({ onShare }: { onShare: (action: 'download' | 'copy') => v
               <div style={{ fontSize: 11, color: '#888' }}>High-res, print ready</div>
             </div>
           </button>
-          <button
-            onClick={handleCopy}
-            style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', padding: '10px 16px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 13 }}
-            onMouseEnter={(e) => { if (!copied) e.currentTarget.style.backgroundColor = '#f5f5f5'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-          >
+          <button onClick={handleCopy} style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', padding: '10px 16px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 13 }} onMouseEnter={(e) => { if (!copied) e.currentTarget.style.backgroundColor = '#f5f5f5'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, backgroundColor: copied ? 'rgba(34,197,94,0.12)' : 'rgba(99,102,241,0.12)' }}>
               {copied ? <Check size={13} style={{ color: '#22C55E' }} /> : <Copy size={13} style={{ color: '#818CF8' }} />}
             </div>
@@ -133,23 +106,10 @@ function SharePopover({ onShare }: { onShare: (action: 'download' | 'copy') => v
 }
 
 export function TopBar({
-  layoutName,
-  onLayoutNameChange,
-  saveStatus,
-  onOpenGenerate,
-  onUndo,
-  onRedo,
-  canUndo,
-  canRedo,
-  tileCount,
-  trackValidation,
-  onClearAll,
-  roomConstraint,
-  onOpenRoomSize,
-  onDisableRoomConstraint,
-  onShare,
-  onSignOut,
-  userEmail,
+  layoutName, onLayoutNameChange, saveStatus, onOpenGenerate,
+  onUndo, onRedo, canUndo, canRedo, tileCount, trackValidation,
+  onClearAll, roomConstraint, onOpenRoomSize, onDisableRoomConstraint,
+  onShare, onSignOut, userEmail,
 }: TopBarProps) {
   const { isDark, toggle } = useTheme();
   const [editing, setEditing] = useState(false);
@@ -190,11 +150,7 @@ export function TopBar({
             style={{ background: 'transparent', border: 'none', borderBottom: '2px solid #0fc4ba', color: '#000', fontSize: 16, fontWeight: 500, fontFamily: 'Inter, sans-serif', outline: 'none', width: Math.max(140, editValue.length * 10 + 24), padding: '0 2px 2px' }}
           />
         ) : (
-          <h1
-            onClick={() => setEditing(true)}
-            title="Click to rename"
-            style={{ margin: 0, color: '#000', fontSize: 16, fontWeight: 500, fontFamily: 'Inter, sans-serif', textDecoration: 'underline', cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}
-          >
+          <h1 onClick={() => setEditing(true)} title="Click to rename" style={{ margin: 0, color: '#000', fontSize: 16, fontWeight: 500, fontFamily: 'Inter, sans-serif', textDecoration: 'underline', cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>
             {layoutName}
           </h1>
         )}
@@ -202,8 +158,6 @@ export function TopBar({
 
       {/* CENTER: saved + tile chip + room chip */}
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, minWidth: 0 }}>
-
-        {/* Saved indicator */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
           {saveStatus === 'saving'
             ? <Loader2 size={11} style={{ color: '#888' }} className="animate-spin" />
@@ -214,7 +168,6 @@ export function TopBar({
           </span>
         </div>
 
-        {/* Tile count chip */}
         {confirmClear ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
             <span style={{ fontSize: 12, color: '#888', whiteSpace: 'nowrap' }}>Clear {tileCount} tile{tileCount !== 1 ? 's' : ''}?</span>
@@ -231,7 +184,6 @@ export function TopBar({
           </div>
         )}
 
-        {/* Room size chip */}
         {roomConstraint && roomConstraint.enabled ? (
           <div style={chipStyle}>
             <Icon path={mdiRulerSquare} size={0.7} style={{ color: '#4D5358' }} />
