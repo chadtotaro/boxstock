@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Undo2, Redo2, Check, Loader2, Moon, Sun, CircleCheck, CircleAlert, AlertTriangle, Trash2, Ruler, X, Share2, Download, Copy, Sparkles, Pencil } from 'lucide-react';
+import Icon from '@mdi/react';
+import { mdiRulerSquare, mdiGrid, mdiClose, mdiUndo, mdiRedo } from '@mdi/js';
 import { useTheme } from '../hooks/useThemeContext';
 import type { SaveStatus } from '@/types/builder';
 import type { TrackValidation } from '../lib/edge-validator';
