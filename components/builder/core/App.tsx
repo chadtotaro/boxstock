@@ -143,7 +143,20 @@ async function loadLayoutsFromSupabase(userId: string): Promise<Layout[]> {
 }
 function AppInner() {
   const { user, loading: authLoading, signOut } = useAuth();
-  const [layouts, setLayouts] = useState<Layout[]>([]);
+  const [layouts, setLayouts] = useState<Layout[]>(() => {
+    let loaded = loadLayouts();
+    const migrated = migrateOldStorage();
+    if (migrated) {
+      loaded = [migrated, ...loaded];
+      saveLayouts(loaded);
+    }
+    if (loaded.length === 0) {
+      const first = createEmptyLayout('Untitled Layout');
+      loaded = [first];
+      saveLayouts(loaded);
+    }
+    return loaded;
+  });
   const [layoutsReady, setLayoutsReady] = useState(false);
 
   const [currentLayoutId, setCurrentLayoutId] = useState<string>('');
