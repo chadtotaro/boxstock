@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus, Layers } from 'lucide-react';
 import Icon from '@mdi/react';
-import { mdiApps, mdiSquareFoot } from '@mdi/js';
+import { mdiApps, mdiRulerSquare } from '@mdi/js';
 
 const LAYOUTS_KEY = 'miniz-layouts';
 const CURRENT_ID_KEY = 'miniz-current-layout-id';
@@ -67,7 +67,7 @@ function TrackCard({ name, tiles, room, thumbnail, onClick }: {
           </span>
           {room && (
             <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#000' }}>
-              <Icon path={mdiSquareFoot} size={0.65} />
+              <Icon path={mdiRulerSquare} size={0.65} />
               {room}
             </span>
           )}
