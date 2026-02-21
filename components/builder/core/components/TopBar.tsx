@@ -315,7 +315,7 @@ export function TopBar({
           </span>
         )}
         {/* Room size chip */}
-        {roomConstraint && roomConstraint.enabled && (
+        {roomConstraint && roomConstraint.enabled ? (
           <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg" style={{ backgroundColor: "var(--c-bg-elevated)", border: "1px solid var(--c-border)", fontSize: "12px", color: "var(--c-text)", whiteSpace: "nowrap" }}>
             <Ruler size={13} style={{ color: "var(--c-text-muted)", flexShrink: 0 }} />
             <button onClick={onOpenRoomSize ?? (() => {})} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-text)", fontSize: "12px", padding: 0 }}>
@@ -323,8 +323,10 @@ export function TopBar({
             </button>
             <button onClick={onDisableRoomConstraint ?? (() => {})} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-text-muted)", fontSize: "14px", padding: "0 0 0 2px", lineHeight: 1, display: "flex", alignItems: "center" }} title="Clear room constraint">x</button>
           </div>
+          </div>
+        ) : (
+          <ActionIconButton onClick={onOpenRoomSize ?? (() => {})} tooltip="Set room size constraint"><Ruler size={15} /></ActionIconButton>
         )}
-      </div>
 
       {/* ── Center: Editable layout name ── */}
       <div className="flex-1 flex items-center justify-center min-w-0 px-4">
