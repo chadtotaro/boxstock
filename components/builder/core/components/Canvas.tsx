@@ -7,7 +7,7 @@ import { FloatingShortcutsPanel } from './Sidebar';
 
 import type { PlacedTile, DragItem, TileType, RoomConstraint } from '@/types/builder';
 import { CELL_SIZE, isInBounds } from '@/types/builder';
-import { Plus, Minus, Maximize2, Grip } from 'lucide-react';
+import { Plus, Minus, Maximize2, Crosshair, Grip } from 'lucide-react';
 import { getTileEdgeErrors, type TrackValidation } from '../lib/edge-validator';
 import { toast } from 'sonner';
 
@@ -243,6 +243,52 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [centerRequest]);
+
+  // ── Center viewport on room when constraint is enabled ────────────
+  const centerOnRoom = () => {
+    if (!roomConstraint?.enabled) {
+      // Fall back to centering on tiles
+      const tileArr = Object.values(tiles);
+      if (tileArr.length === 0) return;
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (const t of tileArr) {
+        if (t.x < minX) minX = t.x;
+        if (t.y < minY) minY = t.y;
+        if (t.x + 1 > maxX) maxX = t.x + 1;
+        if (t.y + 1 > maxY) maxY = t.y + 1;
+      }
+      const worldW = (maxX - minX) * CELL_SIZE - minY) * CELL_SIZE;
+      const cx = ((minX + maxX) / 2) * CELL_SIZE;
+      const cy = ((minY + maxY) / 2) * CELL_SIZE;
+      const cw = containerSize.width || 800;
+      const ch = containerSize.height || 600;
+      const fitZoom = Math.min(cw / (worldW + CELL_SIZE * 4), ch / (worldH + CELL_SIZE * 4), 1);
+      setZoom(fitZoom);
+      setPan({ x: cw / 2 - cx * fitZoom, y: ch / 2 - cy * fitZoom });
+      return;
+    }
+    const rc = roomConstraint;
+    const worldW = (rc.maxX - rc.minX + 1) * CELL_SIZE;
+    const worldH = (rc.maxY - rc.minY + 1) * CELL_SIZE;
+    const cx = ((rc.minX + rc.maxX + 1) / 2) * CELL_SIZE;
+    const cy = ((rc.minY + rc.maxY + 1) / 2) * CELL_SIZE;
+    const cw = containerSize.width || 800;
+    const ch = containerSize.height || 600;
+    const fitZoom = Math.min(cw / (worldW + CELL_SIZE * 4), ch / (worldH + CELL_SIZE * 4), 1);
+    setZoom(fitZoom);
+    setPan({ x: cw / 2 - cx * fitZoom, y: ch / 2 - cy * fitZoom });
+  };
+
+  const prevRoomEnabled = useRef(false);
+  useEffect(() => {
+    const isEnabled = !!(roomConstraint?.enabled);
+    if (isEnabled && !prevRoomEnabled.current) {
+      // Room just got enabled — center on it
+      centerOnRoom();
+    }
+    prevRoomEnabled.current = isEnabled;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomConstraint?.enabled, roomConstraint?.minX, roomConstraint?.minY, roomConstraint?.maxX, roomConstraint?.maxY]);
 
   const visRange = useMemo(
     () => getVisibleRange(containerSize.width, containerSize.height, pan, zoom),
