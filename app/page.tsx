@@ -32,7 +32,7 @@ function timeAgo(ts: number) {
 const PICKS = [
   { id: 'p1', name: 'Daytona Oval', tiles: 42, tileSize: 50, emoji: '🏁' },
   { id: 'p2', name: 'Tokyo Drift', tiles: 38, tileSize: 30, emoji: '🌀' },
-  { id: 'p3', name: burgring Jr.', tiles: 60, tileSize: 50, emoji: '⚡' },
+  { id: 'p3', name: 'Nurburgring Jr.', tiles: 60, tileSize: 50, emoji: '⚡' },
   { id: 'p4', name: 'Mini Hairpin', tiles: 24, tileSize: 30, emoji: '🔄' },
 ];
 
