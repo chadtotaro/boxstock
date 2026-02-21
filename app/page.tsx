@@ -129,7 +129,7 @@ export default function Dashboard() {
             <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>Boxstock Picks</h2>
             <p style={{ margin: 0, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>Curated layouts from the Boxstock team</p>
           </div>
-          <div style={{ display: grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
             {PICKS.map(p => (
               <div key={p.id} style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#14171D', overflow: 'hidden', opacity: 0.7 }}>
                 <div style={{ height: 120, backgroundColor: '#0A0C10', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 48 }}>
