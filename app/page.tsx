@@ -171,7 +171,7 @@ export default function Dashboard() {
           )}
         </section>
         <section>
-          <h2tyle={{ fontSize: 28, fontWeight: 700, margin: '0 0 20px' }}>Boxstock Tracks</h2>
+          <h2 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 20px' }}>Boxstock Tracks</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
             {BOXSTOCK_TRACKS.map(t => (
               <TrackCard key={t.id} name={t.name} tiles={t.tiles} room={t.room} />
