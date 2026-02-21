@@ -215,16 +215,6 @@ export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTil
         </button>
       </div>
 
-      {/* ── Tags ── */}
-      {onTagsChange && (
-        <div className="px-4 py-3 border-b" style={{ borderColor: 'var(--c-border)' }}>
-          <div className="flex items-center gap-1.5 mb-2">
-            <Tag size={11} style={{ color: 'var(--c-text-muted)' }} />
-            <span style={{ color: 'var(--c-text-muted)', fontSize: '11px', letterSpacing: '0.03em' }}>TAGS</span>
-          </div>
-          <TagInput tags={tags} onTagsChange={onTagsChange} />
-        </div>
-      )}
 
       {/* ── Tile palette ── */}
       <div className="flex flex-col gap-1.5 p-3">
