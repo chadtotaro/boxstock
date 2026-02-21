@@ -61,7 +61,7 @@ export default function GlobalHeader() {
       }}
     >
       {/* Left: Wordmark */}
-      <a href="/builder" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+      <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
         <BoxstockLogo />
       </a>
 
