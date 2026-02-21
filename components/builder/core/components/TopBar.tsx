@@ -286,7 +286,6 @@ export function TopBar({
           </div>
         )}
       </div>
-      </div>
       {/* Center: Save status + tile count + room size */}
       <div className="flex-1 flex items-center justify-center gap-2 min-w-0 px-4">
         {/* Save status */}
