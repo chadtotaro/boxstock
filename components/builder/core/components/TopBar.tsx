@@ -314,6 +314,8 @@ export function TopBar({
             {tileCount} Tile{tileCount !== 1 ? 's' : ''} Placed
           </span>
         )}
+        {/* Divider before room size */}
+        <div style={{ width: 1, height: 18, backgroundColor: 'var(--c-border)', margin: '0 8px' }} />
         {/* Room size chip */}
         {roomConstraint && roomConstraint.enabled ? (
           <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg" style={{ backgroundColor: "var(--c-bg-elevated)", border: "1px solid var(--c-border)", fontSize: "12px", color: "var(--c-text)", whiteSpace: "nowrap" }}>
