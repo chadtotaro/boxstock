@@ -216,6 +216,35 @@ export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTil
       </div>
 
 
+      {/* ── Track Type Toggle ── */}
+      <div className="px-3 py-3 border-b" style={{ borderColor: 'var(--c-border)' }}>
+        <p style={{ fontSize: '13px', marginBottom: '8px', color: 'var(--c-text)' }}>
+          <strong>Track Type:</strong> {tileSize === 30 ? '30CM Tiles' : '50CM Tiles'}
+        </p>
+        <div className="flex gap-2">
+          {([{ label: 'Mini-96', size: 30 as const }, { label: 'Standard', size: 50 as const }]).map(({ label, size }) => {
+            const active = tileSize === size;
+            return (
+              <button
+                key={size}
+                onClick={() => onTileSizeChange?.(size)}
+                style={{
+                  flex: 1,
+                  padding: '6px 0',
+                  borderRadius: '8px',
+                  border: 'none',
+                  cursor: 'pointer',
+          fontSize: '13px',
+                  fontWeight: 500,
+                  backgroundColor: active ? 'var(--c-accent)' : 'var(--c-bg-elevated)',
+                  color: active ? '#fff' : 'var(--c-text-muted)',
+                  transition: 'all 0.15s',
+                }}
+              >{label}</button>
+            );
+          })}
+        </div>
+      </div>
       {/* ── Tile palette ── */}
       <div className="flex flex-col gap-1.5 p-3">
         {TILE_ORDER.map((tileType) => (
