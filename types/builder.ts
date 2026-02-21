@@ -38,6 +38,7 @@ export interface Layout {
   tiles: Record<string, PlacedTile>;
   lastModified: number;
   createdAt: number;
+  tileSize: 30 | 50;
   /** Cached PNG thumbnail for gallery cards */
   thumbnailDataUrl?: string;
 }
