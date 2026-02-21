@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Clock, Layers } from 'lucide-react';
+import { Plus, Layers } from 'lucide-react';
 
 const LAYOUTS_KEY = 'miniz-layouts';
 const CURRENT_ID_KEY = 'miniz-current-layout-id';
@@ -13,28 +13,67 @@ interface Layout {
   lastModified: number;
   tiles: Record<string, unknown>;
   tileSize?: 30 | 50;
+  roomConstraint?: { widthValue: number; heightValue: number; unit: string; enabled: boolean } | null;
 }
 
 function generateId() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
-function timeAgo(ts: number) {
-  const diff = Date.now() - ts;
-  const m = Math.floor(diff / 60000);
-  if (m < 1) return 'just now';
-  if (m < 60) return `${m}m ago`;
-  const h = Math.floor(m / 60);
-  if (h < 24) return `${h}h ago`;
-  return `${Math.floor(h / 24)}d ago`;
-}
-
-const PICKS = [
-  { id: 'p1', name: 'Daytona Oval', tiles: 42, tileSize: 50, emoji: '🏁' },
-  { id: 'p2', name: 'Tokyo Drift', tiles: 38, tileSize: 30, emoji: '🌀' },
-  { id: 'p3', name: 'Nurburgring Jr.', tiles: 60, tileSize: 50, emoji: '⚡' },
-  { id: 'p4', name: 'Mini Hairpin', tiles: 24, tileSize: 30, emoji: '🔄' },
+const BOXSTOCK_TRACKS = [
+  { id: 'b1', name: 'Laguna Zeca', tiles: 50, room: "10' x 20'" },
+  { id: 'b2', name: 'Daytona', tiles: 33, room: '-- x --' },
+  { id: 'b3', name: 'Laguna Zeca', tiles: 50, room: "10' x 20'" },
+  { id: 'b4', name: 'Laguna Zeca', tiles: 50, room: "10' x 20'" },
+  { id: 'b5', name: 'Laguna Zeca', tiles: 50, room: "10' x 20'" },
 ];
+
+function TrackCard({ name, tiles, room, thumbnail, onClick }: {
+  name: string;
+  tiles: number;
+  room?: string;
+  thumbnail?: string;
+  onClick?: () => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        borderRadius: 8,
+        overflow: 'hidden',
+        cursor: onClick ? 'pointer' : 'default',
+        border: hovered ? '2px solid #0fc4ba' : '2px solid transparent',
+        transition: 'border-color 0.15s',
+      }}
+    >
+      <div style={{ height: 162, backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {thumbnail
+          ? <img src={thumbnail} alt={name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          : <Layers size={40} style={{ color: 'rgba(255,255,255,0.1)' }} />
+        }
+      </div>
+      <div style={{ backgroundColor: '#fff', padding: '12px 14px 16px' }}>
+        <p style={{ margin: '0 0 4px', fontWeight: 700, fontSize: 20, color: '#000' }}>{name}</p>
+        <p style={{ margin: '0 0 10px', fontSize: 11, color: '#555' }}>Created by: radical_mannt</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: '#000' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            {tiles}
+          </span>
+          {room && (
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#000' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 21H3V3"/><path d="M21 3L3 21"/></svg>
+              {room}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Dashboard() {
   const router = useRouter();
@@ -69,71 +108,48 @@ export default function Dashboard() {
 
   const displayed = showAll ? layouts : layouts.slice(0, 5);
   const tileCount = (l: Layout) => Object.keys(l.tiles || {}).length;
+  const roomStr = (l: Layout) => l.roomConstraint?.enabled
+    ? `${l.roomConstraint.widthValue}' x ${l.roomConstraint.heightValue}'`
+    : '-- x --';
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0A0C10', color: '#F0F2F5', fontFamily: 'system-ui, sans-serif' }}>
-
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 32px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#090707', color: '#fff', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <div style={{ maxWidth: 1320, margin: '0 auto', padding: '40px 40px' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 40 }}>
+          <button onClick={handleNew} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '14px 28px', borderRadius: 8, background: 'linear-gradient(90deg, #0fc4ba, #dbb762)', color: '#2e2919', fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer', letterSpacing: '0.5px' }}>
+            <Plus size={16} />
+            NEW TRACK
+          </button>
+        </div>
         <section style={{ marginBottom: 56 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Your Tracks</h2>
+            <h2 style={{ fontSize: 28, fontWeight: 700, margin: 0 }}>Your Tracks</h2>
             {layouts.length > 5 && (
-              <button onClick={() => setShowAll(v => !v)} style={{ background: 'none', border: 'none', color: '#00D4FF', fontSize: 13, cursor: 'pointer' }}>
+              <button onClick={() => setShowAll(v => !v)} style={{ background: 'none', border: 'none', color: '#0fc4ba', fontSize: 14, cursor: 'pointer' }}>
                 {showAll ? 'Show less' : `See all ${layouts.length}`}
               </button>
             )}
           </div>
           {layouts.length === 0 ? (
-            <div onClick={handleNew} style={{ border: '2px dashed rgba(255,255,255,0.1)', borderRadius: 12, padding: '48px 24px', textAlign: 'center', cursor: 'pointer', color: 'rgba(255,255,255,0.4)' }}>
-              <Plus size={32} style={{ margin: '0 auto 12px' }} />
-              <p style={{ margin: 0, fontSize: 14 }}>No tracks yet — create your first one</p>
+            <div onClick={handleNew} style={{ border: '2px dashed rgba(255,255,255,0.15)', borderRadius: 8, padding: '60px 24px', textAlign: 'center', cursor: 'pointer', color: 'rgba(255,255,255,0.3)' }}>
+              <Plus size={36} style={{ margin: '0 auto 12px' }} />
+              <p style={{ margin: 0, fontSize: 15 }}>No tracks yet — create your first one</p>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(au-fill, minmax(200px, 1fr))', gap: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
               {displayed.map(l => (
-                <div key={l.id} onClick={() => handleOpen(l.id)}
-                  style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#14171D', cursor: 'pointer', overflow: 'hidden' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(0,212,255,0.4)')}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
-                >
-                  <div style={{ height: 120, backgroundColor: '#0A0C10', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {l.thumbnailDataUrl
-                      ? <img src={l.thumbnailDataUrl} alt={l.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                      : <Layers size={32} style={{ color: 'rgba(255,255,255,0.15)' }} />
-                    }
-                  </div>
-                  <div style={{ padding: '12px 14px' }}>
-                    <p style={{ margin: '0 0 4px', fontWeight: 600, fontSize: 13, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{l.name}</p>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'rgba(255,255,255,0.4)', fontSize: 11 }}>
-                      <span>{tileCount(l)} tiles · {l.tileSize ?? 50}cm</span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Clock size={10} />{timeAgo(l.lastModified)}</span>
-                    </div>
-                  </div>
-                </div>
+                <TrackCard key={l.id} name={l.name} tes={tileCount(l)} room={roomStr(l)} thumbnail={l.thumbnailDataUrl} onClick={() => handleOpen(l.id)} />
               ))}
             </div>
           )}
         </section>
-
         <section>
-          <div style={{ marginBottom: 20 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>Boxstock Picks</h2>
-            <p style={{ margin: 0, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>Curated layouts from the Boxstock team</p>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
-            {PICKS.map(p => (
-              <div key={p.id} style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#14171D', overflow: 'hidden', opacity: 0.7 }}>
-                <div style={{ height: 120, backgroundColor: '#0A0C10', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 48 }}>
-                  {p.emoji}
-                </div>
-                <div style={{ padding: '12px 14px' }}>
-                  <p style={{ margin: '0 0 4px', fontWeight: 600, fontSize: 13 }}>{p.name}</p>
-                  <p style={{ margin: 0, color: 'rgba(255,255,255,0.4)', fontSize: 11 }}>{p.tiles} tiles · {p.tileSize}cm</p>
-                  <span style={{ display: 'inline-block', marginTop: 6, fontSize: 10, backgroundColor: 'rgba(0,212,255,0.1)', color: '#00D4FF', padding: '2px 6px', borderRadius: 4 }}>Coming soon</span>
-                </div>
-              </div>
+          <h2 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 20px' }}>Boxstock Tracks</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
+            {BOXSTOCK_TRACKS.map(t => (
+              <TrackCard key={t.id} name={t.name} tiles={t.tiles} room={t.room} />
             ))}
-         </div>
+          </div>
         </section>
       </div>
     </div>
