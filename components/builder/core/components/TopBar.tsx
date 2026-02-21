@@ -383,25 +383,13 @@ export function TopBar({
         </ActionIconButton>
 
         {/* Room size */}
-        <div style={{ position: 'relative', display: 'inline-flex' }}>
-          <ActionIconButton
-            onClick={roomConstraint?.enabled ? (onDisableRoomConstraint ?? (() => {})) : (onOpenRoomSize ?? (() => {}))}
-            tooltip={roomConstraint?.enabled ? 'Clear room constraint' : 'Set room size constraint'}
-            active={roomConstraint?.enabled}
-          >
-            <Ruler size={15} />
-          </ActionIconButton>
-          {roomConstraint?.enabled && (
-            <div style={{
-              position: 'absolute', top: -4, right: -4,
-              width: 14, height: 14, borderRadius: '50%',
-              backgroundColor: 'var(--c-error)',
-              color: '#fff', fontSize: '9px', fontWeight: 700,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              pointerEvents: 'none',
-            }}>×</div>
-          )}
-        </div>
+        <ActionIconButton
+          onClick={onOpenRoomSize ?? (() => {})}
+          tooltip="Set room size constraint"
+          active={roomConstraint?.enabled}
+        >
+          <Ruler size={15} />
+        </ActionIconButton>
 
         {/* Share */}
         <SharePopover onShare={onShare} />
