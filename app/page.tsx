@@ -63,7 +63,8 @@ export default function Dashboard() {
     };
     const updated = [newLayout, ...layouts];
     localStorage.setItem(LAYOUTS_KEY, JSON.stringify(updated));
-    localStorage.setItem(CURRENT_ID_KEY, newLayout.idrouter.push('/builder');
+    localStorage.setItem(CURRENT_ID_KEY, newLayout.id);
+    router.push('/builder');
   };
 
   const displayed = showAll ? layouts : layouts.slice(0, 5);
