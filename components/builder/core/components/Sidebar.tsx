@@ -106,6 +106,8 @@ interface SidebarProps {
   onRemoveDumpedTiles?: () => void;
   hasDumpedTiles?: boolean;
   onOpenLayouts?: () => void;
+  tileSize?: 30 | 50;
+  onTileSizeChange?: (size: 30 | 50) => void;
 }
 
 
@@ -168,7 +170,7 @@ export function FloatingShortcutsPanel() {
   );
 }
 
-export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTiles, hasDumpedTiles, onOpenLayouts }: SidebarProps) {
+export function Sidebar({ tiles = {}, tags = [], onTagsChange, onRemoveDumpedTiles, hasDumpedTiles, onOpenLayouts, tileSize = 50, onTileSizeChange }: SidebarProps) {
   const tileCounts = useMemo(() => {
     const counts: Record<TileType, number> = {
       'straight': 0, 'corner': 0, 'inside-corner': 0, 'inside-corner-45': 0, 'bump': 0, 'diagonal': 0, 'blank': 0,

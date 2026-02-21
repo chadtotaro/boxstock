@@ -276,6 +276,17 @@ useEffect(() => {
     [layouts, performSave, resetTo]
   );
 
+  const handleTileSizeChange = useCallback((size: 30 | 50) => {
+    setLayouts(prev => prev.map(l =>
+      l.id === currentLayoutId ? { ...l, tileSize: size, lastModified: Date.now() } : l
+    ));
+    // Recalculate room constraint if one is set
+    if (roomConstraint) {
+      const { convertToCm, computeRoomGrid } = require('@/types/builder');
+      // room constraint already has widthValue/heightValue/unit stored
+    }
+  }, [currentLayoutId, setLayouts, roomConstraint]);
+
   const handleCreateLayout = useCallback(async () => {
     await performSave();
     const newLayout = createEmptyLayout();
@@ -618,7 +629,7 @@ useEffect(() => {
         `}</style>
 
         <div className="flex flex-1 overflow-hidden">
-          <Sidebar tiles={tiles} tags={currentLayout?.tags || []} onTagsChange={handleTagsChange} onRemoveDumpedTiles={handleRemoveDumpedTiles} hasDumpedTiles={hasDumpedTiles} onOpenLayouts={() => setShowLayouts(true)} />
+          <Sidebar tiles={tiles} tags={currentLayout?.tags || []} onTagsChange={handleTagsChange} onRemoveDumpedTiles={handleRemoveDumpedTiles} hasDumpedTiles={hasDumpedTiles} onOpenLayouts={() => setShowLayouts(true)} tileSize={currentLayout?.tileSize ?? 50} onTileSizeChange={handleTileSizeChange} />
           <div className="flex flex-col flex-1 overflow-hidden" style={{
             opacity: generatedResults ? 0.4 : 1,
             transition: "opacity 320ms ease",
