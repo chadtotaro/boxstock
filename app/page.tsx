@@ -138,7 +138,7 @@ export default function Dashboard() {
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
               {displayed.map(l => (
-                <TrackCard key={l.id} name={l.name} tes={tileCount(l)} room={roomStr(l)} thumbnail={l.thumbnailDataUrl} onClick={() => handleOpen(l.id)} />
+                <TrackCard key={l.id} name={l.name} tiles={tileCount(l)} room={roomStr(l)} thumbnail={l.thumbnailDataUrl} onClick={() => handleOpen(l.id)} />
               ))}
             </div>
           )}
