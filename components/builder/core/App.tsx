@@ -280,12 +280,22 @@ useEffect(() => {
     setLayouts(prev => prev.map(l =>
       l.id === currentLayoutId ? { ...l, tileSize: size, lastModified: Date.now() } : l
     ));
-    // Recalculate room constraint if one is set
+    // Recalculate room constraint with new tile size
     if (roomConstraint) {
-      const { convertToCm, computeRoomGrid } = require('@/types/builder');
-      // room constraint already has widthValue/heightValue/unit stored
+      const wCm = convertToCm(roomConstraint.widthValue, roomConstraint.unit);
+      const hCm = convertToCm(roomConstraint.heightValue, roomConstraint.unit);
+      const { cols, rows } = computeRoomGrid(wCm, hCm, size);
+      const tileArr = Object.values(tiles);
+      let centerX = 0, centerY = 0;
+      if (tileArr.length > 0) {
+        centerX = Math.round(tileArr.reduce((s, t) => s + t.x, 0) / tileArr.length);
+        centerY = Math.round(tileArr.reduce((s, t) => s + t.y, 0) / tileArr.length);
+      }
+      const minX = centerX - Math.floor(cols / 2);
+      const minY = centerY - Math.floor(rows / 2);
+      setRoomConstraint({ ...roomConstraint, cols, rows, minX, maxX: minX + cols - 1, minY, maxY: minY + rows - 1, invalidTileKeys: new Set() });
     }
-  }, [currentLayoutId, setLayouts, roomConstraint]);
+  }, [currentLayoutId, setLayouts, roomConstraint, tiles]);
 
   const handleCreateLayout = useCallback(async () => {
     await performSave();
