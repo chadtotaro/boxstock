@@ -4,9 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Plus, Layers } from 'lucide-react';
 import Icon from '@mdi/react';
 import { mdiApps, mdiRulerSquare } from '@mdi/js';
-
-const LAYOUTS_KEY = 'miniz-layouts';
-const CURRENT_ID_KEY = 'miniz-current-layout-id';
+import { supabase } from '@/lib/supabase';
 
 interface Layout {
   id: string;
@@ -81,20 +79,33 @@ export default function Dashboard() {
   const router = useRouter();
   const [layouts, setLayouts] = useState<Layout[]>([]);
   const [showAll, setShowAll] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const data = localStorage.getItem(LAYOUTS_KEY);
-      if (data) setLayouts(JSON.parse(data));
-    } catch {}
+    supabase.auth.getSession().then(async ({ data }) => {
+      const user = data.session?.user;
+      if (!user) {
+        router.replace('/login');
+        return;
+      }
+      const { data: rows } = await supabase
+        .from('layouts')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false });
+      setLayouts(rows ?? []);
+      setLoading(false);
+    });
   }, []);
 
   const handleOpen = (id: string) => {
-    localStorage.setItem(CURRENT_ID_KEY, id);
+    localStorage.setItem('miniz-current-layout-id', id);
     router.push('/builder');
   };
 
-  const handleNew = () => {
+  const handleNew = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
     const newLayout: Layout = {
       id: generateId(),
       name: 'Untitled Layout',
@@ -102,17 +113,31 @@ export default function Dashboard() {
       lastModified: Date.now(),
       tileSize: 50,
     };
-    const updated = [newLayout, ...layouts];
-    localStorage.setItem(LAYOUTS_KEY, JSON.stringify(updated));
-    localStorage.setItem(CURRENT_ID_KEY, newLayout.id);
+    await supabase.from('layouts').insert({
+      id: newLayout.id,
+      user_id: session.user.id,
+      name: newLayout.name,
+      tiles: {},
+      tile_size: 50,
+      tags: [],
+      updated_at: new Date().toISOString(),
+    });
+    localStorage.setItem('miniz-current-layout-id', newLayout.id);
     router.push('/builder');
   };
 
   const displayed = showAll ? layouts : layouts.slice(0, 5);
   const tileCount = (l: Layout) => Object.keys(l.tiles || {}).length;
-  const roomStr = (l: Layout) => l.roomConstraint?.enabled
-    ? `${l.roomConstraint.widthValue}' x ${l.roomConstraint.heightValue}'`
-    : '-- x --';
+  const roomStr = (l: Layout) => {
+    const rc = l.roomConstraint as any;
+    return rc?.enabled ? `${rc.widthValue}' x ${rc.heightValue}'` : '-- x --';
+  };
+
+  if (loading) return (
+    <div style={{ minHeight: '100vh', background: '#090707', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 16 }}>Loading...</p>
+    </div>
+  );
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(to top, rgba(218,184,98,0.15), rgba(13,197,188,0.15)) #090707', color: '#fff', fontFamily: 'Inter, system-ui, sans-serif', overflowY: 'auto' }}>
@@ -146,7 +171,7 @@ export default function Dashboard() {
           )}
         </section>
         <section>
-          <h2 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 20px' }}>Boxstock Tracks</h2>
+          <h2tyle={{ fontSize: 28, fontWeight: 700, margin: '0 0 20px' }}>Boxstock Tracks</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
             {BOXSTOCK_TRACKS.map(t => (
               <TrackCard key={t.id} name={t.name} tiles={t.tiles} room={t.room} />
