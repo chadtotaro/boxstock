@@ -72,15 +72,6 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#0A0C10', color: '#F0F2F5', fontFamily: 'system-ui, sans-serif' }}>
-      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', padding: '0 32px', height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.5px' }}>
-          <span style={{ color: '#00D4FF' }}>BOX</span>STOCK
-        </span>
-        <button onClick={handleNew} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 18px', borderRadius: 8, backgroundColor: '#00D4FF', color: '#0A0C10', fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer' }}>
-          <Plus size={15} />
-          New Track
-        </button>
-      </div>
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 32px' }}>
         <section style={{ marginBottom: 56 }}>
