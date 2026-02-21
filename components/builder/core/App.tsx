@@ -781,6 +781,8 @@ useEffect(() => {
           initialHeight={roomConstraint?.heightValue}
           initialUnit={roomConstraint?.unit}
           tileSize={currentLayout?.tileSize ?? 50}
+          onClear={handleDisableRoomConstraint}
+          hasConstraint={!!roomConstraint?.enabled}
         />
 
         <OutsideTilesModal
