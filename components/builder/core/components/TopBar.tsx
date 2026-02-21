@@ -240,158 +240,51 @@ export function TopBar({
       style={{ backgroundColor: 'var(--c-bg)', borderColor: 'var(--c-border)' }}
     >
       {/* Left: Track name */}
-      <div className="flex items-center shrink-0 min-w-0" style={{ maxWidth: "300px" }}>
+      <div className="flex items-center shrink-0 min-w-0" style={{ maxWidth: "280px" }}>
         {editing ? (
-          <input
-            ref={inputRef}
-            value={editValue}
-            onChange={(e) => setEditValue(e.target.value)}
-            onBlur={commitName}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') commitName();
-              if (e.key === 'Escape') { setEditValue(layoutName); setEditing(false); }
-            }}
-            className="outline-none text-center"
-            style={{
-              backgroundColor: 'transparent',
-              borderBottom: '2px solid var(--c-accent)',
-              color: 'var(--c-text)',
-              fontSize: '15px',
-              fontWeight: 600,
-              width: Math.max(160, editValue.length * 10 + 24),
-              maxWidth: '100%',
-              padding: '0 4px 2px',
-            }}
-          />
+          <input ref={inputRef} value={editValue} onChange={(e) => setEditValue(e.target.value)} onBlur={commitName} onKeyDown={(e) => { if (e.key === 'Enter') commitName(); if (e.key === 'Escape') { setEditValue(layoutName); setEditing(false); } }} className="outline-none" style={{ backgroundColor: 'transparent', borderBottom: '2px solid var(--c-accent)', color: 'var(--c-text)', fontSize: '15px', fontWeight: 500, width: Math.max(140, editValue.length * 10 + 24), maxWidth: '100%', padding: '0 4px 2px' }} />
         ) : (
-          <div
-            className="group flex items-center gap-1.5 cursor-pointer"
-            onClick={() => setEditing(true)}
-            title="Click to rename"
-          >
-            <Pencil size={12} className="opacity-0 group-hover:opacity-40 transition-opacity shrink-0" style={{ color: 'var(--c-text)' }} />
-            <h1
-              className="truncate transition-opacity group-hover:opacity-70"
-              style={{
-                color: 'var(--c-text)',
-                fontSize: '15px',
-                fontWeight: 600,
-                borderBottom: '1.5px solid var(--c-text)',
-                paddingBottom: '1px',
-                maxWidth: '100%',
-              }}
-            >
-              {layoutName}
-            </h1>
+          <div className="group flex items-center cursor-pointer min-w-0" onClick={() => setEditing(true)} title="Click to rename">
+            <h1 className="truncate transition-opacity group-hover:opacity-70" style={{ color: 'var(--c-text)', fontSize: '15px', fontWeight: 500, textDecoration: 'underline', maxWidth: '100%' }}>{layoutName}</h1>
           </div>
         )}
       </div>
       {/* Center: Save status + tile count + room size */}
-      <div className="flex-1 flex items-center justify-center gap-2 min-w-0 px-4">
-        {/* Save status */}
+      <div className="flex-1 flex items-center justify-center gap-2 min-w-0">
         <SaveStatusIndicator status={saveStatus} />
-
-        {/* Divider */}
+        <div style={{ width: 1, height: 18, backgroundColor: 'var(--c-border)', margin: '0 4px' }} />
         {confirmClear ? (
           <div className="flex items-center gap-1.5">
-            <span style={{ color: 'var(--c-text-muted)', fontSize: '12px', whiteSpace: 'nowrap' }}>
-              Clear {tileCount} tile{tileCount !== 1 ? 's' : ''}?
-            </span>
-            <button
-              onClick={() => { onClearAll(); setConfirmClear(false); }}
-              className="flex items-center gap-1 px-2 py-0.5 rounded transition-all cursor-pointer"
-              style={{ backgroundColor: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#EF4444', fontSize: '11px' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.2)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.1)'; }}
-            >
-              Yes, clear
-            </button>
-            <button
-              onClick={() => setConfirmClear(false)}
-              className="px-2 py-0.5 rounded transition-all cursor-pointer"
-              style={{ backgroundColor: 'transparent', border: '1px solid var(--c-border)', color: 'var(--c-text-muted)', fontSize: '11px' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-            >
-              Cancel
-            </button>
+            <span style={{ color: 'var(--c-text-muted)', fontSize: '12px', whiteSpace: 'nowrap' }}>Clear {tileCount} tile{tileCount !== 1 ? 's' : ''}?</span>
+            <button onClick={() => { onClearAll(); setConfirmClear(false); }} className="px-2 py-0.5 rounded cursor-pointer" style={{ backgroundColor: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#EF4444', fontSize: '11px' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.1)'; }}>Yes, clear</button>
+            <button onClick={() => setConfirmClear(false)} className="px-2 py-0.5 rounded cursor-pointer" style={{ backgroundColor: 'transparent', border: '1px solid var(--c-border)', color: 'var(--c-text-muted)', fontSize: '11px' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>Cancel</button>
           </div>
         ) : (
-          <button
-            onClick={() => setConfirmClear(true)}
-            title="Clear all tiles"
-            className="flex items-center gap-1.5 px-2 py-1 rounded transition-all cursor-pointer"
-            style={{ backgroundColor: 'transparent', color: 'var(--c-text-muted)', fontSize: '12px', whiteSpace: 'nowrap' }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#EF4444'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--c-text-muted)'; }}
-          >
-            Clear all tiles
-          </button>
+          <div className="flex items-center gap-1.5 px-2 rounded-lg" style={{ backgroundColor: 'var(--c-bg-elevated)', border: '1px solid var(--c-border)', height: '32px' }}>
+            <Icon path={mdiGrid} size={0.75} style={{ color: 'var(--c-text-muted)' }} />
+            <span style={{ fontSize: '12px', color: 'var(--c-text)', whiteSpace: 'nowrap' }}>{tileCount}</span>
+            <button onClick={() => setConfirmClear(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', padding: '0 0 0 2px' }} title="Clear all tiles"><Icon path={mdiClose} size={0.65} /></button>
+          </div>
         )}
-
-        {/* Tile count */}
-        {!confirmClear && (
-          <span style={{ color: 'var(--c-text-muted)', fontSize: '12px', whiteSpace: 'nowrap' }}>
-            {tileCount} Tile{tileCount !== 1 ? 's' : ''} Placed
-          </span>
-        )}
-        {/* Divider before room size */}
-        <div style={{ width: 1, height: 18, backgroundColor: 'var(--c-border)', margin: '0 8px' }} />
-        {/* Room size chip */}
         {roomConstraint && roomConstraint.enabled ? (
-          <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg" style={{ backgroundColor: "var(--c-bg-elevated)", border: "1px solid var(--c-border)", fontSize: "12px", color: "var(--c-text)", whiteSpace: "nowrap" }}>
-            <Ruler size={13} style={{ color: "var(--c-text-muted)", flexShrink: 0 }} />
-            <button onClick={onOpenRoomSize ?? (() => {})} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-text)", fontSize: "12px", padding: 0 }}>
-              {roomConstraint.widthValue} x {roomConstraint.heightValue} {roomConstraint.unit}
-            </button>
-            <button onClick={onDisableRoomConstraint ?? (() => {})} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-text-muted)", fontSize: "14px", padding: "0 0 0 2px", lineHeight: 1, display: "flex", alignItems: "center" }} title="Clear room constraint">x</button>
+          <div className="flex items-center gap-1.5 px-2 rounded-lg" style={{ backgroundColor: 'var(--c-bg-elevated)', border: '1px solid var(--c-border)', height: '32px' }}>
+            <Icon path={mdiRulerSquare} size={0.75} style={{ color: 'var(--c-text-muted)' }} />
+            <button onClick={onOpenRoomSize ?? (() => {})} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--c-text)', fontSize: '12px', padding: 0, whiteSpace: 'nowrap' }}>{roomConstraint.widthValue} x {roomConstraint.heightValue} {roomConstraint.unit}</button>
+            <button onClick={onDisableRoomConstraint ?? (() => {})} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', padding: '0 0 0 2px' }} title="Clear room constraint"><Icon path={mdiClose} size={0.65} /></button>
           </div>
         ) : (
-          <ActionIconButton onClick={onOpenRoomSize ?? (() => {})} tooltip="Set room size constraint"><Ruler size={15} /></ActionIconButton>
+          <ActionIconButton onClick={onOpenRoomSize ?? (() => {})} tooltip="Set room size constraint"><Icon path={mdiRulerSquare} size={0.75} /></ActionIconButton>
         )}
       </div>
-
       {/* Right: Undo/Redo + action icons */}
-      <div className="flex items-center gap-1 shrink-0">
-        {/* Undo */}
-        <button
-          onClick={onUndo}
-          disabled={!canUndo}
-          title="Undo (Ctrl+Z)"
-          className="flex items-center justify-center w-8 h-8 rounded transition-all cursor-pointer disabled:cursor-default"
-          style={{ color: canUndo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)', backgroundColor: 'transparent' }}
-          onMouseEnter={(e) => { if (canUndo) { e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)'; e.currentTarget.style.color = 'var(--c-accent)'; } }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = canUndo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)'; }}
-        >
-          <Undo2 size={16} />
-        </button>
-
-        {/* Redo */}
-        <button
-          onClick={onRedo}
-          disabled={!canRedo}
-          title="Redo (Ctrl+Shift+Z)"
-          className="flex items-center justify-center w-8 h-8 rounded transition-all cursor-pointer disabled:cursor-default"
-          style={{ color: canRedo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)', backgroundColor: 'transparent' }}
-          onMouseEnter={(e) => { if (canRedo) { e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)'; e.currentTarget.style.color = 'var(--c-accent)'; } }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = canRedo ? 'var(--c-text-icon)' : 'var(--c-text-icon-disabled)'; }}
-        >
-          <Redo2 size={16} />
-        </button>
-
-        {/* Divider */}
-        <div style={{ width: 1, height: 18, backgroundColor: 'var(--c-border)', margin: '0 4px' }} />
-        {/* AI / Generate */}
-        <ActionIconButton onClick={onOpenGenerate} tooltip="AI Generate layout">
-          <Sparkles size={15} />
-        </ActionIconButton>
-
-        {/* Theme toggle */}
-        <ActionIconButton onClick={toggle} tooltip={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
-          {isDark ? <Sun size={15} /> : <Moon size={15} />}
-        </ActionIconButton>
-
-        {/* Share */}
+      <div className="flex items-center gap-1.5 shrink-0">
+        <ActionIconButton onClick={onUndo} tooltip="Undo (Ctrl+Z)" disabled={!canUndo}><Icon path={mdiUndo} size={0.75} /></ActionIconButton>
+        <ActionIconButton onClick={onRedo} tooltip="Redo (Ctrl+Shift+Z)" disabled={!canRedo}><Icon path={mdiRedo} size={0.75} /></ActionIconButton>
+        <div style={{ width: 1, height: 18, backgroundColor: 'var(--c-border)', margin: '0 2px' }} />
+        <ActionIconButton onClick={onOpenGenerate} tooltip="AI Generate layout"><Sparkles size={15} /></ActionIconButton>
+        <ActionIconButton onClick={toggle} tooltip={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>{isDark ? <Sun size={15} /> : <Moon size={15} />}</ActionIconButton>
+        <SharePopover onShare={onShare} />
+      </div>
         <SharePopover onShare={onShare} />
       </div>
     </div>
