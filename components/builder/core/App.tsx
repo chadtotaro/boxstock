@@ -100,6 +100,46 @@ function migrateOldStorage(): Layout | null {
   return null;
 }
 
+
+async function saveLayoutToSupabase(layout: Layout, userId: string) {
+  await supabase.from('layouts').upsert({
+    id: layout.id,
+    user_id: userId,
+    name: layout.name,
+    tiles: layout.tiles,
+    tile_size: layout.tileSize,
+    tags: layout.tags ?? [],
+    room_constraint: layout.roomConstraint ?? null,
+    updated_at: new Date().toISOString(),
+  }, { onConflict: 'id' });
+}
+async function loadLayoutsFromSupabase(userId: string): Promise<Layout[]> {
+  const { data, error } = await supabase
+    .from('layouts')
+    .select('*')
+    .eq('user_id', userId)
+    .order('updated_at', { ascending: false });
+  if (error || !data) return [];
+  const VALID_TILE_TYPES = new Set(Object.keys(TILE_DEFINITIONS));
+  return data.map((row) => {
+    const filteredTiles: Record<string, PlacedTile> = {};
+    for (const [key, tile] of Object.entries(row.tiles || {})) {
+      if (tile && VALID_TILE_TYPES.has((tile as PlacedTile).type)) {
+        filteredTiles[key] = tile as PlacedTile;
+      }
+    }
+    return {
+      id: row.id,
+      name: row.name,
+      tags: row.tags ?? [],
+      tiles: filteredTiles,
+      tileSize: row.tile_size,
+      roomConstraint: row.room_constraint ?? null,
+      lastModified: new Date(row.updated_at).getTime(),
+      createdAt: new Date(row.created_at).getTime(),
+    };
+  });
+}
 function AppInner() {
   const { user, loading: authLoading, signOut } = useAuth();
   const [layouts, setLayouts] = useState<Layout[]>(() => {
