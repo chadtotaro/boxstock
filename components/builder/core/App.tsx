@@ -416,7 +416,7 @@ useEffect(() => {
         saveLayouts(updated);
         return updated;
       });
-      if (user) supabase.from('layouts').delete().eq('id', layoutId).catch(console.error);
+      if (user) supabase.from('layouts').delete().eq('id', layoutId).then(null, console.error);
       if (layoutId === currentLayoutId) {
         const next = layouts.find(l => l.id !== layoutId);
         if (next) { setCurrentLayoutId(next.id); saveCurrentId(next.id); resetTo(next.tiles); setRoomConstraint(next.roomConstraint ?? null); }
