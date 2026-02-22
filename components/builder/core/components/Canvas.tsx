@@ -236,10 +236,10 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
     const ch = containerSize.height || 600;
     const fitZoom = Math.min(cw / (worldW + CELL_SIZE * 2), ch / (worldH + CELL_SIZE * 2), 1);
 
-    setZoom(fitZoom);
+    // zoom preserved
     setPan({
-      x: cw / 2 - cx * fitZoom,
-      y: ch / 2 - cy * fitZoom,
+      x: cw / 2 - cx * zoom,
+      y: ch / 2 - cy * zoom,
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [centerRequest]);
