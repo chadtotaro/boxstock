@@ -153,17 +153,7 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(to top, rgba(218,184,98,0.15), rgba(13,197,188,0.15)) #090707', color: '#fff', fontFamily: 'Inter, system-ui, sans-serif', overflowY: 'auto' }}>
-      {/* Top nav bar */}
-      <div style={{ height: 44, backgroundColor: '#090707', display: 'flex', alignItems: 'center', position: 'sticky', top: 0, zIndex: 100, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <button onClick={() => router.push('/')} title="Dashboard" style={{ width: 49, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#312919', border: 'none', cursor: 'pointer', flexShrink: 0 }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dbb762" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
-          </svg>
-        </button>
-        <div style={{ width: 1, height: 44, backgroundColor: 'rgba(255,255,255,0.1)' }} />
-        <span style={{ fontFamily: "'Faster One', sans-serif", fontSize: 22, background: 'linear-gradient(90deg, #00c6c1, rgba(242,195,100,0.93))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginLeft: 16, letterSpacing: '-0.03em' }}>BOXSTOCK</span>
-      </div>
+
       <div style={{ maxWidth: 1320, margin: '0 auto', padding: '40px 40px' }}>
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 40 }}>
           <button onClick={handleNew} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '14px 28px', borderRadius: 8, background: 'linear-gradient(90deg, #0fc4ba, #dbb762)', color: '#2e2919', fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer', letterSpacing: '0.5px' }}>
