@@ -64,7 +64,7 @@ export default function GlobalHeader() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginLeft: -20 }}>
         <a href="/" title="Dashboard" style={{
             width: 49, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            backgroundColor: '#312919', textDecoration: 'none', flexShrink: 0,
+            backgroundColor: pathname === '/builder' ? '#312919' : '#112322', textDecoration: 'none', flexShrink: 0,
           }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dbb762" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
