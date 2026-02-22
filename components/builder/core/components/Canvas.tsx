@@ -457,12 +457,12 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
         const newZoom = Math.min(Math.max(prevZoom + delta * sensitivity * prevZoom, 0.1), 3);
         const ratio = newZoom / prevZoom;
 
-        // Anchor zoom to cursor position
-        const cursorX = e.clientX - rect.left;
-        const cursorY = e.clientY - rect.top;
-
+        // Anchor zoom to canvas center
+        const centerX = (containerSize.width || rect.width) / 2;
+        const centerY = (containerSize.height || rect.height) / 2;
         setPan((prevPan) => ({
-          x: cursorX - ratio * (cursorX - prevPan.x),
+          x: centerX - ratio * (centerX - prevPan.x),
+          y: centerY - ratio * (centerY - prevPan.y),
           y: cursorY - ratio * (cursorY - prevPan.y),
         }));
 
