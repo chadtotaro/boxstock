@@ -149,11 +149,10 @@ function CardMenu({
           </button>
           <div style={{ height: 1, backgroundColor: 'var(--c-menu-border)' }} />
           <button
-            onClick={(e) => { e.stopPropagation(); setOpen(false); if (!isCurrent) onDelete(layoutId); }}
-            disabled={isCurrent}
-            className="flex items-center gap-2.5 w-full px-3 py-2 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-default"
+            onClick={(e) => { e.stopPropagation(); setOpen(false); onDelete(layoutId); }}
+            className="flex items-center gap-2.5 w-full px-3 py-2 transition-colors cursor-pointer"
             style={{ color: 'var(--c-error)', fontSize: '12px' }}
-            onMouseEnter={(e) => { if (!isCurrent) e.currentTarget.style.backgroundColor = 'var(--c-error-bg)'; }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-error-bg)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
           >
             <Trash2 size={13} />Delete
