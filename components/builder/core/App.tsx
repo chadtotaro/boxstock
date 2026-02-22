@@ -342,6 +342,7 @@ useEffect(() => {
     const updated = [newLayout, ...layouts];
     setLayouts(updated);
     saveLayouts(updated);
+    if (user) saveLayoutToSupabase({ ...newLayout }, user.id).catch(console.error);
     setCurrentLayoutId(newLayout.id);
     saveCurrentId(newLayout.id);
     resetTo({});
@@ -367,6 +368,7 @@ useEffect(() => {
       const updated = [dup, ...layouts];
       setLayouts(updated);
       saveLayouts(updated);
+      if (user) saveLayoutToSupabase({ ...dup }, user.id).catch(console.error);
       toast.success('Layout duplicated', { style: toastStyle, duration: 1500 });
     },
     [layouts, toastStyle]
@@ -379,10 +381,12 @@ useEffect(() => {
           l.id === layoutId ? { ...l, name: newName, lastModified: Date.now() } : l
         );
         saveLayouts(updated);
+        const renamed = updated.find(l => l.id === layoutId);
+        if (user && renamed) saveLayoutToSupabase({ ...renamed }, user.id).catch(console.error);
         return updated;
       });
     },
-    []
+    [user]
   );
 
   const handleDeleteLayout = useCallback(
@@ -391,6 +395,7 @@ useEffect(() => {
       setLayouts((prev) => {
         const updated = prev.filter((l) => l.id !== layoutId);
         saveLayouts(updated);
+        if (user) supabase.from('layouts').delete().eq('id', layoutId).then(() => {});
         return updated;
       });
       toast.success('Layout deleted', { style: toastStyle, duration: 1500 });
