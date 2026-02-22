@@ -60,10 +60,26 @@ export default function GlobalHeader() {
         flexShrink: 0,
       }}
     >
-      {/* Left: Wordmark */}
-      <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-        <BoxstockLogo />
-      </a>
+      {/* Left: Home icon (builder only) + Wordmark */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginLeft: -20 }}>
+        {pathname === '/builder' && (
+          <>
+            <a href="/" title="Dashboard" style={{
+              width: 49, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              backgroundColor: '#312919', textDecoration: 'none', flexShrink: 0,
+            }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dbb762" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </a>
+            <div style={{ width: 1, height: 44, backgroundColor: 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
+          </>
+        )}
+        <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', paddingLeft: pathname === '/builder' ? 16 : 20 }}>
+          <BoxstockLogo />
+        </a>
+      </div>
 
       {/* Right: Bell + User */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
