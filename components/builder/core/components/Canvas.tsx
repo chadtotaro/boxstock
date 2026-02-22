@@ -194,6 +194,7 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
   const [zoom, setZoom] = useState(0.2);
   const zoomRef = useRef(0.2);
   zoomRef.current = zoom; // always current
+  zoomRef.current = zoom; // always current
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
