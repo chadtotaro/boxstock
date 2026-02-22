@@ -253,7 +253,10 @@ function AppInner() {
             setCurrentLayoutId(targetId);
             saveCurrentId(targetId);
             const target = finalLayouts.find(l => l.id === targetId);
-            if (target) resetTo(target.tiles);
+            if (target) {
+              resetTo(target.tiles);
+              setRoomConstraint(target.roomConstraint ?? null);
+            }
             setLayoutsReady(true);
           });
         };
