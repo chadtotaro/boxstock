@@ -104,6 +104,16 @@ export default function Dashboard() {
     localStorage.setItem('miniz-current-layout-id', id);
     router.push('/builder');
   };
+  const handleOpenBoxstock = async (layoutId: string) => {
+    const layout = boxstockLayouts.find(l => l.id === layoutId);
+    if (!layout) return;
+    const { data, error } = await supabase
+      .from('shared_tracks')
+      .insert({ layout_name: layout.name, tiles: layout.tiles })
+      .select('id')
+      .single();
+    if (!error && data) router.push('/track/' + data.id);
+  };
 
   const handleNew = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -175,8 +185,10 @@ export default function Dashboard() {
         <section>
           <h2 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 20px' }}>Boxstock Tracks</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
-            {boxstockLayouts.map(l => (
-              <TrackCard key={l.id} name={l.name} tiles={tileCount(l)} room={roomStr(l)} thumbnail={l.thumbnailDataUrl} onClick={() => handleOpen(l.id)} />
+            {boxstockLayouts.length === 0 ? (
+              <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14 }}>No Boxstock tracks yet.</p>
+            ) : boxstockLayouts.map(l => (
+              <TrackCard key={l.id} name={l.name} tiles={tileCount(l)} room={roomStr(l)} thumbnail={l.thumbnailDataUrl} onClick={() => handleOpenBoxstock(l.id)} />
             ))}
           </div>
         </section>
