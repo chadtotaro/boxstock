@@ -78,6 +78,7 @@ function TrackCard({ name, tiles, room, thumbnail, onClick }: {
 export default function Dashboard() {
   const router = useRouter();
   const [layouts, setLayouts] = useState<Layout[]>([]);
+  const [boxstockLayouts, setBoxstockLayouts] = useState<Layout[]>([]);
   const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -88,15 +89,13 @@ export default function Dashboard() {
         router.replace('/login');
         return;
       }
-      const { data: rows } = await supabase
-        .from('layouts')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('updated_at', { ascending: false });
-      setLayouts((rows ?? []).map((r: any) => ({
-        ...r,
-        thumbnailDataUrl: r.thumbnail_data_url,
-      })));
+      const [{ data: userRows }, { data: boxstockRows }] = await Promise.all([
+        supabase.from('layouts').select('*').eq('user_id', user.id).order('updated_at', { ascending: false }),
+        supabase.from('layouts').select('*').eq('user_id', '30ece52b-5a87-4805-ad83-03d5d858e9d1').order('updated_at', { ascending: false }),
+      ]);
+      const mapRow = (r: any) => ({ ...r, thumbnailDataUrl: r.thumbnail_data_url });
+      setLayouts((userRows ?? []).map(mapRow));
+      setBoxstockLayouts((boxstockRows ?? []).map(mapRow));
       setLoading(false);
     });
   }, []);
@@ -176,8 +175,8 @@ export default function Dashboard() {
         <section>
           <h2 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 20px' }}>Boxstock Tracks</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
-            {BOXSTOCK_TRACKS.map(t => (
-              <TrackCard key={t.id} name={t.name} tiles={t.tiles} room={t.room} />
+            {boxstockLayouts.map(l => (
+              <TrackCard key={l.id} name={l.name} tiles={tileCount(l)} room={roomStr(l)} thumbnail={l.thumbnailDataUrl} onClick={() => handleOpen(l.id)} />
             ))}
           </div>
         </section>
