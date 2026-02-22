@@ -93,7 +93,10 @@ export default function Dashboard() {
         .select('*')
         .eq('user_id', user.id)
         .order('updated_at', { ascending: false });
-      setLayouts(rows ?? []);
+      setLayouts((rows ?? []).map((r: any) => ({
+        ...r,
+        thumbnailDataUrl: r.thumbnail_data_url,
+      })));
       setLoading(false);
     });
   }, []);
