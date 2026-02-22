@@ -173,6 +173,7 @@ function LayoutCard({
 }) {
   const { isDark } = useTheme();
   const [hovered, setHovered] = useState(false);
+  const menuActionRef = useRef(false);
   const tileCount = Object.keys(layout.tiles).length;
   const dateStr = new Date(layout.lastModified).toLocaleDateString(undefined, {
     month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
@@ -191,7 +192,7 @@ function LayoutCard({
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={onOpen}
+      onClick={() => { if (menuActionRef.current) { menuActionRef.current = false; return; } onOpen(); }}
     >
       <div className="relative">
         {thumb ? (
@@ -223,7 +224,7 @@ function LayoutCard({
         <div
           className="absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-full"
           style={{ backgroundColor: 'rgba(0,0,0,0.45)' }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); menuActionRef.current = true; }}
         >
           <CardMenu layoutId={layout.id} layoutName={layout.name} isCurrent={isCurrent} onRename={onRename} onDuplicate={onDuplicate} onDelete={onDelete} />
         </div>
@@ -266,6 +267,7 @@ function LayoutRow({
 }) {
   const { isDark } = useTheme();
   const [hovered, setHovered] = useState(false);
+  const menuActionRef = useRef(false);
   const tileCount = Object.keys(layout.tiles).length;
   const dateStr = new Date(layout.lastModified).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
@@ -279,7 +281,7 @@ function LayoutRow({
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={onOpen}
+      onClick={() => { if (menuActionRef.current) { menuActionRef.current = false; return; } onOpen(); }}
     >
       <div className="shrink-0"><LayoutThumbnail tiles={layout.tiles} width={64} height={44} /></div>
       <div className="flex-1 min-w-0">
