@@ -111,6 +111,7 @@ async function saveLayoutToSupabase(layout: Layout, userId: string) {
     tile_size: layout.tileSize,
     tags: layout.tags ?? [],
     room_constraint: layout.roomConstraint ?? null,
+    thumbnail_data_url: layout.thumbnailDataUrl ?? null,
     updated_at: new Date().toISOString(),
   }, { onConflict: 'id' });
 }
@@ -136,6 +137,7 @@ async function loadLayoutsFromSupabase(userId: string): Promise<Layout[]> {
       tiles: filteredTiles,
       tileSize: row.tile_size,
       roomConstraint: row.room_constraint ?? null,
+      thumbnailDataUrl: row.thumbnail_data_url ?? undefined,
       lastModified: new Date(row.updated_at).getTime(),
       createdAt: new Date(row.created_at).getTime(),
     };
@@ -312,8 +314,12 @@ useEffect(() => {
   }, [tiles, layouts, currentLayoutId]);
 
   const handleLayoutNameChange = useCallback(
-    (name: string) => updateCurrentLayout((l) => ({ ...l, name })),
-    [updateCurrentLayout]
+    (name: string) => {
+      updateCurrentLayout((l) => ({ ...l, name }));
+      const layout = layouts.find(l => l.id === currentLayoutId);
+      if (user && layout) saveLayoutToSupabase({ ...layout, name }, user.id).catch(console.error);
+    },
+    [updateCurrentLayout, layouts, currentLayoutId, user]
   );
 
   const handleTagsChange = useCallback(
