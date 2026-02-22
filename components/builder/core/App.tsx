@@ -213,7 +213,7 @@ function AppInner() {
         saveLayouts(reordered);
 
         if (user && current) {
-          await saveLayoutToSupabase({ ...current, tiles, lastModified: Date.now() }, user.id);
+          await saveLayoutToSupabase({ ...current, tiles, lastModified: Date.now(), thumbnailDataUrl: thumb ?? current.thumbnailDataUrl }, user.id);
         }
       
         const saved = JSON.stringify(tiles);
