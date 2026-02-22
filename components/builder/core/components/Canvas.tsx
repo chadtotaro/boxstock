@@ -192,7 +192,9 @@ function DraggableGridTile({
 
 export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMoveTiles, externalPlacedKey, onExternalPlacedKeyClear, trackValidation, centerRequest, roomConstraint }: CanvasProps) {
   const [zoom, setZoom] = useState(0.2);
+  const zoomRef = useRef(0.2);
   const [pan, setPan] = useState({ x: 0, y: 0 });
+  useEffect(() => { zoomRef.current = zoom; }, [zoom]);
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [ghostCells, setGhostCells] = useState<{ x: number; y: number; tileType: TileType; rotation: number }[]>([]);
@@ -238,8 +240,8 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
 
     // zoom preserved
     setPan({
-      x: cw / 2 - cx * zoom,
-      y: ch / 2 - cy * zoom,
+      x: cw / 2 - cx * zoomRef.current,
+      y: ch / 2 - cy * zoomRef.current,
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [centerRequest]);
