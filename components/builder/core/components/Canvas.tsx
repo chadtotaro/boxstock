@@ -257,7 +257,8 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
         if (t.x + 1 > maxX) maxX = t.x + 1;
         if (t.y + 1 > maxY) maxY = t.y + 1;
       }
-      const worldW = (maxX - minX) * CELL_SIZE - minY) * CELL_SIZE;
+      const worldW = (maxX - minX) * CELL_SIZE;
+      const worldH = (maxY - minY) * CELL_SIZE;
       const cx = ((minX + maxX) / 2) * CELL_SIZE;
       const cy = ((minY + maxY) / 2) * CELL_SIZE;
       const cw = containerSize.width || 800;
