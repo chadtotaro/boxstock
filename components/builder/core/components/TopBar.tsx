@@ -191,6 +191,24 @@ export function TopBar({
           </button>
         )}
 
+        {/* Validation chip */}
+        {tileCount > 0 && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 4,
+            height: 28, padding: '0 8px', borderRadius: 6,
+            backgroundColor: trackValidation.isValid ? 'rgba(77,193,106,0.12)' : 'rgba(239,68,68,0.1)',
+            border: `1px solid ${trackValidation.isValid ? 'rgba(77,193,106,0.3)' : 'rgba(239,68,68,0.3)'}`,
+            fontSize: 11, fontWeight: 500, flexShrink: 0,
+            color: trackValidation.isValid ? '#4dc16a' : '#ef4444',
+            whiteSpace: 'nowrap',
+          }}>
+            {trackValidation.isValid ? (
+              <><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4dc16a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>Valid</>
+            ) : (
+              <><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#ef4444" strokeWidth="1.5"/><path d="M6 3.5v3M6 8h.01" stroke="#ef4444" strokeWidth="1.5" strokeLinecap="round"/></svg>{trackValidation.edgeErrors.length > 0 ? `${trackValidation.edgeErrors.length} error${trackValidation.edgeErrors.length !== 1 ? 's' : ''}` : !trackValidation.hasClosedLoop ? 'Open loop' : 'Invalid'}</>
+            )}
+          </div>
+        )}
         <div style={{ width: 1, height: 24, backgroundColor: '#d5d7de', margin: '0 4px' }} />
 
         {/* Undo */}
