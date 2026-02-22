@@ -228,29 +228,34 @@ function AppInner() {
 
       useEffect(() => {
         if (!user) return;
-        console.log('Loading layouts for user:', user.id);
-        loadLayoutsFromSupabase(user.id).then((remote) => {
-          console.log('Got remote layouts:', remote.length, remote.map(l => l.name));
-          let finalLayouts: Layout[];
-          if (remote.length === 0) {
-            const fresh = createEmptyLayout('Untitled Layout');
-            finalLayouts = [fresh];
-            console.log('New user, creating fresh layout, user.id:', user.id);
-            saveLayoutToSupabase({ ...fresh }, user.id).then(() => console.log('saved fresh')).catch(e => console.error('save failed', e));
-          } else {
-            finalLayouts = remote;
-          }
-          setLayouts(finalLayouts);
-          saveLayouts(finalLayouts);
-          // Respect the layout the dashboard navigated to, if it exists in remote
-          const savedId = loadCurrentId();
-          const targetId = finalLayouts.find(l => l.id === savedId)?.id ?? finalLayouts[0].id;
-          setCurrentLayoutId(targetId);
-          saveCurrentId(targetId);
-          const target = finalLayouts.find(l => l.id === targetId);
-          if (target) resetTo(target.tiles);
-          setLayoutsReady(true);
-        });
+        const savedId = loadCurrentId();
+        const doLoad = (attempt: number) => {
+          loadLayoutsFromSupabase(user.id).then((remote) => {
+            let finalLayouts: Layout[];
+            if (remote.length === 0) {
+              const fresh = createEmptyLayout('Untitled Layout');
+              finalLayouts = [fresh];
+              saveLayoutToSupabase({ ...fresh }, user.id).catch(console.error);
+            } else {
+              finalLayouts = remote;
+            }
+            // If the target layout isn't in remote yet, retry once after 1s
+            const found = finalLayouts.find(l => l.id === savedId);
+            if (!found && savedId && attempt < 3) {
+              setTimeout(() => doLoad(attempt + 1), 1000);
+              return;
+            }
+            setLayouts(finalLayouts);
+            saveLayouts(finalLayouts);
+            const targetId = found?.id ?? finalLayouts[0].id;
+            setCurrentLayoutId(targetId);
+            saveCurrentId(targetId);
+            const target = finalLayouts.find(l => l.id === targetId);
+            if (target) resetTo(target.tiles);
+            setLayoutsReady(true);
+          });
+        };
+        doLoad(0);
       }, [user]);
 useEffect(() => {
   const current = JSON.stringify(tiles);
