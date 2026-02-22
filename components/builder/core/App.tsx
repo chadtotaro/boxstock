@@ -242,8 +242,13 @@ function AppInner() {
           }
           setLayouts(finalLayouts);
           saveLayouts(finalLayouts);
-          setCurrentLayoutId(finalLayouts[0].id);
-          saveCurrentId(finalLayouts[0].id);
+          // Respect the layout the dashboard navigated to, if it exists in remote
+          const savedId = loadCurrentId();
+          const targetId = finalLayouts.find(l => l.id === savedId)?.id ?? finalLayouts[0].id;
+          setCurrentLayoutId(targetId);
+          saveCurrentId(targetId);
+          const target = finalLayouts.find(l => l.id === targetId);
+          if (target) resetTo(target.tiles);
           setLayoutsReady(true);
         });
       }, [user]);
