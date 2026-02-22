@@ -264,8 +264,8 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
       const cw = containerSize.width || 800;
       const ch = containerSize.height || 600;
       const fitZoom = Math.min(cw / (worldW + CELL_SIZE * 4), ch / (worldH + CELL_SIZE * 4), 1);
-      setZoom(fitZoom);
-      setPan({ x: cw / 2 - cx * fitZoom, y: ch / 2 - cy * fitZoom });
+      // preserve current zoom, just recenter
+      setPan({ x: cw / 2 - cx * zoom, y: ch / 2 - cy * zoom });
       return;
     }
     const rc = roomConstraint;
@@ -275,9 +275,9 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
     const cy = ((rc.minY + rc.maxY + 1) / 2) * CELL_SIZE;
     const cw = containerSize.width || 800;
     const ch = containerSize.height || 600;
-    const fitZoom = Math.min(cw / (worldW + CELL_SIZE * 4), ch / (worldH + CELL_SIZE * 4), 1);
-    setZoom(fitZoom);
-    setPan({ x: cw / 2 - cx * fitZoom, y: ch / 2 - cy * fitZoom });
+      const fitZoom = Math.min(cw / (worldW + CELL_SIZE * 4), ch / (worldH + CELL_SIZE * 4), 1);
+      // preserve current zoom, just recenter
+      setPan({ x: cw / 2 - cx * zoom, y: ch / 2 - cy * zoom });
   };
 
   const prevRoomEnabled = useRef(false);
