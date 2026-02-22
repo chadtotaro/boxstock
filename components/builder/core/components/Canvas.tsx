@@ -463,7 +463,6 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
         setPan((prevPan) => ({
           x: centerX - ratio * (centerX - prevPan.x),
           y: centerY - ratio * (centerY - prevPan.y),
-          y: cursorY - ratio * (cursorY - prevPan.y),
         }));
 
         return newZoom;
