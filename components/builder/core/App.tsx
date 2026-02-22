@@ -410,16 +410,20 @@ useEffect(() => {
 
   const handleDeleteLayout = useCallback(
     (layoutId: string) => {
-      if (layoutId === currentLayoutId) return;
       setLayouts((prev) => {
+        if (prev.length <= 1) return prev;
         const updated = prev.filter((l) => l.id !== layoutId);
         saveLayouts(updated);
-        if (user) supabase.from('layouts').delete().eq('id', layoutId).then(() => {});
         return updated;
       });
+      if (user) supabase.from('layouts').delete().eq('id', layoutId).catch(console.error);
+      if (layoutId === currentLayoutId) {
+        const next = layouts.find(l => l.id !== layoutId);
+        if (next) { setCurrentLayoutId(next.id); saveCurrentId(next.id); resetTo(next.tiles); setRoomConstraint(next.roomConstraint ?? null); }
+      }
       toast.success('Layout deleted', { style: toastStyle, duration: 1500 });
     },
-    [currentLayoutId, toastStyle]
+    [currentLayoutId, toastStyle, user, resetTo, layouts]
   );
 
   // ── Tile operations ───────────────────────────────────────────
