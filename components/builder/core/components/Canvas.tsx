@@ -735,6 +735,16 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
         style={{ backgroundColor: 'var(--c-bg-panel)', border: '1px solid var(--c-border)', boxShadow: '0 4px 12px var(--c-shadow)' }}
       >
         <button
+          onClick={() => { const tileArr = Object.values(tiles); if (tileArr.length === 0) return; let sumX = 0, sumY = 0; for (const t of tileArr) { sumX += (t.x + 0.5) * CELL_SIZE; sumY += (t.y + 0.5) * CELL_SIZE; } const cx = sumX / tileArr.length; const cy = sumY / tileArr.length; const cw = containerSize.width || 800; const ch = containerSize.height || 600; setPan({ x: cw / 2 - cx * zoom, y: ch / 2 - cy * zoom }); }}
+          className="flex items-center justify-center w-9 h-9 transition-colors cursor-pointer"
+          style={{ color: 'var(--c-text-icon)', borderBottom: '1px solid var(--c-border)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-accent-bg-hover)'; e.currentTarget.style.color = 'var(--c-accent)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--c-text-icon)'; }}
+          title="Center view"
+        >
+          <Crosshair size={14} />
+        </button>
+        <button
           onClick={handleZoomIn}
           className="flex items-center justify-center w-9 h-9 transition-colors cursor-pointer"
           style={{ color: 'var(--c-text-icon)' }}
