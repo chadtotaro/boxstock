@@ -243,7 +243,7 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
       y: ch / 2 - cy * zoomRef.current,
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [centerRequest, tiles, containerSize, roomConstraint]);
+  }, [centerRequest, containerSize, roomConstraint]);
 
   // ── Center viewport on room when constraint is enabled ────────────
   const centerOnRoom = () => {
