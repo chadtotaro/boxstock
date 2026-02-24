@@ -238,13 +238,12 @@ export function Canvas({ tiles, selectedTiles, onPlaceTile, onSelectTile, onMove
     const ch = containerSize.height || 600;
     const fitZoom = Math.min(cw / (worldW + CELL_SIZE * 2), ch / (worldH + CELL_SIZE * 2), 1);
 
-    // zoom preserved
-    console.log("center clicked, zoomRef:", zoomRef.current, "zoom state:", zoom);
     setPan({
       x: cw / 2 - cx * zoomRef.current,
       y: ch / 2 - cy * zoomRef.current,
     });
-  }, [centerRequest, zoom, tiles, containerSize, roomConstraint]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [centerRequest, tiles, containerSize, roomConstraint]);
 
   // ── Center viewport on room when constraint is enabled ────────────
   const centerOnRoom = () => {
