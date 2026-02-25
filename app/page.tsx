@@ -100,7 +100,7 @@ export default function Dashboard() {
         supabase.from('layouts').select('*').eq('user_id', user.id).order('updated_at', { ascending: false }),
         supabase.from('layouts').select('*').eq('user_id', '30ece52b-5a87-4805-ad83-03d5d858e9d1').order('updated_at', { ascending: false }),
       ]);
-      const mapRow = (r: any) => ({ ...r, thumbnailDataUrl: r.thumbnail_data_url });
+      const mapRow = (r: any) => ({ ...r, thumbnailDataUrl: r.thumbnail_data_url, roomConstraint: r.room_constraint });
       setLayouts((userRows ?? []).map(mapRow));
       setBoxstockLayouts((boxstockRows ?? []).map(mapRow));
       setLoading(false);
