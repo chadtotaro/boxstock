@@ -67,7 +67,7 @@ function TrackCard({ name, tiles, room, thumbnail, onClick, onDelete }: {
         transition: 'border-color 0.15s',
       }}
     >
-<d<div style={{ height: 162, backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+<div style={{ height: 162, backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
   {thumbnail
     ? <img src={thumbnail} alt={name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
     : <Layers size={40} style={{ color: 'rgba(255,255,255,0.1)' }} />
