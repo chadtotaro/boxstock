@@ -67,12 +67,29 @@ function TrackCard({ name, tiles, room, thumbnail, onClick, onDelete }: {
         transition: 'border-color 0.15s',
       }}
     >
-      <div style={{ height: 162, backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {thumbnail
+<div style={{ height: 162, backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+{thumbnail
           ? <img src={thumbnail} alt={name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           : <Layers size={40} style={{ color: 'rgba(255,255,255,0.1)' }} />
         }
       </div>
+      {onDelete && (
+          <div ref={menuRef} style={{ position: 'absolute', top: 8, right: 8, zIndex: 10 }}>
+            <button
+              onClick={(e) => { e.stopPropagation(); setMenuOpen(v => !v); }}
+              style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: 'rgba(0,0,0,0.55)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', opacity: hovered || menuOpen ? 1 : 0, transition: 'opacity 0.15s' }}
+            >
+              <MoreHorizontal size={15} />
+            </button>
+            {menuOpen && (
+              <div style={{ position: 'absolute', top: 32, right: 0, backgroundColor: '#1a1f26', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.4)', minWidth: 130, zIndex: 50, overflow: 'hidden' }}>
+                <button onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onDelete(); }} style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '8px 12px', background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', fontSize: 12 }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.1)'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
+                  <Trash2 size={13} />Delete
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       <div style={{ backgroundColor: '#fff', padding: '12px 14px 16px' }}>
         <p style={{ margin: '0 0 4px', fontWeight: 700, fontSize: 20, color: '#000' }}>{name}</p>
         <p style={{ margin: '0 0 10px', fontSize: 11, color: '#555' }}>Created by: radical_mannt</p>
