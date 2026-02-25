@@ -1,7 +1,7 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Layers } from 'lucide-react';
+import { Plus, Layers, MoreHorizontal, Trash2 } from 'lucide-react';
 import Icon from '@mdi/react';
 import { mdiGrid } from '@mdi/js';
 import { supabase } from '@/lib/supabase';
@@ -35,14 +35,25 @@ const BOXSTOCK_TRACKS = [
   { id: 'b5', name: 'Laguna Zeca', tiles: 50, room: "10' x 20'" },
 ];
 
-function TrackCard({ name, tiles, room, thumbnail, onClick }: {
+function TrackCard({ name, tiles, room, thumbnail, onClick, onDelete }: {
   name: string;
   tiles: number;
   room?: string;
   thumbnail?: string;
   onClick?: () => void;
+  onDelete?: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [menuOpen]);
   return (
     <div
       onClick={onClick}
@@ -145,6 +156,12 @@ export default function Dashboard() {
     router.push('/builder');
   };
 
+  const handleDelete = async (id: string) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+    await supabase.from('layouts').delete().eq('id', id).eq('user_id', session.user.id);
+    setLayouts(prev => prev.filter(l => l.id !== id));
+  };
   const displayed = showAll ? layouts : layouts.slice(0, 5);
   const tileCount = (l: Layout) => Object.keys(l.tiles || {}).length;
   const roomStr = (l: Layout) => {
@@ -185,7 +202,7 @@ export default function Dashboard() {
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
               {displayed.map(l => (
-                <TrackCard key={l.id} name={l.name} tiles={tileCount(l)} room={roomStr(l)} thumbnail={l.thumbnailDataUrl} onClick={() => handleOpen(l.id)} />
+                <TrackCard key={l.id} name={l.name} tiles={tileCount(l)} room={roomStr(l)} thumbnail={l.thumbnailDataUrl} onClick={() => handleOpen(l.id)} onDelete={() => handleDelete(l.id)} />
               ))}
             </div>
           )}
