@@ -61,7 +61,7 @@ function TrackCard({ name, tiles, room, thumbnail, onClick, onDelete }: {
       onMouseLeave={() => setHovered(false)}
       style={{
         borderRadius: 8,
-        overflow: 'hidden',
+        overflow: 'visible',
         cursor: onClick ? 'pointer' : 'default',
         border: hovered ? '2px solid #0fc4ba' : '2px solid transparent',
         transition: 'border-color 0.15s',
