@@ -256,7 +256,6 @@ function LayoutCard({
         </div>
       </div>
     </div>
-    </div>
   );
 }
 
