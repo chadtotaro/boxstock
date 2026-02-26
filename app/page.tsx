@@ -62,7 +62,7 @@ function TrackCard({ name, tiles, room, thumbnail, onClick, onDelete }: {
           <div ref={menuRef} style={{ position: 'absolute', top: 8, right: 8, zIndex: 10 }} onClick={(e) => e.stopPropagation()}>
             <button
               onClick={(e) => { e.stopPropagation(); setMenuOpen(v => !v); }}
-              style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: 'rgba(0,0,0,0.6)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', opacity: hovered || menuOpen ? 1 : 0, transition: 'opacity 0.15s' }}
+              style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: 'rgba(0,0,0,0.6)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', opacity: hovered || menuOpen ? 1 : 0, transition: 'opacity 0.15s, color 0.15s' }} onMouseEnter={(e) => { e.currentTarget.style.color = '#ef4444'; }} onMouseLeave={(e) => { e.currentTarget.style.color = '#fff'; }}
             >
               <MoreHorizontal size={15} />
             </button>
