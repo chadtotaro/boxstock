@@ -245,22 +245,17 @@ function LayoutCard({
           </div>
         )}
       </div>
-
       <div className="p-3 pt-2.5">
-        <p className="truncate" style={{ color: 'var(--c-text)', fontSize: '13px' }}>{layout.name}</p>
-        {(layout.tags ?? []).length > 0 && (
-          <div className="flex items-center gap-1 mt-1.5 flex-wrap">
-            {layout.tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="rounded-full px-2 py-0.5" style={{ backgroundColor: 'var(--c-tag-muted-bg)', color: 'var(--c-tag-muted)', fontSize: '10px' }}>{tag}</span>
-            ))}
-            {(layout.tags ?? []).length > 3 && <span style={{ color: 'var(--c-text-muted)', fontSize: '10px' }}>+{(layout.tags ?? []).length - 3}</span>}
-          </div>
-        )}
-        <div className="flex items-center gap-3 mt-2" style={{ color: 'var(--c-text-muted)', fontSize: '11px' }}>
-          <span className="flex items-center gap-1"><Layers size={10} />{tileCount}</span>
-          <span className="flex items-center gap-1"><Clock size={10} />{dateStr}</span>
+        <p className="truncate" style={{ color: 'var(--c-text)', fontSize: '14px', fontWeight: 700 }}>{layout.name}</p>
+        <p style={{ color: 'var(--c-text-muted)', fontSize: '11px', margin: '2px 0 8px' }}>Created by: radical_mannt</p>
+        <div className="flex items-center gap-3" style={{ color: 'var(--c-text-muted)', fontSize: '11px' }}>
+          <span className="flex items-center gap-1"><Icon path={mdiGrid} size={0.55} />{tileCount}</span>
+          {layout.roomConstraint?.enabled && (
+            <span className="flex items-center gap-1"><RulerIcon size={12} />{layout.roomConstraint.widthValue}' x {layout.roomConstraint.heightValue}'</span>
+          )}
         </div>
       </div>
+    </div>
     </div>
   );
 }
