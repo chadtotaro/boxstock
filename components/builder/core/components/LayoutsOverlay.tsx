@@ -193,7 +193,7 @@ function LayoutCard({
       className="rounded-lg transition-all overflow-hidden"
       style={{
         backgroundColor: 'var(--c-bg-panel)',
-        border: `1px solid ${isCurrent ? 'var(--c-accent-border-strong)' : hovered ? 'var(--c-card-hover-border)' : 'var(--c-border)'}`,
+        border: `2px solid ${isCurrent ? 'var(--c-accent-border-strong)' : hovered ? '#0fc4ba' : 'transparent'}`,
         boxShadow: hovered ? '0 8px 24px var(--c-shadow)' : '0 2px 8px var(--c-shadow)',
         transform: hovered ? 'translateY(-2px)' : 'none',
         cursor: 'pointer',
