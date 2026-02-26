@@ -237,13 +237,6 @@ function LayoutCard({
           <CardMenu layoutId={layout.id} layoutName={layout.name} isCurrent={isCurrent} onRename={onRename} onDuplicate={onDuplicate} onDelete={onDelete} />
         </div>
 
-        {hovered && !isCurrent && (
-          <div className="absolute inset-0 flex items-center justify-center" style={{ backgroundColor: 'var(--c-overlay)', backdropFilter: 'blur(2px)', pointerEvents: 'none' }}>
-            <span className="px-4 py-1.5 rounded-full" style={{ backgroundColor: 'var(--c-accent)', color: isDark ? '#0F1115' : '#FFFFFF', fontSize: '12px' }}>
-              Open
-            </span>
-          </div>
-        )}
       </div>
       <div className="p-3 pt-2.5">
         <p className="truncate" style={{ color: 'var(--c-text)', fontSize: '14px', fontWeight: 700 }}>{layout.name}</p>
@@ -304,9 +297,6 @@ function LayoutRow({
       </div>
       <div className="shrink-0 text-right" style={{ width: 120, color: 'var(--c-text-muted)', fontSize: '12px' }}>{dateStr}</div>
       <div className="shrink-0" style={{ width: 60 }}>
-        {hovered && !isCurrent && (
-          <span className="px-3 py-1 rounded-full" style={{ backgroundColor: 'var(--c-accent)', color: isDark ? '#0F1115' : '#FFFFFF', fontSize: '11px' }}>Open</span>
-        )}
       </div>
       <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
         <CardMenu layoutId={layout.id} layoutName={layout.name} isCurrent={isCurrent} onRename={onRename} onDuplicate={onDuplicate} onDelete={onDelete} />
