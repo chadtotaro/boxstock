@@ -132,8 +132,6 @@ function CardMenu({
         onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
         className="flex items-center justify-center w-7 h-7 rounded transition-colors cursor-pointer"
         style={{ color: 'var(--c-text-muted)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-bg-input)'; e.currentTarget.style.color = '#ef4444'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--c-text-muted)'; }}
-        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-bg-input)'; e.currentTarget.style.color = 'var(--c-text)'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--c-text-muted)'; }}
       >
         <MoreHorizontal size={16} />
       </button>
