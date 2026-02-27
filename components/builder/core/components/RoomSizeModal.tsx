@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { X, Ruler, Grid3x3 } from 'lucide-react';
 import type { RoomUnit } from '@/types/builder';
 import { convertToCm, computeRoomGrid } from '@/types/builder';
@@ -24,6 +24,13 @@ export function RoomSizeModal({ open, onClose, onApply, initialWidth, initialHei
   const [heightStr, setHeightStr] = useState(String(initialHeight ?? 8));
   const [unit, setUnit] = useState<RoomUnit>(initialUnit ?? 'ft');
 
+  useEffect(() => {
+    if (open) {
+      setWidthStr(String(initialWidth ?? 10));
+      setHeightStr(String(initialHeight ?? 8));
+      setUnit(initialUnit ?? 'ft');
+    }
+  }, [open]);
   const width = parseFloat(widthStr) || 0;
   const height = parseFloat(heightStr) || 0;
 
