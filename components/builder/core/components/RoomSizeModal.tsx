@@ -117,7 +117,18 @@ export function RoomSizeModal({ open, onClose, onApply, initialWidth, initialHei
               {(['ft', 'm', 'cm'] as RoomUnit[]).map((u) => (
                 <button
                   key={u}
-                  onClick={() => setUnit(u)}
+                  onClick={() => {
+                    const fromCm = (cm: number, toUnit: RoomUnit) => {
+                      if (toUnit === 'ft') return Math.round((cm / 30.48) * 10) / 10;
+                      if (toUnit === 'm') return Math.round((cm / 100) * 100) / 100;
+                      return Math.round(cm);
+                    };
+                    const wCm = convertToCm(parseFloat(widthStr) || 0, unit);
+                    const hCm = convertToCm(parseFloat(heightStr) || 0, unit);
+                    setWidthStr(String(fromCm(wCm, u)));
+                    setHeightStr(String(fromCm(hCm, u)));
+                    setUnit(u);
+                  }}
                   className="flex-1 py-1.5 rounded-md transition-all cursor-pointer"
                   style={{
                     fontSize: '12px',
