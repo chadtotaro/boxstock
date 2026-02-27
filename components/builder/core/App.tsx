@@ -696,6 +696,7 @@ useEffect(() => {
       const isCmd = e.metaKey || e.ctrlKey;
       if (isCmd && !e.shiftKey && e.key === 'z') { e.preventDefault(); undo(); return; }
       if (isCmd && e.shiftKey && (e.key === 'z' || e.key === 'Z')) { e.preventDefault(); redo(); return; }
+      if (isCmd && e.key === 'a') { e.preventDefault(); setSelectedTiles(new Set(Object.keys(tiles))); return; }
       if (e.key === 'r' || e.key === 'R') { e.preventDefault(); rotateTile(); }
       if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); deleteTile(); }
       if (e.key === 'd' || e.key === 'D') { e.preventDefault(); duplicateTile(); }
