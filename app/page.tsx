@@ -59,7 +59,7 @@ function TrackCard({ name, tiles, room, thumbnail, onClick, onDelete }: {
     >
       <div style={{
         height: 162,
-        backgroundColor: 'var(--c-bg, #000)',
+        backgroundColor: '#0F1115',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -118,19 +118,19 @@ function TrackCard({ name, tiles, room, thumbnail, onClick, onDelete }: {
         )}
       </div>
       <div style={{
-        backgroundColor: 'var(--c-bg-panel, #fff)',
+        backgroundColor: '#FFFFFF',
         padding: '12px 14px 16px',
         borderRadius: '0 0 6px 6px',
         transition: 'background-color 0.2s',
       }}>
-        <p style={{ margin: '0 0 4px', fontWeight: 700, fontSize: 20, color: 'var(--c-text, #000)' }}>{name}</p>
-        <p style={{ margin: '0 0 10px', fontSize: 11, color: 'var(--c-text-muted, #555)' }}>Created by: radical_mannt</p>
+        <p style={{ margin: '0 0 4px', fontWeight: 700, fontSize: 20, color: '#000' }}>{name}</p>
+        <p style={{ margin: '0 0 10px', fontSize: 11, color: '#555' }}>Created by: radical_mannt</p>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: 'var(--c-text, #000)' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: '#000' }}>
             <Icon path={mdiGrid} size={0.65} />{tiles}
           </span>
           {room && room !== '-- x --' && (
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: 'var(--c-text, #000)' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#000' }}>
               <RulerIcon size={16} />{room}
             </span>
           )}
