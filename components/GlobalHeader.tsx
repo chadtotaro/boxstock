@@ -12,6 +12,9 @@ const BoxstockLogo = () => (
 
 function ThemeToggle() {
   const { isDark, toggle } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+  if (!mounted) return <div style={{ width: 32, height: 32 }} />
   return (
     <button
       onClick={toggle}
