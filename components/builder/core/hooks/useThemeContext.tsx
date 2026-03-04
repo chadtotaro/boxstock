@@ -21,7 +21,7 @@ const STORAGE_KEY = 'miniz-theme';
 const darkTokens: Record<string, string> = {
   '--c-bg': '#0F1115',
   '--c-bg-panel': '#14171D',
-  '--c-bg-elevated': '#1A1E26',
+  '--c-bg-elevated': '#14171D',
   '--c-bg-hover': 'rgba(255,255,255,0.03)',
   '--c-bg-input': 'rgba(255,255,255,0.04)',
   '--c-bg-input-solid': '#0F1115',
@@ -85,7 +85,7 @@ const darkTokens: Record<string, string> = {
 const lightTokens: Record<string, string> = {
   '--c-bg': '#F2F3F5',
   '--c-bg-panel': '#FFFFFF',
-  '--c-bg-elevated': '#E8EAED',
+  '--c-bg-elevated': '#FFFFFF',
   '--c-bg-hover': 'rgba(0,0,0,0.03)',
   '--c-bg-input': 'rgba(0,0,0,0.04)',
   '--c-bg-input-solid': '#F2F3F5',
