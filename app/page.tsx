@@ -221,7 +221,7 @@ export default function Dashboard() {
   if (loading) return (
     <div style={{
       minHeight: '100vh',
-      background: 'var(--c-bg, #090707)',
+      background: 'linear-gradient(0deg, rgba(218,184,98,0.1), rgba(13,197,188,0.1)), var(--c-bg, #090707)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       transition: 'background-color 0.2s',
     }}>
