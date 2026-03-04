@@ -32,10 +32,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         style={{ display: 'flex', flexDirection: 'column', height: '100vh', margin: 0, overflow: 'hidden' }}
       >
-        <ThemeProvider>
+        <ClientProviders>
           <GlobalHeader />
           {children}
-        </ThemeProvider>
+        </ClientProviders>
       </body>
     </html>
   );
