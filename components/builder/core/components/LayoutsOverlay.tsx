@@ -192,7 +192,7 @@ function LayoutCard({
     <div
       className="rounded-lg transition-all overflow-hidden"
       style={{
-        backgroundColor: 'var(--c-bg-panel)',
+        backgroundColor: '#FFFFFF',
         border: `2px solid ${isCurrent ? 'var(--c-accent-border-strong)' : hovered ? '#0fc4ba' : 'transparent'}`,
         boxShadow: hovered ? '0 8px 24px var(--c-shadow)' : '0 2px 8px var(--c-shadow)',
         transform: hovered ? 'translateY(-2px)' : 'none',
@@ -239,9 +239,9 @@ function LayoutCard({
 
       </div>
       <div className="p-3 pt-2.5">
-        <p className="truncate" style={{ color: 'var(--c-text)', fontSize: '14px', fontWeight: 700 }}>{layout.name}</p>
-        <p style={{ color: 'var(--c-text-muted)', fontSize: '11px', margin: '2px 0 8px' }}>Created by: radical_mannt</p>
-        <div className="flex items-center gap-3" style={{ color: 'var(--c-text-muted)', fontSize: '11px' }}>
+        <p className="truncate" style={{ color: '#000', fontSize: '14px', fontWeight: 700 }}>{layout.name}</p>
+        <p style={{ color: '#555', fontSize: '11px', margin: '2px 0 8px' }}>Created by: radical_mannt</p>
+        <div className="flex items-center gap-3" style={{ color: '#555', fontSize: '11px' }}>
           <span className="flex items-center gap-1"><Icon path={mdiGrid} size={0.55} />{tileCount}</span>
           {layout.roomConstraint?.enabled && (
             <span className="flex items-center gap-1"><RulerIcon size={12} />{layout.roomConstraint.widthValue}' x {layout.roomConstraint.heightValue}'</span>
