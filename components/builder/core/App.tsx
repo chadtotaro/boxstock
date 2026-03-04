@@ -10,7 +10,6 @@ import { placeInventoryOnCanvas } from './lib/spiral-placer';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { ThemeProvider } from './hooks/useThemeContext';
 import { TopBar } from './components/TopBar';
 import { Sidebar } from './components/Sidebar';
 import { Canvas } from './components/Canvas';
@@ -885,8 +884,8 @@ useEffect(() => {
 
 export default function App() {
   return (
-    <ThemeProvider>
+    
       <AppInner />
-    </ThemeProvider>
+    
   );
 }
