@@ -172,7 +172,7 @@ export default function Dashboard() {
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(to top, rgba(218,184,98,0.15), rgba(13,197,188,0.15)) #090707', color: '#fff', fontFamily: 'Inter, system-ui, sans-serif', overflowY: 'auto' }}>
 
-      <div style={{ maxWidth: 1320, margin: '0 auto', padding: '40px 40px' }}>
+      <div style={{ maxWidth: 1320, margin: '0 auto', padding: '40px 40px 80px' }}>
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 40 }}>
           <button onClick={handleNew} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '14px 28px', borderRadius: 8, background: 'linear-gradient(90deg, #0fc4ba, #dbb762)', color: '#2e2919', fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer', letterSpacing: '0.5px' }}>
             <Plus size={16} />
@@ -212,6 +212,10 @@ export default function Dashboard() {
           </div>
         </section>
       </div>
-    </div>
+    
+        <footer style={{ borderTop: '1px solid rgba(255,255,255,0.08)', padding: '24px 40px', textAlign: 'center', color: 'rgba(255,255,255,0.3)', fontSize: 12 }}>
+          © 2025 Boxstock. All rights reserved.
+        </footer>
+</div>
   );
 }
