@@ -417,10 +417,8 @@ export function LayoutsOverlay({
 
           <button
             onClick={onCreateNew}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors cursor-pointer"
-            style={{ backgroundColor: 'var(--c-accent)', color: isDark ? '#0F1115' : '#FFFFFF', fontSize: '13px' }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-accent-hover)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'var(--c-accent)'; }}
+            className="btn-gradient-sm"
+            style={{}}
           >
             <Plus size={14} />New Layout
           </button>
@@ -435,7 +433,7 @@ export function LayoutsOverlay({
               </div>
               <p style={{ color: 'var(--c-text-muted)', fontSize: '14px' }}>{search.trim() ? 'No layouts match your search' : 'No layouts yet'}</p>
               {!search.trim() && (
-                <button onClick={onCreateNew} className="mt-3 px-4 py-2 rounded-lg cursor-pointer transition-colors" style={{ backgroundColor: 'var(--c-accent-bg)', border: '1px solid var(--c-accent-border)', color: 'var(--c-accent)', fontSize: '13px' }}>
+                <button onClick={onCreateNew} className="btn-gradient-sm mt-3" style={{}}>
                   Create your first layout
                 </button>
               )}
