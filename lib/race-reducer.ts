@@ -16,7 +16,7 @@ import type {
   DecoderState,
   SuppressionConfig,
   DEFAULT_SUPPRESSION,
-} from './types-timing';
+} from '@/types/timing';
 
 // --- Full Race State ---
 
